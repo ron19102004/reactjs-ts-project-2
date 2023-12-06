@@ -1,0 +1,19 @@
+.branches-table {
+  thead {
+    tr {
+      th {
+        @apply border-2 py-2 px-4;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        @apply border-2 text-center;
+        input{
+            @apply outline-none h-10 px-2;
+        }
+      }
+    }
+  }
+}

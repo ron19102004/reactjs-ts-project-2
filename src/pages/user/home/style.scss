@@ -1,0 +1,32 @@
+@import "../../../base";
+.bg-custom{
+ background-color: rgba(240, 255, 255, 0.345);
+}
+.special-thing{
+    position: relative;
+    &::before{
+        content: '';
+        position: absolute;
+        top: -.5rem;
+        left: -.5rem;
+        width: 50px;
+        height: 50px;
+        border-left: 8px solid $color3;
+        border-top: 8px solid $color2;
+        border-top-left-radius: 1.5rem;
+    }
+}
+.department{
+    position: relative;
+    &::before{
+        content: '';
+        position: absolute;
+        top: -.5rem;
+        left: -.5rem;
+        width: 50px;
+        height: 50px;
+        border-left: 8px solid $color3;
+        border-top: 8px solid $color2;
+        border-top-left-radius: 1.5rem;
+    }
+}

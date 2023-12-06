@@ -1,0 +1,71 @@
+@import "../../base";
+.bg-header-user {
+  background-color: $color-header;
+}
+.link {
+  transition: all 0.5s ease-in-out;
+}
+.a-active {
+  position: relative;
+  &::after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+  }
+}
+.a {
+  position: relative;
+  &:hover {
+    &::after {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 1px;
+      bottom: 0;
+      left: 0;
+      background-color: white;
+      animation: animation-a 0.7s ease-in-out;
+    }
+  }
+}
+.a-active-fixed {
+    position: relative;
+    &::after {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 1px;
+      bottom: 0;
+      left: 0;
+      background-color: $color2;
+    }
+  }
+  .a-fixed {
+    position: relative;
+    &:hover {
+      &::after {
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        background-color: $color2;
+        animation: animation-a 0.7s ease-in-out;
+      }
+    }
+  }
+@keyframes animation-a {
+  0% {
+    transform: translateX(50%);
+    width: 0%;
+  }
+  100% {
+    transform: translateX(0);
+    width: 100%;
+  }
+}

@@ -1,0 +1,10 @@
+@import '../../../base';
+.card-info{
+    @apply bg-color3 p-2 rounded;
+    .card-info-title{
+        @apply font-3 text-base text-white xl:text-lg;
+    }
+    .card-info-list{
+        @apply text-white;
+    }
+}
