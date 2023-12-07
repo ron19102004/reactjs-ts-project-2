@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { URL } from "../../helpers/constant";
-import { login, logout } from "../../redux/reducers/auth.reducer";
+import {
+  login,
+  logout,
+  reloadUserCurrent,
+} from "../../redux/reducers/auth.reducer";
 import { ToastOptions } from "react-toastify";
 
 class AuthController {
@@ -61,6 +65,7 @@ class AuthController {
                 })
               );
               toast.toast.success(`Đăng nhập thành công`, toast.options);
+              this.handleLogin(dispatch, toast, navigate);
               navigate("/");
             })
             .catch((err) => {
@@ -73,6 +78,27 @@ class AuthController {
     } catch (error: any) {
       toast.toast.error(`${error.message}`, toast.options);
     }
+  };
+  public handleLogin = (
+    dispatch: any,
+    toast: {
+      toast: any;
+      options: ToastOptions;
+    },
+    navigate: any
+  ) => {
+    const task1 = new Promise(() => {
+      setTimeout(() => {
+        alert("Hết phiên đăng nhập. Vui lòng đăng nhập lại");
+        this.logout(dispatch, toast, navigate);
+      }, 1000 * 60 * 120);
+    });
+    const task2 = new Promise(() => {
+      setTimeout(() => {
+        toast.toast.warning("Hệ thống sắp hết phiên đăng nhập", toast.options);
+      }, 1000 * 60 * 115);
+    });
+    Promise.all([task1, task2]);
   };
   public logout = (
     dispatch: any,
@@ -89,6 +115,21 @@ class AuthController {
     } catch (error: any) {
       toast.toast.error(`${error.message}`, toast.options);
     }
+  };
+  public reloadUserCurrent$ = async (dispatch: any, token: string) => {
+    await axios
+      .get(`${URL}/auths/profile`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then(async (resp: any) => {        
+        const userCurrent = resp.data.data;
+        dispatch(reloadUserCurrent({ userCurrent: userCurrent }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 }
 export enum EMethodsLogin {

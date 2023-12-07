@@ -24,9 +24,12 @@ export const authSlice = createSlice({
         state.accessToken = null;
         state.refreshToken = null;
         state.role = null;
+    },
+    reloadUserCurrent: (state, action) => {      
+      state.userCurrent = action.payload.userCurrent;
     }
   }
 });
 
-export const {login, logout} = authSlice.actions;
+export const {login, logout,reloadUserCurrent} = authSlice.actions;
 export default authSlice.reducer

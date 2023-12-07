@@ -50,7 +50,6 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
   const { handleSubmit, register, reset } = useForm();
   const init = async () => {
     const response = await EditServiceModuleController.getService();
-
     setList(response);
   };
   useEffect(() => {
@@ -62,6 +61,7 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
     setList(listCopy);
   };
   const createService = async (e: any) => {
+    changeStatusOpenAddService();
     const payload = {
       name: e.name,
       description: e.description,
@@ -74,14 +74,12 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
       payload
     );
     reset();
-    changeStatusOpenAddService();
-    const response = await EditServiceModuleController.getService();
-    setList(response);
+    await init();
   };
   return (
     <article className="font-2 space-y-3">
       <section className="space-y-3 md:space-y-0 md:flex md:space-x-2 md:items-center">
-        <h1 className="font-3 xl:text-2xl text-lg text-color2">
+        <h1 className="font-3 xl:text-2xl text-lg text-color2 pointer-events-none ">
           Thông tin các dịch vụ
         </h1>
         <div>
@@ -90,21 +88,23 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
             color="primary"
             onClick={changeStatusOpenAddService}
           >
-            Thêm dịch vụ mới
+            <span className="font-3">Thêm dịch vụ mới</span>
           </Button>
           <Dialog
             open={openAddService}
             onClose={changeStatusOpenAddService}
             aria-labelledby="form-dialog-title"
           >
-            <DialogTitle id="form-dialog-title">Thêm dịch vụ mới</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+              <span className="font-3 text-color2">Thêm dịch vụ mới</span>
+            </DialogTitle>
             <form
               onSubmit={handleSubmit(createService)}
               className="text-color2"
             >
               <DialogContent>
                 <div className="font-2">
-                  <label>Khoa</label>
+                  <label className="font-3">Khoa</label>
                   <select
                     required
                     {...register("department_id")}
@@ -121,7 +121,7 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
                   </select>
                 </div>
                 <div className="font-2">
-                  <label>Tên dịch vụ</label>
+                  <label className="font-3">Tên dịch vụ</label>
                   <input
                     type="text"
                     required
@@ -130,7 +130,7 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
                   />
                 </div>
                 <div className="font-2">
-                  <label>Giá (kVNĐ)</label>
+                  <label className="font-3">Giá (kVNĐ)</label>
                   <input
                     type="number"
                     required
@@ -139,7 +139,7 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
                   />
                 </div>
                 <div className="font-2">
-                  <label>Mô tả</label>
+                  <label className="font-3">Mô tả</label>
                   <textarea
                     required
                     {...register("description")}
@@ -151,10 +151,10 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
                     onClick={changeStatusOpenAddService}
                     color="secondary"
                   >
-                    Hủy
+                    <span className="font-3">Hủy</span>
                   </Button>
                   <Button type="submit" color="primary">
-                    Thêm
+                    <span className="font-3">Thêm</span>
                   </Button>
                 </DialogActions>
               </DialogContent>
@@ -255,8 +255,8 @@ const EditRowService: React.FC<{
     setDetailsBackup(details);
   };
   const handleCancelEdit = () => {
-    setDetails(detailsBackup);
     setIsEdit(!isEdit);
+    setDetails(detailsBackup);
   };
   const handleDelete = async () => {
     await EditServiceModuleController.deleteService(details.id, token, {
@@ -321,7 +321,7 @@ const EditRowService: React.FC<{
                 onClick={changeDialogEdit}
               >
                 {icons.check}
-                <span>Lưu</span>
+                <span className="font-3">Lưu</span>
               </Button>
               <Dialog
                 open={openDialogEdit}
@@ -330,14 +330,16 @@ const EditRowService: React.FC<{
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"Bạn có chắc chắn muốn lưu chỉnh sửa này không?"}
+                  <span className="font-3">
+                    {"Bạn có chắc chắn muốn lưu chỉnh sửa này không?"}
+                  </span>
                 </DialogTitle>
                 <DialogActions>
                   <Button onClick={changeDialogEdit} color="secondary">
-                    Hủy
+                    <span className="font-3">Hủy</span>
                   </Button>
                   <Button onClick={handleSave} color="primary" autoFocus>
-                    Đồng ý
+                    <span className="font-3">Đồng ý</span>
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -349,7 +351,7 @@ const EditRowService: React.FC<{
               onClick={handleCancelEdit}
             >
               {icons.close}
-              <span>Hủy</span>
+              <span className="font-3">Hủy</span>
             </Button>
           </>
         ) : (
@@ -361,7 +363,7 @@ const EditRowService: React.FC<{
               onClick={changeStatusIsEdit}
             >
               {icons.edit}
-              <span>Sửa</span>
+              <span className="font-3">Sửa</span>
             </Button>
             <div>
               <Button
@@ -371,7 +373,7 @@ const EditRowService: React.FC<{
                 onClick={changeDialogDelete}
               >
                 {icons.close}
-                <span>Xóa</span>
+                <span className="font-3">Xóa</span>
               </Button>
               <Dialog
                 open={openDialogDelete}
@@ -380,14 +382,16 @@ const EditRowService: React.FC<{
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"Bạn có chắc chắn muốn xóa dịch vụ này không?"}
+                  <span className="font-3">
+                    {"Bạn có chắc chắn muốn xóa dịch vụ này không?"}
+                  </span>
                 </DialogTitle>
                 <DialogActions>
                   <Button onClick={changeDialogDelete} color="secondary">
-                    Hủy
+                    <span className="font-3">Hủy</span>
                   </Button>
                   <Button onClick={handleDelete} color="primary" autoFocus>
-                    Đồng ý
+                    <span className="font-3">Đồng ý</span>
                   </Button>
                 </DialogActions>
               </Dialog>

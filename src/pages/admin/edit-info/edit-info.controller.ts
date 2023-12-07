@@ -87,9 +87,96 @@ interface IEditService {
     }
   ): Promise<any>;
 }
+interface IEditUserService {
+  getAdminAndServiceForAd(admin_id: number, token: string): Promise<any>;
+  getAdminAndService(): Promise<any>;
+  removeAdminAndService(
+    token: string,
+    toast: {
+      toast: any;
+      options: ToastOptions;
+    },
+    id: number
+  ): Promise<any>;
+  addUserService(
+    payload: { user_id: number; service_id: number },
+    token: string,
+    toast: {
+      toast: any;
+      options: ToastOptions;
+    }
+  ): Promise<any>;
+}
 class EditInfoController
-  implements IEditBranches, IEditDepartment, IEditService
+  implements IEditBranches, IEditDepartment, IEditService, IEditUserService
 {
+  async addUserService(
+    payload: { user_id: number; service_id: number },
+    token: string,
+    toast: {
+      toast: any;
+      options: ToastOptions;
+    }
+  ) {
+    try {
+      const response = await axios.post(`${URL}/users-services`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: `application/json`,
+        },
+      });
+      if (response.status !== 200) {
+        console.log(response);
+        return;
+      }
+      toast.toast.success("Thêm thành công", toast.options);
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
+    }
+  }
+  async getAdminAndService() {
+    try {
+      const response = await axios.get(`${URL}/users-services/`);
+      if (response.status !== 200) {
+        console.log(response);
+        return;
+      }
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
+    }
+    return [];
+  }
+  async getAdminAndServiceForAd(admin_id: number, token: string): Promise<any> {
+    try {
+      const response = await axios.get(
+        `${URL}/users-services/admin_id=${admin_id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.status !== 200) {
+        console.log(response);
+        return;
+      }
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
+    }
+    return [];
+  }
   async getService(): Promise<any> {
     try {
       const response = await axios.get(`${URL}/services`);
@@ -100,6 +187,9 @@ class EditInfoController
       return response.data;
     } catch (error: any) {
       console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
     return [];
   }
@@ -113,6 +203,9 @@ class EditInfoController
       return response.data;
     } catch (error: any) {
       console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
     return [];
   }
@@ -126,6 +219,9 @@ class EditInfoController
       return response.data;
     } catch (error: any) {
       console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
     return [];
   }
@@ -151,10 +247,9 @@ class EditInfoController
       toast.toast.success("Cập nhật thành công", toast.options);
     } catch (error: any) {
       console.log(error);
-      toast.toast.error(
-        "Đã có lỗi sảy ra khi cập nhật. Vui lòng thử lại",
-        toast.options
-      );
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
   async updateService(
@@ -180,10 +275,9 @@ class EditInfoController
       toast.toast.success("Cập nhật thành công", toast.options);
     } catch (error: any) {
       console.log(error);
-      toast.toast.error(
-        "Đã có lỗi sảy ra khi cập nhật. Vui lòng thử lại",
-        toast.options
-      );
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
   async updateDepartment(
@@ -209,10 +303,9 @@ class EditInfoController
       toast.toast.success("Cập nhật thành công", toast.options);
     } catch (error: any) {
       console.log(error);
-      toast.toast.error(
-        "Đã có lỗi sảy ra khi cập nhật. Vui lòng thử lại",
-        toast.options
-      );
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
   async deleteBranches(
@@ -237,10 +330,32 @@ class EditInfoController
       toast.toast.success("Xóa thành công", toast.options);
     } catch (error: any) {
       console.log(error);
-      toast.toast.error(
-        "Đã có lỗi sảy ra khi xóa. Vui lòng thử lại",
-        toast.options
-      );
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
+    }
+  }
+  async removeAdminAndService(
+    token: string,
+    toast: {
+      toast: any;
+      options: ToastOptions;
+    },
+    id: number
+  ) {
+    try {
+      await axios.delete(`${URL}/users-services/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: `application/json`,
+        },
+      });
+      toast.toast.success("Xóa thành công", toast.options);
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
   async deleteService(
@@ -265,10 +380,9 @@ class EditInfoController
       toast.toast.success("Xóa thành công", toast.options);
     } catch (error: any) {
       console.log(error);
-      toast.toast.error(
-        "Đã có lỗi sảy ra khi xóa. Vui lòng thử lại",
-        toast.options
-      );
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
   async deleteDepartments(
@@ -293,10 +407,9 @@ class EditInfoController
       toast.toast.success("Xóa thành công", toast.options);
     } catch (error: any) {
       console.log(error);
-      toast.toast.error(
-        "Đã có lỗi sảy ra khi xóa. Vui lòng thử lại",
-        toast.options
-      );
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
   async addBranch(
@@ -321,10 +434,9 @@ class EditInfoController
       toast.toast.success("Thêm chi nhánh thành công", toast.options);
     } catch (error: any) {
       console.log(error);
-      toast.toast.error(
-        "Đã có lỗi sảy ra khi thêm chi nhánh. Vui lòng thử lại",
-        toast.options
-      );
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
   async addService(
@@ -349,10 +461,9 @@ class EditInfoController
       toast.toast.success("Thêm dịch vụ thành công", toast.options);
     } catch (error: any) {
       console.log(error);
-      toast.toast.error(
-        "Đã có lỗi sảy ra khi thêm dịch vụ. Vui lòng thử lại",
-        toast.options
-      );
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
   async addDepartment(
@@ -377,10 +488,9 @@ class EditInfoController
       toast.toast.success("Thêm chi khoa thành công", toast.options);
     } catch (error: any) {
       console.log(error);
-      toast.toast.error(
-        "Đã có lỗi sảy ra khi thêm khoa. Vui lòng thử lại",
-        toast.options
-      );
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
 }
@@ -389,4 +499,6 @@ export const EditBranchModuleController: IEditBranches =
 export const EditDepartmentModuleController: IEditDepartment =
   new EditInfoController();
 export const EditServiceModuleController: IEditService =
+  new EditInfoController();
+export const EditUserServiceModuleController: IEditUserService =
   new EditInfoController();

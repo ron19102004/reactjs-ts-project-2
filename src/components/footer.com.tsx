@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
-    <footer className="bg-color2 p-10 mt-5 font-2 text-color5">
+    <footer className="bg-color2 p-10 font-2 text-color5">
       <ToastContainer />
       <section className="xl:flex justify-around items-center">
         <div>

@@ -7,6 +7,7 @@ import "./style.scss";
 const EditBranches = React.lazy(() => import("./branches"));
 const EditDepartment = React.lazy(() => import("./department"));
 const EditService = React.lazy(() => import("./services"));
+const EditUserService = React.lazy(() => import("./user-service"))
 
 const EditInfoAdmin: React.FC = () => {
   const userCurrent = useSelector(
@@ -28,6 +29,11 @@ const EditInfoAdmin: React.FC = () => {
       <section>
         <Suspense fallback={<Loading />}>
           <EditService admin_id={userCurrent?.id} token={token} />
+        </Suspense>
+      </section>
+      <section>
+        <Suspense fallback={<Loading />}>
+          <EditUserService admin_id={userCurrent?.id} token={token} />
         </Suspense>
       </section>
     </article>

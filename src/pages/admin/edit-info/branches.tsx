@@ -52,19 +52,19 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
     setList(listCopy);
   };
   const createBranch = async (e: any) => {
+    changeStatusOpenAddBranch();
     await EditBranchModuleController.addBranch(
       token,
       { toast: toast, options: toastConfigs },
       e
     );
     reset();
-    changeStatusOpenAddBranch();
     init();
   };
   return (
     <article className="font-2 space-y-3">
       <section className="space-y-3 md:space-y-0 md:flex md:space-x-2 md:items-center">
-        <h1 className="font-3 xl:text-2xl text-lg text-color2">
+        <h1 className="font-3 xl:text-2xl text-lg text-color2 pointer-events-none">
           Thông tin các chi nhánh
         </h1>
         <div>
@@ -73,18 +73,20 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
             color="primary"
             onClick={changeStatusOpenAddBranch}
           >
-            Thêm chi nhánh mới
+            <span className="font-3">Thêm chi nhánh mới</span>
           </Button>
           <Dialog
             open={openAddBranch}
             onClose={changeStatusOpenAddBranch}
             aria-labelledby="form-dialog-title"
           >
-            <DialogTitle id="form-dialog-title">Thêm chi nhánh mới</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+              <span className="font-3 text-color2">Thêm chi nhánh mới</span>
+            </DialogTitle>
             <form onSubmit={handleSubmit(createBranch)} className="text-color2">
               <DialogContent>
                 <div className="font-2">
-                  <label>Tên chi nhánh</label>
+                  <label className="font-3">Tên chi nhánh</label>
                   <input
                     type="text"
                     required
@@ -94,7 +96,7 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                   />
                 </div>
                 <div className="font-2">
-                  <label>Địa chỉ</label>
+                  <label className="font-3">Địa chỉ</label>
                   <input
                     type="text"
                     required
@@ -104,7 +106,7 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                   />
                 </div>
                 <div className="font-2">
-                  <label>Email</label>
+                  <label className="font-3">Email</label>
                   <input
                     type="email"
                     required
@@ -114,7 +116,7 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                   />
                 </div>
                 <div className="font-2">
-                  <label>Đường dây nóng</label>
+                  <label className="font-3">Đường dây nóng</label>
                   <input
                     type="text"
                     required
@@ -125,14 +127,14 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                   />
                 </div>
                 <div className="font-2">
-                  <label>Mô tả</label>
+                  <label className="font-3">Mô tả</label>
                   <textarea
                     {...register("description")}
                     className="w-full h-32 outline-none border-2 rounded px-2"
                   />
                 </div>
                 <div className="font-2">
-                  <label>Link bản đồ</label>
+                  <label className="font-3">Link bản đồ</label>
                   <input
                     type="text"
                     {...register("src_map")}
@@ -141,7 +143,7 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                   />
                 </div>
                 <div className="font-2">
-                  <label>Ngày thành lập</label>
+                  <label className="font-3">Ngày thành lập</label>
                   <input
                     type="date"
                     required
@@ -151,10 +153,10 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                 </div>
                 <DialogActions>
                   <Button onClick={changeStatusOpenAddBranch} color="secondary">
-                    Hủy
+                    <span className="font-3">Hủy</span>
                   </Button>
                   <Button type="submit" color="primary">
-                    Thêm
+                    <span className="font-3">Thêm</span>
                   </Button>
                 </DialogActions>
               </DialogContent>
@@ -262,11 +264,11 @@ const EditRowBranches: React.FC<{
     setIsEdit(!isEdit);
   };
   const handleSave = async () => {
+    setIsEdit(!isEdit);
     await EditBranchModuleController.updateBranches(details, token, {
       toast: toast,
       options: toastConfigs,
     });
-    setIsEdit(!isEdit);
     setDetailsBackup(details);
   };
   const handleCancelEdit = () => {
@@ -378,7 +380,7 @@ const EditRowBranches: React.FC<{
                 onClick={changeDialogEdit}
               >
                 {icons.check}
-                <span>Lưu</span>
+                <span className="font-3">Lưu</span>
               </Button>
               <Dialog
                 open={openDialogEdit}
@@ -387,14 +389,16 @@ const EditRowBranches: React.FC<{
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"Bạn có chắc chắn muốn lưu chỉnh sửa này không?"}
+                  <span className="font-3">
+                    {"Bạn có chắc chắn muốn lưu chỉnh sửa này không?"}
+                  </span>
                 </DialogTitle>
                 <DialogActions>
                   <Button onClick={changeDialogEdit} color="secondary">
-                    Hủy
+                    <span className="font-3">Hủy</span>
                   </Button>
                   <Button onClick={handleSave} color="primary" autoFocus>
-                    Đồng ý
+                    <span className="font-3">Đồng ý</span>
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -406,7 +410,7 @@ const EditRowBranches: React.FC<{
               onClick={handleCancelEdit}
             >
               {icons.close}
-              <span>Hủy</span>
+              <span className="font-3">Hủy</span>
             </Button>
           </>
         ) : (
@@ -418,7 +422,7 @@ const EditRowBranches: React.FC<{
               onClick={changeStatusIsEdit}
             >
               {icons.edit}
-              <span>Sửa</span>
+              <span className="font-3">Sửa</span>
             </Button>
             <div>
               <Button
@@ -428,7 +432,7 @@ const EditRowBranches: React.FC<{
                 onClick={changeDialogDelete}
               >
                 {icons.close}
-                <span>Xóa</span>
+                <span className="font-3">Xóa</span>
               </Button>
               <Dialog
                 open={openDialogDelete}
@@ -437,14 +441,16 @@ const EditRowBranches: React.FC<{
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"Bạn có chắc chắn muốn xóa chi nhánh này không?"}
+                  <span className="font-3">
+                    {"Bạn có chắc chắn muốn xóa chi nhánh này không?"}
+                  </span>
                 </DialogTitle>
                 <DialogActions>
                   <Button onClick={changeDialogDelete} color="secondary">
-                    Hủy
+                    <span className="font-3">Hủy</span>
                   </Button>
                   <Button onClick={handleDelete} color="primary" autoFocus>
-                    Đồng ý
+                    <span className="font-3">Đồng ý</span>
                   </Button>
                 </DialogActions>
               </Dialog>

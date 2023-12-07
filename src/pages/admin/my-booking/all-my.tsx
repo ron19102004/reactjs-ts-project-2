@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   EAction,
   MyBookingAdminModuleController,
@@ -19,6 +19,11 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Tooltip } from "@material-ui/core";
 import { ValidatorCustomModule } from "../../../helpers/validator";
 import { Divider } from "@chakra-ui/react";
+import { Loading } from ".";
+import { TelebotModuleController } from "./telebot.controller";
+import { EditUserServiceModuleController } from "../edit-info/edit-info.controller";
+
+const CreateBooking = React.lazy(() => import("./create-booking"));
 enum ESearchMethod {
   phone = "phoneNumber",
   email = "email",
@@ -46,6 +51,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
   const [listForSearch, setListForSearch] = useState<any[]>([]);
   const [listResultForSearch, setListResultForSearch] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
+  const [listUService, setListUService] = useState<any[]>([]);
   const init = async () => {
     const bookings = await MyBookingAdminModuleController.getAllMyBookings(
       admin_id,
@@ -56,6 +62,12 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
       token
     );
     setList(bookings);
+    const listUService$ =
+      await EditUserServiceModuleController.getAdminAndServiceForAd(
+        admin_id,
+        token
+      );
+    setListUService(listUService$);
   };
   const toastConfigs: ToastOptions = {
     position: "top-right",
@@ -112,8 +124,8 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
       return;
     }
     setSearchValue(e.target.value.trim());
-    if(searchValue.length === 0){
-      setListResultForSearch([])
+    if (searchValue.length === 0) {
+      setListResultForSearch([]);
       return;
     }
     switch (searchMethod) {
@@ -134,8 +146,6 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
   const searchByCode = () => {
     const result = listForSearch.filter((x) => {
       const code = `b${x.id}id`;
-      console.log(code);
-      console.log(searchValue);
       return code === searchValue.toLowerCase();
     });
     setListResultForSearch(result);
@@ -171,6 +181,11 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
     );
     setListResultForSearch(result);
   };
+  const findUService = (id: number) => {
+    const listCopy = [...listUService];
+    const index = listCopy.findIndex((x) => x.id + "" === id + "");
+    return listCopy[index];
+  };
   useEffect(() => {
     init();
   }, []);
@@ -178,8 +193,8 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
     <article className="bg-color2 p-3 ">
       <main className="space-y-3">
         <section>
-          <h1 className="font-3 text-white xl:text-2xl flex space-x-1">
-            <span>Tìm kiếm</span>
+          <h1 className="font-3 text-white xl:text-2xl text-lg flex space-x-1">
+            <span className="pointer-events-none">Tìm kiếm</span>
             <section>
               <Tooltip
                 title={`${isOpenBoxSearch ? "Đóng tím kiếm" : "Mở tìm kiếm"}`}
@@ -194,75 +209,94 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
               </Tooltip>
             </section>
           </h1>
-          <div
-            className={`${
-              isOpenBoxSearch ? "" : "hidden"
-            } flex justify-center md:justify-start md:space-x-3 md:flex-row flex-col space-y-3 md:space-y-0 font-2`}
-          >
-            <select
-              className="rounded h-10 px-2 text-color2 outline-none"
-              onChange={(e) => {
-                handleSelectSearch(e);
-              }}
+          {isOpenBoxSearch && (
+            <div
+              className={`flex justify-center md:justify-start md:space-x-3 md:flex-row flex-col space-y-3 md:space-y-0 font-2`}
             >
-              <option value={ESearchMethod.none} defaultValue={searchMethod}>
-                Chọn phương thức tìm kiếm
-              </option>
-              <option value={ESearchMethod.phone}>Số điện thoại</option>
-              <option value={ESearchMethod.email}>Email</option>
-              <option value={ESearchMethod.code}>Mã số thứ tự</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Nhập giá trị tìm kiếm"
-              className="h-10 px-2 rounded outline-none"
-              value={searchValue}
-              onChange={(e) => {
-                handleSearch(e);
-              }}
-            />
-          </div>
+              <select
+                className="rounded h-10 px-2 text-color2 outline-none"
+                onChange={(e) => {
+                  handleSelectSearch(e);
+                }}
+              >
+                <option value={ESearchMethod.none} defaultValue={searchMethod}>
+                  Chọn phương thức tìm kiếm
+                </option>
+                <option value={ESearchMethod.phone}>Số điện thoại</option>
+                <option value={ESearchMethod.email}>Email</option>
+                <option value={ESearchMethod.code}>Mã số thứ tự</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Nhập giá trị tìm kiếm"
+                className="h-10 px-2 rounded outline-none"
+                value={searchValue}
+                onChange={(e) => {
+                  handleSearch(e);
+                }}
+              />
+            </div>
+          )}
         </section>
-        <section className={`${isOpenBoxSearch ? "" : "hidden"} space-y-3`}>
-          <h1 className="font-3 text-white xl:text-2xl ">
-            {listResultForSearch.length} Kết quả tìm kiếm
-          </h1>
-          <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
-          >
-            {listResultForSearch &&
-              listResultForSearch.map((booking: any, index: number) => (
-                <li key={index} className="bg-color7 p-3 rounded space-y-2">
-                  <CardBookingAdmin
-                    data={booking}
-                    handleChangeList={handleChangeList}
-                    admin_id={admin_id}
-                    token={token}
-                    toastOptions={toastConfigs}
-                  />
-                </li>
-              ))}
-          </ul>
-          <Divider />
-        </section>
-        <h1 className="font-3 text-white xl:text-2xl flex space-x-1">
-          <span>Danh sách các hồ sơ khách hàng</span>
-          <section>
-            <Tooltip title={`${isOpen ? "Đóng danh sách" : "Mở danh sách"}`}>
-              <button onClick={handleOpen} className="text-white">
-                {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-              </button>
-            </Tooltip>
+        {isOpenBoxSearch && (
+          <section className={`space-y-3`}>
+            <h1 className="font-3 text-white xl:text-2xl ">
+              {listResultForSearch.length} Kết quả tìm kiếm
+            </h1>
+            <ul
+              className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+            >
+              {listResultForSearch &&
+                listResultForSearch.map((booking: any, index: number) => (
+                  <li key={index} className="bg-color7 p-3 rounded space-y-2">
+                    <CardBookingAdmin
+                      data={booking}
+                      handleChangeList={handleChangeList}
+                      admin_id={admin_id}
+                      token={token}
+                      toastOptions={toastConfigs}
+                      user_service={findUService(booking.uService.id)}
+                    />
+                  </li>
+                ))}
+            </ul>
+            <Divider />
           </section>
-        </h1>
+        )}
+
+        <section className="md:flex md:justify-between md:items-center space-y-2 md:space-y-0">
+          <h1 className="font-3 text-white xl:text-2xl text-lg  flex space-x-1">
+            <span className="pointer-events-none">
+              Danh sách các hồ sơ khách hàng
+            </span>
+            <section>
+              <Tooltip title={`${isOpen ? "Đóng danh sách" : "Mở danh sách"}`}>
+                <button onClick={handleOpen} className="text-white">
+                  {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                </button>
+              </Tooltip>
+            </section>
+          </h1>
+          <Suspense fallback={<Loading />}>
+            <CreateBooking
+              initAllMyBooking={init}
+              admin_id={admin_id}
+              token={token}
+            />
+          </Suspense>
+        </section>
         <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
           <ul
             className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
           >
             {list &&
               list.map((booking: any, index: number) => (
-                <li key={index} className="bg-color7 p-3 rounded space-y-2">
+                <li
+                  key={index}
+                  className="bg-color7 p-3 rounded space-y-2 flex flex-col justify-between"
+                >
                   <CardBookingAdmin
+                    user_service={findUService(booking.uService.id)}
                     data={booking}
                     handleChangeList={handleChangeList}
                     admin_id={admin_id}
@@ -273,25 +307,27 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
               ))}
           </ul>
           <div className="flex items-center justify-center">
-            <Button variant="contained" onClick={handleLoadList}>
+            <button className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md" onClick={handleLoadList}>
               Tải thêm hồ sơ
-            </Button>
+            </button>
           </div>
         </section>
       </main>
     </article>
   );
 };
-const icons = {
+export const icons = {
   checked: <img src={checkedImg} alt="checked" className="w-5" />,
   refused: <img src={refuseImg} alt="refuse" className="w-5" />,
 };
 interface ICardBookingAdminProps extends IAllBookingAdminProps {
+  user_service: any;
   data: any;
   handleChangeList: (id: number) => void;
   toastOptions: ToastOptions;
 }
 const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
+  user_service,
   data,
   handleChangeList,
   admin_id,
@@ -308,7 +344,14 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
     finished: false,
   });
   const [open, setOpen] = useState<boolean>(false);
-
+  const [openSendMessage, setOpenSendMessage] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+  const changeStatusOpenSendMessage = () => {
+    if (openSendMessage) {
+      setMessage("");
+    }
+    setOpenSendMessage(!openSendMessage);
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -363,6 +406,18 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
     );
     handleChangeList(data.id);
   };
+  const sendMessage = async () => {
+    changeStatusOpenSendMessage();
+    const src =
+      `\n📤Thông báo đến từ hồ sơ ${data.id}id\n🔡Nội dung: ` + message;
+    await TelebotModuleController.sendMessage(
+      token,
+      data.user.phoneNumber,
+      src,
+      { toast: toast, options: toastOptions }
+    );
+    setMessage("");
+  };
   useEffect(() => {
     init();
   }, [data]);
@@ -413,15 +468,21 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
               <span>Hoàn thành</span>
             </li>
           </ul>
+          <h1 className="card-info-title">Ghi chú</h1>
+          <textarea
+            disabled={true}
+            className=" bg-color7 p-1 w-full h-20 rounded font-2 text-color2 outline-none"
+            value={`Ghi chú: ${data.note ?? "Không có"}`}
+          />
         </div>
         <div className="card-info">
           <h1 className="card-info-title">Dịch vụ sử dụng</h1>
           <ul className="card-info-list">
             <li>
-              <span>Tên dịch vụ: {data.service.name}</span>
+              <span>Tên dịch vụ: {user_service?.service?.name}</span>
             </li>
             <li>
-              <span>Giá dịch vụ: {data.service.price}k</span>
+              <span>Giá dịch vụ: {user_service?.service?.price}k</span>
             </li>
           </ul>
         </div>
@@ -439,7 +500,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
           </ul>
         </div>
       </section>
-      <section className="">
+      <section className="flex justify-between items-center">
         <div className="space-x-2">
           {status.rejected === false &&
           status.accepted === false &&
@@ -451,7 +512,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                 color="secondary"
                 className="bg-red-400"
               >
-                Từ chối
+                <span className="font-3">Từ chối</span>
               </Button>
               <Button
                 onClick={handleAccept}
@@ -459,7 +520,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                 color="primary"
                 className="bg-red-400"
               >
-                Chấp nhận
+                <span className="font-3">Chấp nhận</span>
               </Button>
             </>
           ) : (
@@ -475,7 +536,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                 color="primary"
                 className="bg-red-400"
               >
-                Hoàn thành
+                <span className="font-3">Hoàn thành</span>
               </Button>
             </>
           ) : (
@@ -494,7 +555,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                   color="secondary"
                   onClick={handleClickOpen}
                 >
-                  Đưa vào lịch sử hồ sơ
+                  <span className="font-3">Đưa vào lịch sử hồ sơ</span>
                 </Button>
                 <Dialog
                   open={open}
@@ -503,7 +564,9 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                   aria-describedby="alert-dialog-description"
                 >
                   <DialogTitle id="alert-dialog-title">
-                    {"Bạn có chắc chắn là muốn đưa hồ sơ vào lịch sử không?"}
+                    <span className="font-3">
+                      {"Bạn có chắc chắn là muốn đưa hồ sơ vào lịch sử không?"}
+                    </span>
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -519,7 +582,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                       color="secondary"
                       variant="contained"
                     >
-                      Húy
+                      <span className="font-3">Húy</span>
                     </Button>
                     <Button
                       onClick={() => {
@@ -529,7 +592,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                       variant="contained"
                       autoFocus
                     >
-                      Đồng ý
+                      <span className="font-2">Đồng ý</span>
                     </Button>
                   </DialogActions>
                 </Dialog>
@@ -538,6 +601,60 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
           ) : (
             ""
           )}
+        </div>
+        <div>
+          <div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={changeStatusOpenSendMessage}
+            >
+              <span className="font-3">Gửi thông báo</span>
+            </Button>
+            <Dialog
+              open={openSendMessage}
+              onClose={changeStatusOpenSendMessage}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                <span className="font-3 text-color2">
+                  Gửi tin nhắn thông báo đến hồ sơ {data.id}id của{" "}
+                  {data.user.lastName}
+                </span>
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  <h1 className="font-3 text-color2">Tin nhắn</h1>
+                  <textarea
+                    className="w-full h-36 outline-none border-2 rounded text-color2 font-2 p-2"
+                    onChange={(e) => {
+                      setMessage(e.target.value);
+                    }}
+                  />
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    changeStatusOpenSendMessage();
+                  }}
+                  color="secondary"
+                  variant="contained"
+                >
+                  <span className="font-3">Húy</span>
+                </Button>
+                <Button
+                  onClick={sendMessage}
+                  color="primary"
+                  variant="contained"
+                  autoFocus
+                >
+                  <span className="font-3">Gửi tin nhắn</span>
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
         </div>
       </section>
     </>

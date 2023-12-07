@@ -8,6 +8,41 @@ export enum EAction {
   FINISH = "finish",
 }
 class MyBookingAdminController {
+  async addBooking(
+    payload: {
+      user_service_id: number;
+      admin_id: number;
+      user_id: number;
+      note: string;
+    },
+    toast: { toast: any; options: ToastOptions },
+    token: string
+  ) {
+    try {
+      const response = await axios.post(
+        `${URL}/booking/admin/${payload.admin_id}`,
+        payload,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.data.status !== 200) {
+        console.log(response);
+        toast.toast.error("Đã có lỗi sảy ra", toast.options);
+        return false;
+      }
+      toast.toast.success("Thêm thành công", toast.options);
+      return true;
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
+    }
+  }
   async getAllMyBookings(
     admin_id: number,
     limit: { take?: number; skip?: number },
@@ -34,6 +69,9 @@ class MyBookingAdminController {
       return response.data.data;
     } catch (error: any) {
       console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
     return [];
   }
@@ -60,8 +98,11 @@ class MyBookingAdminController {
         return;
       }
       toast.toast.success(`${response.data.message}`, toast.options);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
   }
   async getAllBookingForSearch(admin_id: number, token: string) {
@@ -95,7 +136,7 @@ class MyBookingAdminController {
             Authorization: "Bearer " + token,
           },
         }
-      );      
+      );
       if (response.data.status !== 200) {
         console.log(response);
         return false;
@@ -103,6 +144,9 @@ class MyBookingAdminController {
       return true;
     } catch (error: any) {
       console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
     return false;
   }

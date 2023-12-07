@@ -13,7 +13,6 @@ class HomeAdminController {
           },
         }
       );
-      console.log(response);
       if (response.data.status !== 200) {
         console.log(response);
         return [];
@@ -21,6 +20,9 @@ class HomeAdminController {
       return response.data.data;
     } catch (error: any) {
       console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
     return [];
   }
@@ -40,7 +42,6 @@ class HomeAdminController {
           },
         }
       );
-      console.log(response);
       if (response.data.status !== 200) {
         console.log(response);
         return [];
@@ -48,6 +49,9 @@ class HomeAdminController {
       return response.data.data;
     } catch (error: any) {
       console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
     }
     return [];
   }

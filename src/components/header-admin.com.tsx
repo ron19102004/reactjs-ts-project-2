@@ -1,31 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { NavLink, useNavigate } from "react-router-dom";
-import LOGO from "../../assets/logo.png";
+import LOGO from "../assets/logo.png";
 import { useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import "../styles/header.scss";
+import "./styles/header.scss";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import { Tooltip } from "@chakra-ui/react";
-import { AuthModuleController } from "../../pages/auths/auth.controller";
-import { ToastOptions, toast } from "react-toastify";
+import { Role } from "../redux/reducers/auth.reducer";
 import { useDispatch } from "react-redux";
-interface IRoute {
+import { AuthModuleController } from "../pages/auths/auth.controller";
+import { toast, ToastOptions } from "react-toastify";
+import LockIcon from "@mui/icons-material/Lock";
+interface IRouteAdmin {
   title: string;
   icon: any;
   path: string;
+  role: Role;
 }
-const routes: IRoute[] = [
-  { title: "Trang chủ", icon: "", path: "/" },
-  { title: "Chuyên khoa", icon: "", path: "/departments" },
-  { title: "Dịch vụ", icon: "", path: "/services" },
-  { title: "Đặt hẹn", icon: "", path: "/booking" },
+const routes: IRouteAdmin[] = [
+  { title: "Trang chủ", icon: "", path: "/", role: Role.admin },
+  {
+    title: "Chỉnh sửa thông tin",
+    icon: "",
+    path: "/edit-info",
+    role: Role.master,
+  },
+  {
+    title: "Lịch hẹn khách hàng",
+    icon: "",
+    path: "/my-booking",
+    role: Role.admin,
+  },
 ];
-interface IHeaderUserProps {
+interface IHeaderAdminProps {
   userCurrent: any;
 }
-const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
+const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
   const toastConfigs: ToastOptions = {
     position: "top-center",
     autoClose: 2000,
@@ -59,7 +71,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
         className={`font-3 z-50 ${
           isFixed
             ? "fixed transition-all bg-header-user text-color2"
-            : "bg-color2 text-color7 absolute md:static"
+            : "bg-color2 text-color7"
         } min-w-full md:flex justify-between items-center px-3 md:px-6 py-1  `}
       >
         <section
@@ -90,7 +102,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
         <nav
           className={`${
             isOpen
-              ? `absolute left-0 translate-y-1 md:static md:translate-y-0 py-3 md:py-0 ${
+              ? `absolute z-50 left-0 translate-y-1 md:static md:translate-y-0 py-3 md:py-0 ${
                   isFixed
                     ? "fixed transition-all bg-header-user text-color2"
                     : "bg-color2 text-color7"
@@ -101,7 +113,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
           <ul
             className={`md:flex items-center text-base font-semibold space-y-3 space-x-0 md:space-x-2 md:space-y-0`}
           >
-            {routes.map((route: IRoute, index: number) => {
+            {routes.map((route: IRouteAdmin, index: number) => {
               return (
                 <li key={index} className={`link `}>
                   <NavLink
@@ -109,27 +121,27 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
                     to={route.path}
                     className={({ isActive }) =>
                       isActive
-                        ? `${
-                            route.path === "/booking"
-                              ? `md:border-2 rounded-md ${
-                                  isFixed
-                                    ? "border-color2 bg-color2text-white"
-                                    : "bg-white text-color2"
-                                }`
-                              : `${isFixed ? "a-active-fixed" : "a-active"}`
+                        ? `flex items-center ${
+                            isFixed ? "a-active-fixed" : "a-active"
                           } px-5 py-2 mx-3 md:mx-0`
-                        : `${
-                            route.path === "/booking"
-                              ? `md:border-2 rounded-md ${
-                                  isFixed
-                                    ? "border-color2 hover:bg-color2 hover:text-white"
-                                    : "hover:bg-white hover:text-color2"
-                                }`
-                              : `${isFixed ? "a-fixed" : "a"}`
+                        : ` flex items-center ${
+                            isFixed ? "a-fixed" : "a"
                           } px-5 py-2 mx-3 md:mx-0`
                     }
                   >
                     {route.title}
+                    {route.role !== userCurrent.role &&
+                    userCurrent.role !== Role.master ? (
+                      <div className="-translate-y-0.5">
+                        <LockIcon
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </NavLink>
                 </li>
               );
@@ -142,17 +154,20 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
                     to={"/my-profile"}
                     className={({ isActive }) =>
                       isActive
-                        ? `px-5 py-2 mx-3 md:mx-0  ${
+                        ? `flex items-center px-5 py-2 mx-3 md:mx-0  ${
                             isFixed ? "a-active-fixed" : "a-active"
                           }`
-                        : `px-5 py-2 mx-3 md:mx-0 ${isFixed ? "a-fixed" : "a"}`
+                        : ` flex items-center px-5 py-2 mx-3 md:mx-0 ${
+                            isFixed ? "a-fixed" : "a"
+                          }`
                     }
                   >
-                    Tài khoản của tôi
+                    Tài khoản
                   </NavLink>
                 </li>
                 <li className={`link`}>
-                  <button
+                  <NavLink
+                    to={"/"}
                     onClick={() => {
                       AuthModuleController.logout(
                         dispatch,
@@ -161,12 +176,12 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
                       );
                       changeStatusHeader();
                     }}
-                    className={`px-5 py-2 mx-3 md:mx-0 ${
+                    className={`flex items-center px-5 py-2 mx-3 md:mx-0 ${
                       isFixed ? "a-fixed" : "a"
                     }`}
                   >
                     Đăng xuất
-                  </button>
+                  </NavLink>
                 </li>
               </>
             ) : (
@@ -176,10 +191,12 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
                   to={"/auth/login"}
                   className={({ isActive }) =>
                     isActive
-                      ? `px-5 py-2 mx-3 md:mx-0  ${
+                      ? `flex items-center px-5 py-2 mx-3 md:mx-0  ${
                           isFixed ? "a-active-fixed" : "a-active"
                         }`
-                      : `px-5 py-2 mx-3 md:mx-0 ${isFixed ? "a-fixed" : "a"}`
+                      : `flex items-center px-5 py-2 mx-3 md:mx-0 ${
+                          isFixed ? "a-fixed" : "a"
+                        }`
                   }
                 >
                   Đăng nhập
@@ -206,4 +223,4 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
     </>
   );
 };
-export default HeaderUser;
+export default HeaderAdmin;

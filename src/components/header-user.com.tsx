@@ -1,42 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { NavLink, useNavigate } from "react-router-dom";
-import LOGO from "../../assets/logo.png";
+import LOGO from "../assets/logo.png";
 import { useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import "../styles/header.scss";
+import "./styles/header.scss";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import { Tooltip } from "@chakra-ui/react";
-import { Role } from "../../redux/reducers/auth.reducer";
+import { AuthModuleController } from "../pages/auths/auth.controller";
+import { ToastOptions, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { AuthModuleController } from "../../pages/auths/auth.controller";
-import { toast, ToastOptions } from "react-toastify";
-interface IRouteAdmin {
+interface IRoute {
   title: string;
   icon: any;
   path: string;
-  role: Role;
 }
-const routes: IRouteAdmin[] = [
-  { title: "Trang chủ", icon: "", path: "/", role: Role.admin },
-  {
-    title: "Chỉnh sửa thông tin",
-    icon: "",
-    path: "/edit-info",
-    role: Role.master,
-  },
-  {
-    title: "Lịch hẹn khách hàng",
-    icon: "",
-    path: "/my-booking",
-    role: Role.admin,
-  },
+const routes: IRoute[] = [
+  { title: "Trang chủ", icon: "", path: "/" },
+  { title: "Chuyên khoa", icon: "", path: "/departments" },
+  { title: "Dịch vụ", icon: "", path: "/services" },
+  { title: "Đặt hẹn", icon: "", path: "/booking" },
 ];
-interface IHeaderAdminProps {
+interface IHeaderUserProps {
   userCurrent: any;
 }
-const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
+const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
   const toastConfigs: ToastOptions = {
     position: "top-center",
     autoClose: 2000,
@@ -70,7 +59,7 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
         className={`font-3 z-50 ${
           isFixed
             ? "fixed transition-all bg-header-user text-color2"
-            : "bg-color2 text-color7"
+            : "bg-color2 text-color7 absolute md:static"
         } min-w-full md:flex justify-between items-center px-3 md:px-6 py-1  `}
       >
         <section
@@ -112,7 +101,7 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
           <ul
             className={`md:flex items-center text-base font-semibold space-y-3 space-x-0 md:space-x-2 md:space-y-0`}
           >
-            {routes.map((route: IRouteAdmin, index: number) => {
+            {routes.map((route: IRoute, index: number) => {
               return (
                 <li key={index} className={`link `}>
                   <NavLink
@@ -120,10 +109,24 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
                     to={route.path}
                     className={({ isActive }) =>
                       isActive
-                        ? `${
-                            isFixed ? "a-active-fixed" : "a-active"
+                        ? `flex items-center ${
+                            route.path === "/booking"
+                              ? `md:border-2 rounded-md ${
+                                  isFixed
+                                    ? "border-color2 bg-color2text-white"
+                                    : "bg-white text-color2"
+                                }`
+                              : `${isFixed ? "a-active-fixed" : "a-active"}`
                           } px-5 py-2 mx-3 md:mx-0`
-                        : `${isFixed ? "a-fixed" : "a"} px-5 py-2 mx-3 md:mx-0`
+                        : ` flex items-center ${
+                            route.path === "/booking"
+                              ? `md:border-2 rounded-md ${
+                                  isFixed
+                                    ? "border-color2 hover:bg-color2 hover:text-white"
+                                    : "hover:bg-white hover:text-color2"
+                                }`
+                              : `${isFixed ? "a-fixed" : "a"}`
+                          } px-5 py-2 mx-3 md:mx-0`
                     }
                   >
                     {route.title}
@@ -139,10 +142,10 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
                     to={"/my-profile"}
                     className={({ isActive }) =>
                       isActive
-                        ? `px-5 py-2 mx-3 md:mx-0  ${
+                        ? `flex items-center px-5 py-2 mx-3 md:mx-0  ${
                             isFixed ? "a-active-fixed" : "a-active"
                           }`
-                        : `px-5 py-2 mx-3 md:mx-0 ${isFixed ? "a-fixed" : "a"}`
+                        : `flex items-center px-5 py-2 mx-3 md:mx-0 ${isFixed ? "a-fixed" : "a"}`
                     }
                   >
                     Tài khoản của tôi
@@ -173,10 +176,10 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
                   to={"/auth/login"}
                   className={({ isActive }) =>
                     isActive
-                      ? `px-5 py-2 mx-3 md:mx-0  ${
+                      ? `flex items-center px-5 py-2 mx-3 md:mx-0  ${
                           isFixed ? "a-active-fixed" : "a-active"
                         }`
-                      : `px-5 py-2 mx-3 md:mx-0 ${isFixed ? "a-fixed" : "a"}`
+                      : ` flex items-center px-5 py-2 mx-3 md:mx-0 ${isFixed ? "a-fixed" : "a"}`
                   }
                 >
                   Đăng nhập
@@ -203,4 +206,4 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
     </>
   );
 };
-export default HeaderAdmin;
+export default HeaderUser;

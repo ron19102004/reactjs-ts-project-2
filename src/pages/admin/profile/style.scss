@@ -1,0 +1,7 @@
+@import "../../../base";
+.card-profile-custom{
+    box-shadow: 0 0 20px 2px $color5;
+    &:hover{
+        box-shadow: 0 0 20px 2px $color4;
+    }
+}

@@ -7,13 +7,15 @@ import { useSelector } from "react-redux";
 import { Role } from "./redux/reducers/auth.reducer";
 import HomeAdmin from "./pages/admin/home";
 import Footer from "./components/footer.com";
-import HeaderAdmin from "./components/admin/header-admin.com";
-import HeaderUser from "./components/user/header-user.com";
+import HeaderAdmin from "./components/header-admin.com";
+import HeaderUser from "./components/header-user.com";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import MyBookingAdmin from "./pages/admin/my-booking";
 import MyBookingUser from "./pages/user/my-booking";
 import EditInfoAdmin from "./pages/admin/edit-info";
+import ProfileAdmin from "./pages/admin/profile";
+import ProfileUser from "./pages/user/profile";
 
 const App: React.FC = () => {
   const userCurrent = useSelector(
@@ -64,10 +66,24 @@ const App: React.FC = () => {
                   path="/edit-info"
                   element={
                     userCurrent ? (
-                      userCurrent?.role !== Role.user ? (
+                      userCurrent?.role === Role.master ? (
                         <EditInfoAdmin />
                       ) : (
                         "Forbidden"
+                      )
+                    ) : (
+                      <Navigate to={"/auth/login"} />
+                    )
+                  }
+                />
+                <Route
+                  path="/my-profile"
+                  element={
+                    userCurrent ? (
+                      userCurrent?.role !== Role.user ? (
+                        <ProfileAdmin />
+                      ) : (
+                        <ProfileUser />
                       )
                     ) : (
                       <Navigate to={"/auth/login"} />

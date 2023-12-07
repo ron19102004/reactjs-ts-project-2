@@ -63,6 +63,7 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
     setList(listCopy);
   };
   const createDepartment = async (e: any) => {
+    changeStatusOpenAddDepartment();
     const payload = {
       name: e.name,
       description: e.description,
@@ -78,14 +79,12 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
       payload
     );
     reset();
-    changeStatusOpenAddDepartment();
-    const response = await EditDepartmentModuleController.getDepartment();
-    setList(response);
+    await init();
   };
   return (
     <article className="font-2 space-y-3">
       <section className="space-y-3 md:space-y-0 md:flex md:space-x-2 md:items-center">
-        <h1 className="font-3 xl:text-2xl text-lg text-color2">
+        <h1 className="font-3 xl:text-2xl text-lg text-color2 pointer-events-none">
           Thông tin các khoa
         </h1>
         <div>
@@ -94,21 +93,23 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
             color="primary"
             onClick={changeStatusOpenAddDepartment}
           >
-            Thêm khoa mới
+            <span className="font-3">Thêm khoa mới</span>
           </Button>
           <Dialog
             open={openAddDepartment}
             onClose={changeStatusOpenAddDepartment}
             aria-labelledby="form-dialog-title"
           >
-            <DialogTitle id="form-dialog-title">Thêm khoa mới</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+              <span className="font-3 text-color2">Thêm khoa mới</span>
+            </DialogTitle>
             <form
               onSubmit={handleSubmit(createDepartment)}
               className="text-color2"
             >
               <DialogContent>
                 <div className="font-2">
-                  <label>Chi nhánh</label>
+                  <label className="font-3">Chi nhánh</label>
                   <select
                     required
                     {...register("branch_id")}
@@ -125,7 +126,7 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   </select>
                 </div>
                 <div className="font-2">
-                  <label>Tên khoa</label>
+                  <label className="font-3">Tên khoa</label>
                   <input
                     type="text"
                     required
@@ -135,7 +136,7 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   />
                 </div>
                 <div className="font-2">
-                  <label>Nhiệm vụ</label>
+                  <label className="font-3">Nhiệm vụ</label>
                   <textarea
                     required
                     {...register("duties")}
@@ -143,7 +144,7 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   />
                 </div>
                 <div className="font-2">
-                  <label>Mô tả</label>
+                  <label className="font-3">Mô tả</label>
                   <textarea
                     required
                     {...register("description")}
@@ -151,7 +152,7 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   />
                 </div>
                 <div className="font-2">
-                  <label>Thiết bị & Hệ thống</label>
+                  <label className="font-3">Thiết bị & Hệ thống</label>
                   <textarea
                     required
                     {...register("equipment_system")}
@@ -159,7 +160,7 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   />
                 </div>
                 <div className="font-2">
-                  <label>Kỹ thuật điều trị</label>
+                  <label className="font-3">Kỹ thuật điều trị</label>
                   <textarea
                     required
                     {...register("treatment_techniques")}
@@ -167,7 +168,7 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   />
                 </div>
                 <div className="font-2">
-                  <label>Ảnh khoa</label>
+                  <label className="font-3">Ảnh khoa</label>
                   <input
                     type="text"
                     {...register("avatar")}
@@ -180,10 +181,10 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                     onClick={changeStatusOpenAddDepartment}
                     color="secondary"
                   >
-                    Hủy
+                    <span className="font-3">Hủy</span>
                   </Button>
                   <Button type="submit" color="primary">
-                    Thêm
+                    <span className="font-3">Thêm</span>
                   </Button>
                 </DialogActions>
               </DialogContent>
@@ -280,8 +281,8 @@ const EditRowDepartment: React.FC<{
   };
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const changeStatusIsEdit = () => {
-    if(!isEdit){
-        setDetailsBackup(details);
+    if (!isEdit) {
+      setDetailsBackup(details);
     }
     setIsEdit(!isEdit);
   };
@@ -294,8 +295,8 @@ const EditRowDepartment: React.FC<{
     setDetailsBackup(details);
   };
   const handleCancelEdit = () => {
-    setDetails(detailsBackup);
     setIsEdit(!isEdit);
+    setDetails(detailsBackup);
   };
   const handleDelete = async () => {
     await EditDepartmentModuleController.deleteDepartments(details.id, token, {
@@ -385,7 +386,7 @@ const EditRowDepartment: React.FC<{
                 onClick={changeDialogEdit}
               >
                 {icons.check}
-                <span>Lưu</span>
+                <span className="font-3">Lưu</span>
               </Button>
               <Dialog
                 open={openDialogEdit}
@@ -394,14 +395,16 @@ const EditRowDepartment: React.FC<{
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"Bạn có chắc chắn muốn lưu chỉnh sửa này không?"}
+                  <span className="font-3">
+                    {"Bạn có chắc chắn muốn lưu chỉnh sửa này không?"}
+                  </span>
                 </DialogTitle>
                 <DialogActions>
                   <Button onClick={changeDialogEdit} color="secondary">
-                    Hủy
+                    <span className="font-3">Hủy</span>
                   </Button>
                   <Button onClick={handleSave} color="primary" autoFocus>
-                    Đồng ý
+                    <span className="font-3">Đồng ý</span>
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -413,7 +416,7 @@ const EditRowDepartment: React.FC<{
               onClick={handleCancelEdit}
             >
               {icons.close}
-              <span>Hủy</span>
+              <span className="font-3">Hủy</span>
             </Button>
           </>
         ) : (
@@ -425,7 +428,7 @@ const EditRowDepartment: React.FC<{
               onClick={changeStatusIsEdit}
             >
               {icons.edit}
-              <span>Sửa</span>
+              <span className="font-3">Sửa</span>
             </Button>
             <div>
               <Button
@@ -435,7 +438,7 @@ const EditRowDepartment: React.FC<{
                 onClick={changeDialogDelete}
               >
                 {icons.close}
-                <span>Xóa</span>
+                <span className="font-3">Xóa</span>
               </Button>
               <Dialog
                 open={openDialogDelete}
@@ -444,14 +447,16 @@ const EditRowDepartment: React.FC<{
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"Bạn có chắc chắn muốn xóa khoa này không?"}
+                  <span className="font-3">
+                    {"Bạn có chắc chắn muốn xóa khoa này không?"}
+                  </span>
                 </DialogTitle>
                 <DialogActions>
                   <Button onClick={changeDialogDelete} color="secondary">
-                    Hủy
+                    <span className="font-3">Hủy</span>
                   </Button>
                   <Button onClick={handleDelete} color="primary" autoFocus>
-                    Đồng ý
+                    <span className="font-3">Đồng ý</span>
                   </Button>
                 </DialogActions>
               </Dialog>
