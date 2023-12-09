@@ -110,15 +110,22 @@ const Login: React.FC = () => {
               className={`flex flex-col justify-center items-center space-y-3`}
             >
                <Button type="submit" variant="contained" color="primary" className="w-full bg-color2">
-                Đăng nhập
+               <span className="font-3">
+               Đăng nhập
+               </span>
               </Button>
               <NavLink
                 to={"/auth/forgot-password"}
-                className={`hover:underline text-yellow-400 hover:text-yellow-500`}
+                className={`hover:underline text-yellow-400 hover:text-yellow-500 font-3`}
               >
                 Quên mật khẩu
               </NavLink>
-             
+              <NavLink
+                to={"/auth/registation"}
+                className={`hover:underline text-red-400 hover:text-red-500 font-3`}
+              >
+                Đăng ký
+              </NavLink>
             </div>
           </form>
         </section>

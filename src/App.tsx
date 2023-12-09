@@ -12,10 +12,12 @@ import HeaderUser from "./components/header-user.com";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import MyBookingAdmin from "./pages/admin/my-booking";
-import MyBookingUser from "./pages/user/my-booking";
 import EditInfoAdmin from "./pages/admin/edit-info";
 import ProfileAdmin from "./pages/admin/profile";
 import ProfileUser from "./pages/user/profile";
+import Register from "./pages/auths/register";
+import BookingUser from "./pages/user/booking";
+import DepartmentPage from "./pages/user/department";
 
 const App: React.FC = () => {
   const userCurrent = useSelector(
@@ -55,13 +57,14 @@ const App: React.FC = () => {
                       userCurrent?.role !== Role.user ? (
                         <MyBookingAdmin />
                       ) : (
-                        <MyBookingUser />
+                        <ProfileUser />
                       )
                     ) : (
                       <Navigate to={"/auth/login"} />
                     )
                   }
                 />
+                <Route path="/booking" element={<BookingUser/>} />
                 <Route
                   path="/edit-info"
                   element={
@@ -76,6 +79,7 @@ const App: React.FC = () => {
                     )
                   }
                 />
+                <Route path="/departments" element={<DepartmentPage />} />
                 <Route
                   path="/my-profile"
                   element={
@@ -102,6 +106,7 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/registation" element={<Register />} />
             </Routes>
           }
         />

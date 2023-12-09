@@ -19,7 +19,6 @@ interface IRoute {
 const routes: IRoute[] = [
   { title: "Trang chủ", icon: "", path: "/" },
   { title: "Chuyên khoa", icon: "", path: "/departments" },
-  { title: "Dịch vụ", icon: "", path: "/services" },
   { title: "Đặt hẹn", icon: "", path: "/booking" },
 ];
 interface IHeaderUserProps {

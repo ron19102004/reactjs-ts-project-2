@@ -8,12 +8,80 @@ export enum EAction {
   FINISH = "finish",
 }
 class MyBookingAdminController {
+  async confirm(
+    toast: { toast: any; options: ToastOptions },
+    token: string,
+    payload: {
+      bid: number;
+      admin_id: number;
+      code: number;
+    }
+  ) {
+    try {
+      const response = await axios.post(
+        `${URL}/booking/admin=${payload.admin_id}/bookingID=${payload.bid}&code=${payload.code}`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.data.status !== 200) {
+        toast.toast.error(response.data.message, toast.options);
+        return false;
+      }
+      toast.toast.success(response.data.message, toast.options);
+      return true;
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status === 401) {
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
+      }
+      return false;
+    }
+  }
+  async refreshCode(
+    toast: { toast: any; options: ToastOptions },
+    token: string,
+    payload: {
+      bid: number;
+      admin_id: number;
+    }
+  ) {
+    try {
+      const response = await axios.post(
+        `${URL}/booking/admin=${payload.admin_id}/bookingID=${payload.bid}/refresh-code`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.data.status !== 200) {
+        toast.toast.error(response.data.message, toast.options);
+        return false;
+      }
+      toast.toast.success(response.data.message, toast.options);
+      return true;
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status === 401) {
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
+      }
+      return false;
+    }
+  }
   async addBooking(
     payload: {
       user_service_id: number;
       admin_id: number;
       user_id: number;
       note: string;
+      appointment_date: string;
     },
     toast: { toast: any; options: ToastOptions },
     token: string
@@ -39,8 +107,9 @@ class MyBookingAdminController {
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
+      return false;
     }
   }
   async getAllMyBookings(
@@ -95,14 +164,16 @@ class MyBookingAdminController {
       );
       if (response.data.status !== 200) {
         toast.toast.error(`${response.data.message}`, toast.options);
-        return;
+        return false;
       }
       toast.toast.success(`${response.data.message}`, toast.options);
+      return true;
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
+      return false;
     }
   }
   async getAllBookingForSearch(admin_id: number, token: string) {
@@ -149,6 +220,74 @@ class MyBookingAdminController {
       }
     }
     return false;
+  }
+  async getAllMyBookingsByCondition(
+    admin_id: number,
+    limit: { take?: number; skip?: number },
+    condition: {
+      rejected: boolean;
+      finished: boolean;
+      accepted: boolean;
+      confirmed: boolean;
+    },
+    token: string
+  ) {
+    try {
+      const response = await axios.get(
+        `${URL}/booking/admin/${admin_id}/accepted=${condition.accepted}&rejected=${condition.rejected}&finished=${condition.finished}&confirmed=${condition.confirmed}/skip=${limit.skip}&take=${limit.take}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.data.status !== 200) {
+        console.log(response);
+        return [];
+      }
+      return response.data.data;
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
+    }
+    return [];
+  }
+  async updateNote(
+    admin_id: number,
+    token: string,
+    note: string,
+    booking_id: number,
+    toast: { toast: any; options: ToastOptions }
+  ) {
+    try {
+      const response = await axios.put(
+        `${URL}/booking/admin=${admin_id}/update-note`,
+        {
+          booking_id: booking_id,
+          note: note,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.data.status !== 200) {
+        toast.toast.error(`${response.data.message}`, toast.options);
+      }
+      toast.toast.success(`${response.data.message}`, toast.options);
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status === 401) {
+        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+      }
+      toast.toast.error(`${error.message}`, toast.options);
+    }
+    return [];
   }
 }
 export const MyBookingAdminModuleController: MyBookingAdminController =

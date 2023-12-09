@@ -124,16 +124,16 @@ class EditInfoController
           Authorization: `Bearer ${token}`,
           Accept: `application/json`,
         },
-      });
-      if (response.status !== 200) {
-        console.log(response);
+      });      
+      if (response.data.status !== 200) {
+        toast.toast.error(response.data.message, toast.options);
         return;
       }
-      toast.toast.success("Thêm thành công", toast.options);
+      toast.toast.success(response.data.message, toast.options);
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -248,7 +248,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -276,7 +276,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -304,7 +304,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -331,7 +331,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -354,7 +354,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -381,7 +381,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -408,7 +408,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -435,7 +435,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -462,7 +462,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }
@@ -489,7 +489,7 @@ class EditInfoController
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }

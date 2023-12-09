@@ -7,8 +7,55 @@ import {
   reloadUserCurrent,
 } from "../../redux/reducers/auth.reducer";
 import { ToastOptions } from "react-toastify";
+import { IPayloadRegistation } from "./register";
 
 class AuthController {
+  async register(
+    toast: {
+      toast: any;
+      options: ToastOptions;
+    },
+    navigate: any,
+    payload: IPayloadRegistation
+  ) {
+    try {
+      await axios
+        .post(
+          `${URL}/users`,
+          {
+            firstName: payload.firstName,
+            lastName: payload.lastName,
+            address: payload.address,
+            password: payload.password,
+            sex: payload.sex,
+            age: parseInt(payload.age+''),
+            phoneNumber: payload.phoneNumber,
+            email: payload.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then(async (response) => {
+          if (response.data.status !== 200) {
+            toast.toast.error(`${response.data.message}`, toast.options);
+            return;
+          }
+          toast.toast.success(`${response.data.message}`, toast.options);
+          navigate("/auth/login");
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.toast.error(`${err.message}`, toast.options);
+        });
+    } catch (error: any) {
+      console.log(error);
+
+      toast.toast.error(`${error.message}`, toast.options);
+    }
+  }
   public login = async (
     dispatch: any,
     toast: {
@@ -65,7 +112,10 @@ class AuthController {
                 })
               );
               toast.toast.success(`Đăng nhập thành công`, toast.options);
-              this.handleLogin(dispatch, toast, navigate);
+              setTimeout(() => {
+                alert("Hết phiên đăng nhập. Vui lòng đăng nhập lại");
+                this.logout(dispatch, toast, navigate);
+              }, 1000 * 60 * 120)
               navigate("/");
             })
             .catch((err) => {
@@ -78,27 +128,6 @@ class AuthController {
     } catch (error: any) {
       toast.toast.error(`${error.message}`, toast.options);
     }
-  };
-  public handleLogin = (
-    dispatch: any,
-    toast: {
-      toast: any;
-      options: ToastOptions;
-    },
-    navigate: any
-  ) => {
-    const task1 = new Promise(() => {
-      setTimeout(() => {
-        alert("Hết phiên đăng nhập. Vui lòng đăng nhập lại");
-        this.logout(dispatch, toast, navigate);
-      }, 1000 * 60 * 120);
-    });
-    const task2 = new Promise(() => {
-      setTimeout(() => {
-        toast.toast.warning("Hệ thống sắp hết phiên đăng nhập", toast.options);
-      }, 1000 * 60 * 115);
-    });
-    Promise.all([task1, task2]);
   };
   public logout = (
     dispatch: any,
@@ -123,7 +152,7 @@ class AuthController {
           Authorization: "Bearer " + token,
         },
       })
-      .then(async (resp: any) => {        
+      .then(async (resp: any) => {
         const userCurrent = resp.data.data;
         dispatch(reloadUserCurrent({ userCurrent: userCurrent }));
       })

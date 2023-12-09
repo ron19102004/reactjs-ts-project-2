@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect, useState } from "react";
-import { EditUserServiceModuleController } from "../edit-info/edit-info.controller";
+import { useDispatch } from "react-redux";
+import { ToastOptions, toast } from "react-toastify";
+import { ESex, IDetailsUser } from "../../admin/profile/my-profile";
+import { ProfileModuleController } from "../../admin/profile/profile.controller";
+import { AuthModuleController } from "../../auths/auth.controller";
 import { Tooltip } from "@material-ui/core";
-import pencilIcon from "../../../assets/pencil.png";
 import saveIcon from "../../../assets/save.png";
 import resetAvt from "../../../assets/image-file-reset.png";
-import { ToastOptions, toast } from "react-toastify";
-import { ProfileModuleController } from "./profile.controller";
-import { useDispatch } from "react-redux";
-import { AuthModuleController } from "../../auths/auth.controller";
-import { IDetailsWork } from "./accounts-admin";
+import pencilIcon from "../../../assets/pencil.png";
 
 const toastConfigs: ToastOptions = {
   position: "top-right",
@@ -22,31 +21,15 @@ const toastConfigs: ToastOptions = {
   progress: undefined,
   theme: "light",
 };
-export interface IDetailsUser {
-  id: number;
-  address: string;
-  age: number;
-  sex: ESex;
-  phoneNumber: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  avatar: string;
-}
-export enum ESex {
-  male = "male",
-  female = "female",
-}
-interface IMyProfileAdminProps {
+interface IMyProfileUserProps {
   userCurrent: any;
   token: string;
 }
-const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
+const MyProfileUser: React.FC<IMyProfileUserProps> = ({
   userCurrent,
   token,
 }) => {
   const dispatch = useDispatch();
-  const [listUService, setListUService] = useState<any[]>([]);
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [details, setDetails] = useState<IDetailsUser>({
     address: userCurrent?.address,
@@ -59,24 +42,7 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
     phoneNumber: userCurrent?.phoneNumber,
     sex: userCurrent?.sex,
   });
-  const [detailsWork, setDetailsWork] = useState<IDetailsWork>({
-    areas_of_expertise: userCurrent?.areas_of_expertise,
-    bio: userCurrent?.bio,
-    member_of_organization: userCurrent?.member_of_organization,
-    position: userCurrent?.position,
-    id: userCurrent?.id,
-  });
-  const [detailsWorkBackup, setDetailsWorkBackup] = useState<IDetailsWork>({
-    areas_of_expertise: userCurrent?.areas_of_expertise,
-    bio: userCurrent?.bio,
-    member_of_organization: userCurrent?.member_of_organization,
-    position: userCurrent?.position,
-    id: userCurrent?.id,
-  });
   const changeStatusOpenEdit = async () => {
-    if (!openEdit) {
-      setDetailsWorkBackup(detailsWork);
-    }
     if (openEdit) {
       if (
         (details.address.length > 0 &&
@@ -94,32 +60,20 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
         token,
         details.id
       );
-      const re$ = await ProfileModuleController.updateInfoWorkForMaster(
-        detailsWork,
-        { toast: toast, options: toastConfigs },
-        token
-      );
       if (!re) return;
-      if (!re$) setDetailsWork(detailsWorkBackup);
       await AuthModuleController.reloadUserCurrent$(dispatch, token);
     }
     setOpenEdit(!openEdit);
   };
   const init = async () => {
     await AuthModuleController.reloadUserCurrent$(dispatch, token);
-    const uServices =
-      await EditUserServiceModuleController.getAdminAndServiceForAd(
-        userCurrent?.id,
-        token
-      );
-    setListUService(uServices);
   };
   useEffect(() => {
     init();
   }, []);
   return (
     <>
-      <section className="font-2 space-y-1">
+      <section className="font-2 space-y-1 grid grid-cols-1 md:grid-cols-2">
         <div className="flex flex-col justify-center items-center p-3 space-y-3">
           <div className={`relative opacity-100`}>
             <Tooltip title={"Chỉnh sửa thông tin cá nhân"}>
@@ -171,9 +125,6 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
           <h1 className="font-3 text-color1 text-4xl text-center">
             {details.firstName} {details.lastName}
           </h1>
-          <h2 className="font-3 underline text-color1 text-lg text-center">
-            {detailsWork?.position?.toUpperCase()}
-          </h2>
           {openEdit && (
             <div className="space-y-3 flex flex-col ">
               <input
@@ -197,12 +148,14 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
             </div>
           )}
         </div>
-        <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center">
+        <div className="">
           <div className="bg-white card-profile-custom rounded-md p-3">
             <h1 className="font-3 text-color1 text-2xl text-center">
               Thông tin cá nhân
             </h1>
-            <h2 className="text-color2 font-2 text-lg ">Mã thông tin: {details.id}</h2>
+            <h2 className="text-color2 font-2 text-lg ">
+              Mã thông tin: {details.id}
+            </h2>
             <h2 className="text-color2 font-2 text-lg ">
               Email:
               <input
@@ -283,120 +236,9 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
               )}
             </h2>
           </div>
-          <div className="card-profile-custom bg-white rounded-md p-3">
-            <h1 className="font-3 text-color1 text-2xl text-center">
-              Trực thuộc chi nhánh - Khoa
-            </h1>
-            <h2 className="text-color2 font-2 text-lg ">
-              Mã nhánh: {userCurrent?.branch.id ?? "Chưa có"}
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Mã khoa: {userCurrent?.department.id ?? "Chưa có"}
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Tên nhánh: {userCurrent?.branch.name ?? "Chưa có"}
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Tên khoa: {userCurrent?.department.name ?? "Chưa có"}
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Đường dây nóng: {userCurrent?.branch.hotline ?? "Chưa có"}
-            </h2>
-          </div>
-          <div className="bg-white card-profile-custom rounded-md p-3">
-            <h1 className="font-3 text-color1 text-2xl text-center">
-              Thông tin công việc
-            </h1>
-            <h2 className="text-color2 font-2 text-lg ">
-              Vị trí:{" "}
-              <input
-                disabled={!openEdit}
-                type="text"
-                required
-                value={`${detailsWork.position ?? ""}`}
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetailsWork({ ...detailsWork, position: e.target.value });
-                }}
-                placeholder={detailsWork.position ? "" : "Chưa có"}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Chuyên môn:{" "}
-              <input
-                disabled={!openEdit}
-                type="text"
-                required
-                value={`${detailsWork.areas_of_expertise ?? ""}`}
-                placeholder={detailsWork.areas_of_expertise ? "" : "Chưa có"}
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetailsWork({
-                    ...detailsWork,
-                    areas_of_expertise: e.target.value,
-                  });
-                }}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Tổ chức:{" "}
-              <input
-                disabled={!openEdit}
-                type="text"
-                required
-                value={`${detailsWork.member_of_organization ?? ""}`}
-                placeholder={
-                  detailsWork.member_of_organization ? "" : "Chưa có"
-                }
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetailsWork({
-                    ...detailsWork,
-                    member_of_organization: e.target.value,
-                  });
-                }}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Mô tả:{" "}
-              <textarea
-                disabled={!openEdit}
-                required
-                placeholder={detailsWork.bio ? "" : "Chưa có"}
-                value={`${detailsWork.bio ?? ""}`}
-                className={`disabled:bg-white h-full px-1 outline-none rounded-md w-full ${
-                  openEdit ? "ring-4 bg-color2 text-color5 " : "border-2 "
-                }`}
-                onChange={(e) => {
-                  setDetailsWork({ ...detailsWork, bio: e.target.value });
-                }}
-              />
-            </h2>
-          </div>
-          <div className="bg-white card-profile-custom rounded-md p-3">
-            <h1 className="font-3 text-color1 text-2xl text-center">
-              Các dịch vụ của tôi
-            </h1>
-            <ul className="list-decimal m-3">
-              {listUService &&
-                listUService.map((item: any, index: number) => {
-                  return (
-                    <li className="text-color2 font-2 text-lg " key={index}>
-                      {item?.service.name}
-                    </li>
-                  );
-                })}
-            </ul>
-          </div>
         </div>
       </section>
     </>
   );
 };
-export default MyProfileAdmin;
+export default MyProfileUser;

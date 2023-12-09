@@ -28,7 +28,7 @@ class TelebotController {
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 401) {
-        console.log("Hết phiên làm việc vui lòng đăng nhập lại");
+        toast.toast.info("Hết phiên làm việc vui lòng đăng nhập lại", toast.options);
       }
     }
   }

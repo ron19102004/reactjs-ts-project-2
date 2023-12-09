@@ -63,6 +63,10 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
   const [idServiceSelectUser, setIdServiceSelectUser] = useState<number>(0);
   const [valueCheckUser, setValueCheckUser] = useState<string>("");
   const init = async () => {
+    setUser({
+      checked: false,
+      details: {},
+    });
     const response = await EditUserServiceModuleController.getAdminAndService();
     setList(response);
   };

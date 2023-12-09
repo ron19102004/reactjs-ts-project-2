@@ -199,6 +199,7 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
               <th className="">Mã số khoa</th>
               <th className="">Mã chi nhánh</th>
               <th className="">Tên khoa</th>
+              <th className="">Link ảnh</th>
               <th className="">Nhiệm vụ</th>
               <th className="">Mô tả</th>
               <th className="">Kỹ thuật điều trị</th>
@@ -233,6 +234,7 @@ export interface IDetailsDepartment {
   treatment_techniques: string;
   equipment_system: string;
   branch_id: number;
+  avatar: string;
 }
 const EditRowDepartment: React.FC<{
   item: any;
@@ -257,6 +259,7 @@ const EditRowDepartment: React.FC<{
     id: 0,
     name: "",
     treatment_techniques: "",
+    avatar: "",
   });
   const [detailsBackup, setDetailsBackup] = useState<IDetailsDepartment>({
     branch_id: 0,
@@ -266,9 +269,12 @@ const EditRowDepartment: React.FC<{
     id: 0,
     name: "",
     treatment_techniques: "",
+    avatar: "",
   });
 
   const init = () => {
+    console.log(item);
+    
     setDetails({
       branch_id: item.branch.id,
       description: item.description,
@@ -277,6 +283,7 @@ const EditRowDepartment: React.FC<{
       id: item.id,
       name: item.name,
       treatment_techniques: item.treatment_techniques,
+      avatar: item.avatar,
     });
   };
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -324,6 +331,17 @@ const EditRowDepartment: React.FC<{
           disabled={!isEdit}
           onChange={(e) => {
             setDetails({ ...details, name: e.target.value });
+          }}
+        />
+      </td>
+      <td className={`${isEdit ? " bg-color1 text-white" : ""}`}>
+        <input
+          className={`${isEdit ? " bg-color1 text-white" : ""}`}
+          type="url"
+          value={details.avatar}
+          disabled={!isEdit}
+          onChange={(e) => {
+            setDetails({ ...details, avatar: e.target.value });
           }}
         />
       </td>

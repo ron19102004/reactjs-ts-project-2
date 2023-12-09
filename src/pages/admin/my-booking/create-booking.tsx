@@ -53,6 +53,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
     EMethodsCheckUser.uid
   );
   const [idUServiceSelectUser, setIdUServiceSelectUser] = useState<number>(0);
+  const [appointmentDate, setAppointmentDate] = useState<string>("");
   const changeValueCheckUser = (e: any) => {
     setValueCheckUser(e.target.value);
   };
@@ -115,11 +116,17 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
       toast.warning("Vui lòng chọn dịch vụ", toastConfigs);
       return;
     }
+    if (appointmentDate.length === 0) {
+      toast.warning("Vui lòng chọn ngày hẹn", toastConfigs);
+      return;
+    }
+    const app_date = appointmentDate.split("-").reverse().join("-");
     const payload = {
       admin_id: admin_id,
       user_id: user.details.id,
       note: note,
       user_service_id: idUServiceSelectUser,
+      appointment_date: app_date,
     };
     await MyBookingAdminModuleController.addBooking(
       payload,
@@ -253,6 +260,17 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
                   </option>
                 ))}
             </select>
+          </section>
+          <section className={``}>
+            <h1 className="font-3">Ngày hẹn</h1>
+            <input
+              type="date"
+              required
+              className={`h-10 font-2 w-full outline-none border-2 p-2 rounded`}
+              onChange={(e) => {
+                setAppointmentDate(e.target.value);
+              }}
+            />
           </section>
           <section className={``}>
             <h1 className="font-3">Ghi chú</h1>

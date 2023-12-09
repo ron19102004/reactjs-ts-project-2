@@ -18,10 +18,11 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Tooltip } from "@material-ui/core";
 import { ValidatorCustomModule } from "../../../helpers/validator";
-import { Divider } from "@chakra-ui/react";
+import { Divider, HStack, PinInput, PinInputField } from "@chakra-ui/react";
 import { Loading } from ".";
 import { TelebotModuleController } from "./telebot.controller";
-import { EditUserServiceModuleController } from "../edit-info/edit-info.controller";
+import pencilIcon from "../../../assets/pencil.png";
+import saveIcon from "../../../assets/save.png";
 
 const CreateBooking = React.lazy(() => import("./create-booking"));
 enum ESearchMethod {
@@ -40,8 +41,46 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isOpenBoxSearch, setIsOpenBoxSearch] = useState<boolean>(false);
-  const [list, setList] = useState<any[]>([]);
-  const [limit, setLimit] = useState<{ take: number; skip: number }>({
+  const [listBookingAcceptYet, setListBookingAcceptYet] = useState<any[]>([]);
+  const [listBookingAccepted, setListBookingAccepted] = useState<any[]>([]);
+  const [listBookingRefused, setListBookingRefused] = useState<any[]>([]);
+  const [listBookingFinished, setListBookingFinished] = useState<any[]>([]);
+  const [listBookingConfirmedYet, setListBookingConfirmedYet] = useState<any[]>(
+    []
+  );
+
+  const [limitAcceptYet, setLimitAcceptYet] = useState<{
+    take: number;
+    skip: number;
+  }>({
+    take: 8,
+    skip: 0,
+  });
+  const [limitAccepted, setLimitAccepted] = useState<{
+    take: number;
+    skip: number;
+  }>({
+    take: 8,
+    skip: 0,
+  });
+  const [limitRefused, setLimitRefused] = useState<{
+    take: number;
+    skip: number;
+  }>({
+    take: 8,
+    skip: 0,
+  });
+  const [limitFinished, setLimitFinished] = useState<{
+    take: number;
+    skip: number;
+  }>({
+    take: 8,
+    skip: 0,
+  });
+  const [limitConfirmYet, setLimitConfirmYet] = useState<{
+    take: number;
+    skip: number;
+  }>({
     take: 8,
     skip: 0,
   });
@@ -51,23 +90,187 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
   const [listForSearch, setListForSearch] = useState<any[]>([]);
   const [listResultForSearch, setListResultForSearch] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [listUService, setListUService] = useState<any[]>([]);
   const init = async () => {
-    const bookings = await MyBookingAdminModuleController.getAllMyBookings(
-      admin_id,
-      {
-        take: limit.take,
-        skip: limit.skip,
-      },
-      token
-    );
-    setList(bookings);
-    const listUService$ =
-      await EditUserServiceModuleController.getAdminAndServiceForAd(
+    const listBookingAcceptYet$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
         admin_id,
+        {
+          take: limitAcceptYet.take,
+          skip: limitAcceptYet.skip,
+        },
+        {
+          accepted: false,
+          confirmed: true,
+          finished: false,
+          rejected: false,
+        },
         token
       );
-    setListUService(listUService$);
+    const listBookingAccepted$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
+        admin_id,
+        {
+          take: limitAccepted.take,
+          skip: limitAccepted.skip,
+        },
+        {
+          accepted: true,
+          confirmed: true,
+          finished: false,
+          rejected: false,
+        },
+        token
+      );
+    const listBookingRejected$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
+        admin_id,
+        {
+          take: limitRefused.take,
+          skip: limitRefused.skip,
+        },
+        {
+          accepted: false,
+          confirmed: true,
+          finished: false,
+          rejected: true,
+        },
+        token
+      );
+    const listBookingConfirmedYet$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
+        admin_id,
+        {
+          take: limitConfirmYet.take,
+          skip: limitConfirmYet.skip,
+        },
+        {
+          accepted: false,
+          confirmed: false,
+          finished: false,
+          rejected: false,
+        },
+        token
+      );
+    const listBookingFinished$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
+        admin_id,
+        {
+          take: limitFinished.take,
+          skip: limitFinished.skip,
+        },
+        {
+          accepted: true,
+          confirmed: true,
+          finished: true,
+          rejected: false,
+        },
+        token
+      );
+    setListBookingAcceptYet(listBookingAcceptYet$);
+    setListBookingAccepted(listBookingAccepted$);
+    setListBookingRefused(listBookingRejected$);
+    setListBookingFinished(listBookingFinished$);
+    setListBookingConfirmedYet(listBookingConfirmedYet$);
+  };
+  const handleLoadListConfirmYet = async () => {
+    const takeNew: number = limitConfirmYet.take + 5;
+    setLimitConfirmYet({ ...limitConfirmYet, take: takeNew });
+    const listBookingConfirmedYet$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
+        admin_id,
+        {
+          take: limitConfirmYet.take,
+          skip: limitConfirmYet.skip,
+        },
+        {
+          accepted: false,
+          confirmed: false,
+          finished: false,
+          rejected: false,
+        },
+        token
+      );
+    setListBookingConfirmedYet(listBookingConfirmedYet$);
+  };
+  const handleLoadListFinished = async () => {
+    const takeNew: number = limitFinished.take + 5;
+    setLimitFinished({ ...limitFinished, take: takeNew });
+    const listBookingFinished$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
+        admin_id,
+        {
+          take: limitFinished.take,
+          skip: limitFinished.skip,
+        },
+        {
+          accepted: true,
+          confirmed: true,
+          finished: true,
+          rejected: false,
+        },
+        token
+      );
+    setListBookingFinished(listBookingFinished$);
+  };
+  const handleLoadListRefused = async () => {
+    const takeNew: number = limitRefused.take + 5;
+    setLimitRefused({ ...limitRefused, take: takeNew });
+    const listBookingRejected$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
+        admin_id,
+        {
+          take: limitRefused.take,
+          skip: limitRefused.skip,
+        },
+        {
+          accepted: false,
+          confirmed: true,
+          finished: false,
+          rejected: true,
+        },
+        token
+      );
+    setListBookingRefused(listBookingRejected$);
+  };
+  const handleLoadListAccepted = async () => {
+    const takeNew: number = limitAccepted.take + 5;
+    setLimitAccepted({ ...limitAccepted, take: takeNew });
+    const listBookingAccepted$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
+        admin_id,
+        {
+          take: limitAccepted.take,
+          skip: limitAccepted.skip,
+        },
+        {
+          accepted: true,
+          confirmed: true,
+          finished: false,
+          rejected: false,
+        },
+        token
+      );
+    setListBookingAccepted(listBookingAccepted$);
+  };
+  const handleLoadListAcceptedYet = async () => {
+    const takeNew: number = limitAcceptYet.take + 5;
+    setLimitAcceptYet({ ...limitAcceptYet, take: takeNew });
+    const listBookingAcceptYet$ =
+      await MyBookingAdminModuleController.getAllMyBookingsByCondition(
+        admin_id,
+        {
+          take: limitAcceptYet.take,
+          skip: limitAcceptYet.skip,
+        },
+        {
+          accepted: false,
+          confirmed: true,
+          finished: false,
+          rejected: false,
+        },
+        token
+      );
+    setListBookingAcceptYet(listBookingAcceptYet$);
   };
   const toastConfigs: ToastOptions = {
     position: "top-right",
@@ -79,10 +282,35 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
     progress: undefined,
     theme: "light",
   };
-  const handleChangeList = (id: number) => {
-    let listCurrent = [...list];
+  const handleChangeListAcceptYet = (id: number) => {
+    let listCurrent: any[] = [...listBookingAcceptYet];
     listCurrent = listCurrent && listCurrent.filter((x) => x.id !== id);
-    setList(listCurrent);
+    setListBookingAcceptYet(listCurrent);
+  };
+  const handleChangeListAccept = (id: number) => {
+    let listCurrent: any[] = [...listBookingAccepted];
+    listCurrent = listCurrent && listCurrent.filter((x) => x.id !== id);
+    setListBookingAccepted(listCurrent);
+  };
+  const handleChangeListRefused = (id: number) => {
+    let listCurrent: any[] = [...listBookingRefused];
+    listCurrent = listCurrent && listCurrent.filter((x) => x.id !== id);
+    setListBookingRefused(listCurrent);
+  };
+  const handleChangeListFinished = (id: number) => {
+    let listCurrent: any[] = [...listBookingFinished];
+    listCurrent = listCurrent && listCurrent.filter((x) => x.id !== id);
+    setListBookingFinished(listCurrent);
+  };
+  const handleChangeListConfirmYet = (id: number) => {
+    let listCurrent: any[] = [...listBookingConfirmedYet];
+    listCurrent = listCurrent && listCurrent.filter((x) => x.id !== id);
+    setListBookingConfirmedYet(listCurrent);
+  };
+  const handleChangeListSearch = (id: number) => {
+    let listCurrent: any[] = [...listForSearch];
+    listCurrent = listCurrent && listCurrent.filter((x) => x.id !== id);
+    setListForSearch(listCurrent);
   };
   const handleOpen = () => {
     setIsOpen(!isOpen);
@@ -102,28 +330,14 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
       setSearchValue("");
     }
   };
-  const handleLoadList = async () => {
-    const takeNew: number = limit.take + 5;
-    setLimit({ ...limit, take: takeNew });
-    const bookings = await MyBookingAdminModuleController.getAllMyBookings(
-      admin_id,
-      {
-        take: limit.take,
-        skip: limit.skip,
-      },
-      token
-    );
-    setList(bookings);
-  };
   const handleSelectSearch = (e: any) => {
     setSearchMethod(e.target.value);
   };
-  const handleSearch = (e: any) => {
+  const handleSearch = () => {
     if (searchMethod === ESearchMethod.none) {
       toast.warn("Vui lòng chọn phương thức tìm kiếm", toastConfigs);
       return;
     }
-    setSearchValue(e.target.value.trim());
     if (searchValue.length === 0) {
       setListResultForSearch([]);
       return;
@@ -181,25 +395,20 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
     );
     setListResultForSearch(result);
   };
-  const findUService = (id: number) => {
-    const listCopy = [...listUService];
-    const index = listCopy.findIndex((x) => x.id + "" === id + "");
-    return listCopy[index];
-  };
   useEffect(() => {
     init();
   }, []);
   return (
-    <article className="bg-color2 p-3 ">
+    <article className=" p-3 ">
       <main className="space-y-3">
         <section>
-          <h1 className="font-3 text-white xl:text-2xl text-lg flex space-x-1">
+          <h1 className="font-3 text-color6 xl:text-2xl text-lg flex space-x-1">
             <span className="pointer-events-none">Tìm kiếm</span>
             <section>
               <Tooltip
                 title={`${isOpenBoxSearch ? "Đóng tím kiếm" : "Mở tìm kiếm"}`}
               >
-                <button onClick={handleOpenBoxSearch} className="text-white">
+                <button onClick={handleOpenBoxSearch} className="text-color6">
                   {isOpenBoxSearch ? (
                     <ArrowDropUpIcon />
                   ) : (
@@ -214,7 +423,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
               className={`flex justify-center md:justify-start md:space-x-3 md:flex-row flex-col space-y-3 md:space-y-0 font-2`}
             >
               <select
-                className="rounded h-10 px-2 text-color2 outline-none"
+                className="rounded-md h-10 px-2 text-color2 outline-none bg-color7 shadow-xl font-3"
                 onChange={(e) => {
                   handleSelectSearch(e);
                 }}
@@ -229,18 +438,25 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
               <input
                 type="text"
                 placeholder="Nhập giá trị tìm kiếm"
-                className="h-10 px-2 rounded outline-none"
+                className="h-10 px-2 rounded-md bg-color7 shadow-xl outline-none "
                 value={searchValue}
                 onChange={(e) => {
-                  handleSearch(e);
+                  setSearchValue(e.target.value);
                 }}
               />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleSearch}
+              >
+                <span className="font-3">Lọc</span>
+              </Button>
             </div>
           )}
         </section>
         {isOpenBoxSearch && (
           <section className={`space-y-3`}>
-            <h1 className="font-3 text-white xl:text-2xl ">
+            <h1 className="font-3 text-color6 xl:text-2xl ">
               {listResultForSearch.length} Kết quả tìm kiếm
             </h1>
             <ul
@@ -248,14 +464,17 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             >
               {listResultForSearch &&
                 listResultForSearch.map((booking: any, index: number) => (
-                  <li key={index} className="bg-color7 p-3 rounded space-y-2">
+                  <li
+                    key={index}
+                    className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
+                  >
                     <CardBookingAdmin
                       data={booking}
-                      handleChangeList={handleChangeList}
+                      handleChangeList={handleChangeListSearch}
                       admin_id={admin_id}
                       token={token}
                       toastOptions={toastConfigs}
-                      user_service={findUService(booking.uService.id)}
+                      user_service={booking.uService}
                     />
                   </li>
                 ))}
@@ -265,13 +484,13 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
         )}
 
         <section className="md:flex md:justify-between md:items-center space-y-2 md:space-y-0">
-          <h1 className="font-3 text-white xl:text-2xl text-lg  flex space-x-1">
+          <h1 className="font-3 text-color6 xl:text-2xl text-lg  flex space-x-1">
             <span className="pointer-events-none">
               Danh sách các hồ sơ khách hàng
             </span>
             <section>
               <Tooltip title={`${isOpen ? "Đóng danh sách" : "Mở danh sách"}`}>
-                <button onClick={handleOpen} className="text-white">
+                <button onClick={handleOpen} className="text-color6">
                   {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                 </button>
               </Tooltip>
@@ -286,19 +505,23 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           </Suspense>
         </section>
         <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
+          <h1 className="font-3 text-color2 text-xl">
+            Danh sách chưa xác nhận
+            <p>Số lượng: {listBookingConfirmedYet.length}</p>
+          </h1>
           <ul
             className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
           >
-            {list &&
-              list.map((booking: any, index: number) => (
+            {listBookingConfirmedYet &&
+              listBookingConfirmedYet.map((booking: any, index: number) => (
                 <li
                   key={index}
-                  className="bg-color7 p-3 rounded space-y-2 flex flex-col justify-between"
+                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
                 >
                   <CardBookingAdmin
-                    user_service={findUService(booking.uService.id)}
+                    user_service={booking.uService}
                     data={booking}
-                    handleChangeList={handleChangeList}
+                    handleChangeList={handleChangeListConfirmYet}
                     admin_id={admin_id}
                     token={token}
                     toastOptions={toastConfigs}
@@ -306,11 +529,158 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
                 </li>
               ))}
           </ul>
-          <div className="flex items-center justify-center">
-            <button className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md" onClick={handleLoadList}>
-              Tải thêm hồ sơ
-            </button>
-          </div>
+          {listBookingConfirmedYet.length >= 8 && (
+            <div className="flex items-center justify-center">
+              <button
+                className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
+                onClick={handleLoadListConfirmYet}
+              >
+                Tải thêm hồ sơ
+              </button>
+            </div>
+          )}
+        </section>
+        <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
+          <h1 className="font-3 text-color2 text-xl">
+            Danh sách chưa chấp nhận
+            <p>Số lượng: {listBookingAcceptYet.length}</p>
+          </h1>
+          <ul
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+          >
+            {listBookingAcceptYet &&
+              listBookingAcceptYet.map((booking: any, index: number) => (
+                <li
+                  key={index}
+                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
+                >
+                  <CardBookingAdmin
+                    user_service={booking.uService}
+                    data={booking}
+                    handleChangeList={handleChangeListAcceptYet}
+                    admin_id={admin_id}
+                    token={token}
+                    toastOptions={toastConfigs}
+                  />
+                </li>
+              ))}
+          </ul>
+          {listBookingAcceptYet.length >= 8 && (
+            <div className="flex items-center justify-center">
+              <button
+                className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
+                onClick={handleLoadListAcceptedYet}
+              >
+                Tải thêm hồ sơ
+              </button>
+            </div>
+          )}
+        </section>
+        <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
+          <h1 className="font-3 text-color2 text-xl">
+            Danh sách chưa kết thúc
+            <p>Số lượng: {listBookingAccepted.length}</p>
+          </h1>
+          <ul
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+          >
+            {listBookingAccepted &&
+              listBookingAccepted.map((booking: any, index: number) => (
+                <li
+                  key={index}
+                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
+                >
+                  <CardBookingAdmin
+                    user_service={booking.uService}
+                    data={booking}
+                    handleChangeList={handleChangeListAccept}
+                    admin_id={admin_id}
+                    token={token}
+                    toastOptions={toastConfigs}
+                  />
+                </li>
+              ))}
+          </ul>
+          {listBookingAccepted.length >= 8 && (
+            <div className="flex items-center justify-center">
+              <button
+                className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
+                onClick={handleLoadListAccepted}
+              >
+                Tải thêm hồ sơ
+              </button>
+            </div>
+          )}
+        </section>
+        <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
+          <h1 className="font-3 text-color2 text-xl">
+            Danh sách từ chối <p>Số lượng: {listBookingRefused.length}</p>
+          </h1>
+          <ul
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+          >
+            {listBookingRefused &&
+              listBookingRefused.map((booking: any, index: number) => (
+                <li
+                  key={index}
+                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
+                >
+                  <CardBookingAdmin
+                    user_service={booking.uService}
+                    data={booking}
+                    handleChangeList={handleChangeListRefused}
+                    admin_id={admin_id}
+                    token={token}
+                    toastOptions={toastConfigs}
+                  />
+                </li>
+              ))}
+          </ul>
+          {listBookingRefused.length >= 8 && (
+            <div className="flex items-center justify-center">
+              <button
+                className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
+                onClick={handleLoadListRefused}
+              >
+                Tải thêm hồ sơ
+              </button>
+            </div>
+          )}
+        </section>
+        <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
+          <h1 className="font-3 text-color2 text-xl">
+            Danh sách hoàn thành <p>Số lượng: {listBookingFinished.length}</p>
+          </h1>
+          <ul
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+          >
+            {listBookingFinished &&
+              listBookingFinished.map((booking: any, index: number) => (
+                <li
+                  key={index}
+                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
+                >
+                  <CardBookingAdmin
+                    user_service={booking.uService}
+                    data={booking}
+                    handleChangeList={handleChangeListFinished}
+                    admin_id={admin_id}
+                    token={token}
+                    toastOptions={toastConfigs}
+                  />
+                </li>
+              ))}
+          </ul>
+          {listBookingFinished.length >= 8 && (
+            <div className="flex items-center justify-center">
+              <button
+                className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
+                onClick={handleLoadListFinished}
+              >
+                Tải thêm hồ sơ
+              </button>
+            </div>
+          )}
         </section>
       </main>
     </article>
@@ -338,14 +708,45 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
     rejected: boolean;
     accepted: boolean;
     finished: boolean;
+    confirm: boolean;
+    overDate: boolean;
   }>({
     accepted: false,
     rejected: false,
     finished: false,
+    confirm: false,
+    overDate: false,
   });
   const [open, setOpen] = useState<boolean>(false);
   const [openSendMessage, setOpenSendMessage] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false);
+  const [code, setCode] = useState<string>("");
+  const refreshCode = async () => {
+    await MyBookingAdminModuleController.refreshCode(
+      { toast: toast, options: toastOptions },
+      token,
+      {
+        bid: data.id,
+        admin_id: admin_id,
+      }
+    );
+  };
+  const confirm = async (e: any) => {
+    setCode(e);
+    if (e.length < 6) return;
+    const re = await MyBookingAdminModuleController.confirm(
+      { toast: toast, options: toastOptions },
+      token,
+      {
+        bid: data.id,
+        admin_id: admin_id,
+        code: parseInt(e),
+      }
+    );
+    if (re) setOpenConfirm(!openConfirm);
+    else setCode("");
+  };
   const changeStatusOpenSendMessage = () => {
     if (openSendMessage) {
       setMessage("");
@@ -362,10 +763,26 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
     handleMoveToHistory();
   };
   const init = () => {
+    const dateNow = ValidatorCustomModule.getDate();
+    let overDate = false;
+    if (
+      (data.finished === false && data.accepted === true) ||
+      (data.rejected === false && data.accepted === false)
+    ) {
+      overDate =
+        ValidatorCustomModule.compareDate(
+          data.appointment_date,
+          dateNow.split("-").reverse().join("-")
+        ) >= 0
+          ? false
+          : true;
+    }
     setStatus({
       accepted: data.accepted,
       finished: data.finished,
       rejected: data.rejected,
+      confirm: data.confirm,
+      overDate: overDate,
     });
   };
   const handleReject = async () => {
@@ -389,14 +806,14 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
     setStatus({ ...status, accepted: true });
   };
   const handleFinish = async () => {
-    await MyBookingAdminModuleController.handleMyBookings(
+    const re = await MyBookingAdminModuleController.handleMyBookings(
       admin_id,
       token,
       data.id,
       EAction.FINISH,
       { toast: toast, options: toastOptions }
     );
-    setStatus({ ...status, finished: true });
+    if (re) setStatus({ ...status, finished: true });
   };
   const handleMoveToHistory = async () => {
     await MyBookingAdminModuleController.deleteByIdBooking(
@@ -421,12 +838,26 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
   useEffect(() => {
     init();
   }, [data]);
+  const [openEditNote, setOpenEditNote] = useState<boolean>(false);
+  const [note, setNote] = useState<string>(data.note);
+  const handleEditNote = async () => {
+    if (note) {
+      await MyBookingAdminModuleController.updateNote(
+        admin_id,
+        token,
+        note,
+        data.id,
+        { toast: toast, options: toastOptions }
+      );
+    }
+    setOpenEditNote(!openEditNote);
+  };
   return (
     <>
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-2 font-2">
-        <div className="card-info">
-          <h1 className="card-info-title">Thông tin khách hàng</h1>
-          <ul className="card-info-list">
+        <div className="">
+          <h1 className="font-3">Thông tin khách hàng</h1>
+          <ul>
             <li>
               <span>Mã số thứ tự: b{data.id}id</span>
             </li>
@@ -452,9 +883,13 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
             </li>
           </ul>
         </div>
-        <div className="card-info">
-          <h1 className="card-info-title">Trạng thái lịch hẹn</h1>
-          <ul className="card-info-list space-y-1">
+        <div className="">
+          <h1 className="font-3">Trạng thái lịch hẹn</h1>
+          <ul className="space-y-1">
+            <li className="flex space-x-1 items-center">
+              <span>{status.confirm ? icons.checked : icons.refused}</span>
+              <span>Xác thực</span>
+            </li>
             <li className="flex space-x-1 items-center">
               <span>{status.rejected ? icons.checked : icons.refused}</span>
               <span>Từ chối</span>
@@ -467,42 +902,118 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
               <span>{status.finished ? icons.checked : icons.refused}</span>
               <span>Hoàn thành</span>
             </li>
+            <li className="flex space-x-1 items-center">
+              <span>{status.overDate ? icons.checked : icons.refused}</span>
+              <span>Quá thời gian</span>
+            </li>
           </ul>
-          <h1 className="card-info-title">Ghi chú</h1>
+          <div className="flex space-x-3 items-center">
+            <h1 className="card-info-title">Ghi chú</h1>
+            <button onClick={handleEditNote}>
+              <img
+                src={openEditNote ? saveIcon : pencilIcon}
+                alt="edit"
+                className="w-4 h-4x"
+              />
+            </button>
+          </div>
           <textarea
-            disabled={true}
-            className=" bg-color7 p-1 w-full h-20 rounded font-2 text-color2 outline-none"
-            value={`Ghi chú: ${data.note ?? "Không có"}`}
+            disabled={!openEditNote}
+            className={`bg-slate-200 p-1 w-full h-20 rounded font-2 outline-none ${
+              openEditNote ? "ring-2" : ""
+            }`}
+            value={note}
+            onChange={(e) => {
+              setNote(e.target.value);
+            }}
           />
         </div>
-        <div className="card-info">
-          <h1 className="card-info-title">Dịch vụ sử dụng</h1>
-          <ul className="card-info-list">
+        <div className="">
+          <h1 className="font-3">Dịch vụ sử dụng</h1>
+          <ul className="">
             <li>
               <span>Tên dịch vụ: {user_service?.service?.name}</span>
             </li>
             <li>
-              <span>Giá dịch vụ: {user_service?.service?.price}k</span>
+              <span>Giá dịch vụ: {user_service?.service?.price}kVNĐ</span>
             </li>
           </ul>
         </div>
-        <div className="card-info">
-          <h1 className="card-info-title">Thông tin lịch hẹn</h1>
+        <div className="">
+          <h1 className="font-3">Thông tin lịch hẹn</h1>
           <ul className="card-info-list">
             <li>
               <span>Ngày đặt lịch hẹn: {data.timeInit}</span>
             </li>
             <li>
+              <span>Ngày hẹn: {data.appointment_date}</span>
+            </li>
+            <li>
               <span>
-                Ngày hoàn thành: {data.finished_at ?? "Chưa hoàn thành"}
+                Ngày hoàn thành:{" "}
+                {data.finished_at
+                  ? (data.finished_at + "").split("-").reverse().join("-")
+                  : "Chưa hoàn thành"}
               </span>
             </li>
           </ul>
         </div>
       </section>
       <section className="flex justify-between items-center">
-        <div className="space-x-2">
-          {status.rejected === false &&
+        <div className="xl:space-x-2 flex flex-col xl:flex-row xl:space-y-0 space-y-2">
+          {status.confirm === false && status.overDate === false && (
+            <div>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  setOpenConfirm(!openConfirm);
+                }}
+              >
+                <span className="font-3">Xác thực</span>
+              </Button>
+              <Dialog
+                open={openConfirm}
+                onClose={() => {
+                  setOpenConfirm(!openConfirm);
+                }}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  <span className="font-3">Vui lòng nhập mã xác thực</span>
+                </DialogTitle>
+                <DialogContent>
+                  <section className="flex flex-col justify-center items-center space-y-3">
+                    <HStack>
+                      <PinInput
+                        value={code}
+                        onChange={(e) => {
+                          confirm(e);
+                        }}
+                      >
+                        <PinInputField />
+                        <PinInputField />
+                        <PinInputField />
+                        <PinInputField />
+                        <PinInputField />
+                        <PinInputField />
+                      </PinInput>
+                    </HStack>
+                    <button
+                      className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
+                      onClick={refreshCode}
+                    >
+                      Gửi lại mã xác thực
+                    </button>
+                  </section>
+                </DialogContent>
+              </Dialog>
+            </div>
+          )}
+          {status.overDate === false &&
+          status.confirm === true &&
+          status.rejected === false &&
           status.accepted === false &&
           status.finished === false ? (
             <>
@@ -547,7 +1058,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
             status.finished === true) ||
           (status.rejected === true &&
             status.accepted === false &&
-            status.finished === false) ? (
+            status.finished === false) || status.overDate === true? (
             <>
               <div>
                 <Button
@@ -555,25 +1066,19 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                   color="secondary"
                   onClick={handleClickOpen}
                 >
-                  <span className="font-3">Đưa vào lịch sử hồ sơ</span>
+                  <span className="font-3">Xóa</span>
                 </Button>
                 <Dialog
                   open={open}
-                  onClose={handleClose}
+                  onClose={()=>{setOpen(false)}}
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                 >
                   <DialogTitle id="alert-dialog-title">
                     <span className="font-3">
-                      {"Bạn có chắc chắn là muốn đưa hồ sơ vào lịch sử không?"}
+                      {"Bạn có chắc chắn là muốn xóa?"}
                     </span>
                   </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Sau khi đưa hồ sơ vào lịch sử hồ sơ, bạn có thể kiểm tra
-                      chúng lại mục hồ sơ lưu trữ.
-                    </DialogContentText>
-                  </DialogContent>
                   <DialogActions>
                     <Button
                       onClick={() => {
