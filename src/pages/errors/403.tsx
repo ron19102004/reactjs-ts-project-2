@@ -1,7 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import './403.scss'
 const Page403: React.FC = () => {
-  const navigate = useNavigate();
   return (
     <main className="pg403">
       <div className="text-wrapper">
@@ -24,9 +22,7 @@ const Page403: React.FC = () => {
         <div className="buttons">
           <a
             className="button a403"
-            onClick={() => {
-              navigate("/");
-            }}
+            href='/'
           >
             Go to homepage
           </a>

@@ -1,7 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import "./404.scss";
 const Page404: React.FC = () => {
-  const navigate = useNavigate();
   return (
     <main>
       <section className="page_404">
@@ -19,9 +17,7 @@ const Page404: React.FC = () => {
                   <p className="font-2">the page you are looking for not avaible!</p>
 
                   <a
-                    onClick={() => {
-                      navigate("/");
-                    }}
+                    href="/"
                     className="link_404 font-3"
                   >
                     Go to Home
