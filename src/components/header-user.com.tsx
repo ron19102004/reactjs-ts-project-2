@@ -11,6 +11,7 @@ import { Tooltip } from "@chakra-ui/react";
 import { AuthModuleController } from "../pages/auths/auth.controller";
 import { ToastOptions, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import { NAME_SYSTEM } from "../helpers/constant";
 interface IRoute {
   title: string;
   icon: any;
@@ -83,7 +84,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
             <div>
               <img src={LOGO} alt="logo" className={`w-10 md:w-14`} />
             </div>
-            <h1 className="font-semibold text-lg md:text-2xl">TD Hospital</h1>
+            <h1 className="font-semibold text-lg md:text-2xl">{NAME_SYSTEM}</h1>
           </div>
         </section>
         <nav

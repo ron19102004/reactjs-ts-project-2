@@ -7,6 +7,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { useSelector } from "react-redux";
 import { Loading } from "../../admin/my-booking";
 import { Divider } from "@material-ui/core";
+import { NAME_SYSTEM } from "../../../helpers/constant";
 
 const FeedBack = lazy(() => import("./feedback"));
 const InfoBranch = lazy(() => import("../../../components/info-branch"));
@@ -71,13 +72,13 @@ const HomeUser: React.FC = () => {
         <div className="w-full -translate-y-9 sm:translate-y-0 sm:w-[40%] font-medium lg:text-base text-sm xl:text-lg sm:text-color7 text-green-950  font-2 space-y-4">
           <div className="text-color4">
             <h1 className="font-bold text-6xl font-3 leading-tight">
-              Trang Dũng Hospital
+              {NAME_SYSTEM}
             </h1>
           </div>
           <div className={`bg-custom xl:p-5  p-3 rounded-lg `}>
             <p>
               Nổi tiếng là một trong những bệnh viện tư nhân hàng đầu tại miền
-              Trung Việt Nam, bệnh viện TD Đà Nẵng cung cấp các dịch vụ chăm sóc
+              Trung Việt Nam, bệnh viện {NAME_SYSTEM} Đà Nẵng cung cấp các dịch vụ chăm sóc
               sức khỏe chất lượng cao, dễ tiếp cận, phục vụ cho khu vực rộng lớn
               không chỉ ở Đà Nẵng. Bệnh viện phục vụ hơn 1.000 lượt bệnh nhân
               ngoại trú và 400 lượt bệnh nhân nội trú mỗi ngày, với 45 khoa, 42
@@ -93,7 +94,7 @@ const HomeUser: React.FC = () => {
       </section>
       <section className="p-3">
         <h1 className="text-center font-semibold md:text-2xl text-lg text-color2">
-          GIÁ TRỊ KHÁC BIỆT CỦA TD HOSPITAL
+          GIÁ TRỊ KHÁC BIỆT CỦA {NAME_SYSTEM}
         </h1>
         <ul
           className={`grid gap-4 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 p-4 max-h-screen overflow-y-auto`}

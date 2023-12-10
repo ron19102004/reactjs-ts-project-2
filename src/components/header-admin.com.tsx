@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { AuthModuleController } from "../pages/auths/auth.controller";
 import { toast, ToastOptions } from "react-toastify";
 import LockIcon from "@mui/icons-material/Lock";
+import { NAME_SYSTEM } from "../helpers/constant";
 interface IRouteAdmin {
   title: string;
   icon: any;
@@ -96,7 +97,7 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
             <div>
               <img src={LOGO} alt="logo" className={`w-10 md:w-14`} />
             </div>
-            <h1 className="font-semibold text-lg md:text-2xl">TD Hospital</h1>
+            <h1 className="font-semibold text-lg md:text-2xl">{NAME_SYSTEM}</h1>
           </div>
         </section>
         <nav
