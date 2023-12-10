@@ -96,7 +96,7 @@ const HomeUser: React.FC = () => {
           GIÁ TRỊ KHÁC BIỆT CỦA TD HOSPITAL
         </h1>
         <ul
-          className={`grid gap-4 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 p-4`}
+          className={`grid gap-4 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 p-4 max-h-screen overflow-y-auto`}
         >
           {specialThings.map((specialThing: ISpecialThing, index: number) => {
             return (
@@ -121,7 +121,7 @@ const HomeUser: React.FC = () => {
           CHUYÊN KHOA TIÊU BIỂU
         </h1>
         <ul
-          className={`grid gap-4 xl:grid-cols-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 py-4 px-6`}
+          className={`grid gap-4 xl:grid-cols-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 py-4 px-6 max-h-screen overflow-y-auto`}
         >
           {departments.map((dep: IDepartment, index: number) => {
             return (
