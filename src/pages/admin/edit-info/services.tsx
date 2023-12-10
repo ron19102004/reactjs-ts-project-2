@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import {
   EditDepartmentModuleController,
   EditServiceModuleController,
@@ -64,7 +66,7 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
     changeStatusOpenAddService();
     const payload = {
       name: e.name,
-      description: e.description,
+      description: description,
       price: parseInt(e.price),
       department_id: parseInt(e.department_id),
     };
@@ -76,6 +78,7 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
     reset();
     await init();
   };
+  const [description, setDescription] = useState("");
   return (
     <article className="font-2 space-y-3">
       <section className="space-y-3 md:space-y-0 md:flex md:space-x-2 md:items-center">
@@ -140,10 +143,11 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
                 </div>
                 <div className="font-2">
                   <label className="font-3">Mô tả</label>
-                  <textarea
-                    required
-                    {...register("description")}
-                    className="w-full h-32 outline-none border-2 rounded px-2"
+                  <ReactQuill
+                    className="w-full outline-none rounded"
+                    onChange={setDescription}
+                    value={description}
+                    theme="snow"
                   />
                 </div>
                 <DialogActions>
@@ -162,7 +166,7 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
           </Dialog>
         </div>
       </section>
-      <section className="overflow-x-auto w-full">
+      <section className="overflow-x-auto w-full h-screen overflow-y-auto">
         <table className="branches-table min-w-full">
           <thead className="bg-color2 text-color7">
             <tr className="font-3">
@@ -269,7 +273,7 @@ const EditRowService: React.FC<{
     init();
   }, []);
   return (
-    <tr>
+    <tr className="h-48">
       <td className={`${isEdit ? "bg-color3 text-white" : ""}`}>
         {details.id}
       </td>
@@ -299,16 +303,20 @@ const EditRowService: React.FC<{
         />
       </td>
       <td className={`${isEdit ? " bg-color1 text-white" : ""}`}>
-        <textarea
-          cols={30}
-          rows={5}
-          className={`${isEdit ? " bg-color1 text-white" : ""} w-full`}
-          value={details.description}
-          disabled={!isEdit}
-          onChange={(e) => {
-            setDetails({ ...details, description: e.target.value });
-          }}
-        />
+        {isEdit ? (
+          <ReactQuill
+            value={details.description}
+            onChange={(e) => {
+              setDetails({ ...details, description: e });
+            }}
+            className="h-36 -translate-y-6"
+          />
+        ) : (
+          <ReactQuill
+            value={details.description}
+            className="h-36 w-[500px] lg:w-full -translate-y-6"
+          />
+        )}
       </td>
       <td className="space-y-1 p-1">
         {isEdit ? (

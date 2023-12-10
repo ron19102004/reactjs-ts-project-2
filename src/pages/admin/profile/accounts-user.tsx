@@ -65,7 +65,7 @@ const AccountsUser: React.FC<IAccountsProps> = ({ admin_id, token }) => {
         </h1>
       </section>
       <section className="overflow-x-auto w-full">
-        <table className="branches-table min-w-full">
+        <table className="branches-table min-w-full overflow-y-auto max-h-screen">
           <thead className="bg-color2 text-color7">
             <tr className="font-3">
               <th className="">Mã tài khoản (UID) </th>

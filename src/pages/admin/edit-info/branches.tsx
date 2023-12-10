@@ -224,14 +224,14 @@ const EditRowBranches: React.FC<{
   };
 
   const [details, setDetails] = useState<IDetailsBranch>({
-    address: "",
-    description: "",
-    email: "",
-    hotline: "",
-    id: 0,
-    name: "",
-    src_map: "",
-    established_at: "",
+    id: item.id,
+    name: item.name,
+    email: item.email,
+    address: item.address,
+    description: item.description,
+    hotline: item.hotline,
+    src_map: item.src_map,
+    established_at: item.establish_at,
   });
   const [detailsBackup, setDetailsBackup] = useState<IDetailsBranch>({
     address: "",
@@ -245,16 +245,6 @@ const EditRowBranches: React.FC<{
   });
 
   const init = () => {
-    setDetails({
-      id: item.id,
-      name: item.name,
-      email: item.email,
-      address: item.address,
-      description: item.description,
-      hotline: item.hotline,
-      src_map: item.src_map,
-      established_at: item.establish_at,
-    });
   };
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const changeStatusIsEdit = () => {

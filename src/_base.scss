@@ -1,27 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@600&display=swap");
 //color
-$color1:#068D9D;
-$color2:#53599A;
-$color3:#6D9DC5;
-$color4:#80DED9;
-$color5:#AEECEF;
-$color6:#048a81;
+$color1: #068d9d;
+$color2: #53599a;
+$color3: #6d9dc5;
+$color4: #80ded9;
+$color5: #aeecef;
+$color6: #048a81;
 //color-transparent
-$color4_tran:#32a28855;
-$color-header:#80ded9e0;
+$color4_tran: #32a28855;
+// $color-header:#80ded9e0;
+$color-header: #53599ad1;
 //font
-$font1:'Noto Sans', sans-serif;
-$font2: 'Quicksand', sans-serif;
-$font3:'Lexend', sans-serif;
+$font1: "Noto Sans", sans-serif;
+$font2: "Quicksand", sans-serif;
+$font3: "Lexend", sans-serif;
 //set font
-.font-1{
-    font-family: $font1;
+.font-1 {
+  font-family: $font1;
 }
-.font-2{
-    font-family: $font2;
+.font-2 {
+  font-family: $font2;
 }
-.font-3{
-    font-family: $font3;
+.font-3 {
+  font-family: $font3;
 }

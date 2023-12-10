@@ -510,7 +510,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             <p>Số lượng: {listBookingConfirmedYet.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
           >
             {listBookingConfirmedYet &&
               listBookingConfirmedYet.map((booking: any, index: number) => (
@@ -546,7 +546,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             <p>Số lượng: {listBookingAcceptYet.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
           >
             {listBookingAcceptYet &&
               listBookingAcceptYet.map((booking: any, index: number) => (
@@ -582,7 +582,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             <p>Số lượng: {listBookingAccepted.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
           >
             {listBookingAccepted &&
               listBookingAccepted.map((booking: any, index: number) => (
@@ -617,7 +617,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             Danh sách từ chối <p>Số lượng: {listBookingRefused.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
           >
             {listBookingRefused &&
               listBookingRefused.map((booking: any, index: number) => (
@@ -652,7 +652,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             Danh sách hoàn thành <p>Số lượng: {listBookingFinished.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 `}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
           >
             {listBookingFinished &&
               listBookingFinished.map((booking: any, index: number) => (

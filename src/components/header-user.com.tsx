@@ -57,7 +57,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
       <header
         className={`font-3 z-50 ${
           isFixed
-            ? "fixed transition-all bg-header-user text-color2"
+            ? "fixed transition-all bg-header-user text-cyan-300 "
             : "bg-color2 text-color7 absolute md:static"
         } min-w-full md:flex justify-between items-center px-3 md:px-6 py-1  `}
       >
@@ -66,7 +66,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
         >
           <div
             className={`md:hidden border-2 p-1 rounded-lg ${
-              isFixed ? "border-color2" : ""
+              isFixed ? "border-cyan-300" : ""
             }`}
           >
             {isOpen ? (
@@ -91,7 +91,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
             isOpen
               ? `absolute left-0 translate-y-1 md:static md:translate-y-0 py-3 md:py-0 ${
                   isFixed
-                    ? "fixed transition-all bg-header-user text-color2"
+                    ? "fixed transition-all bg-header-user md:bg-transparent  text-cyan-300"
                     : "bg-color2 text-color7"
                 }`
               : "hidden"
@@ -112,7 +112,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
                             route.path === "/booking"
                               ? `md:border-2 rounded-md ${
                                   isFixed
-                                    ? "border-color2 bg-color2text-white"
+                                    ? "border-cyan-300  text-slate-900 bg-cyan-300"
                                     : "bg-white text-color2"
                                 }`
                               : `${isFixed ? "a-active-fixed" : "a-active"}`
@@ -121,7 +121,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
                             route.path === "/booking"
                               ? `md:border-2 rounded-md ${
                                   isFixed
-                                    ? "border-color2 hover:bg-color2 hover:text-white"
+                                    ? "border-cyan-300 hover:bg-cyan-300 hover:text-slate-900"
                                     : "hover:bg-white hover:text-color2"
                                 }`
                               : `${isFixed ? "a-fixed" : "a"}`

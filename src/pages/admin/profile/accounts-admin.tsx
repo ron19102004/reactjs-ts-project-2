@@ -66,7 +66,7 @@ const AccountsAdmin: React.FC<IAccountsProps> = ({ admin_id, token }) => {
           Các tài khoản quản lý
         </h1>
       </section>
-      <section className="overflow-x-auto w-full">
+      <section className="overflow-x-auto w-full overflow-y-auto max-h-screen">
         <table className="branches-table min-w-full">
           <thead className="bg-color2 text-color7">
             <tr className="font-3">

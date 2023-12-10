@@ -76,11 +76,11 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
         />
       </section>
       <section className="space-y-3">
-        <h2 className="font-3 text-xl text-color2 text-center">
+        <h2 className="font-3 text-xl text-color2 text-center ">
           <p> Lịch hẹn chưa được chấp nhận</p>
           <p>Số lượng: {listBookingAcceptYet.length}</p>
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
           {listBookingAcceptYet.map((item: any, index: number) => {
             return (
               <li
@@ -98,7 +98,7 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
           <p> Lịch hẹn bị từ chối</p>
           <p>Số lượng: {listBookingRefused.length}</p>{" "}
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
           {listBookingRefused.map((item: any, index: number) => {
             return (
               <li
@@ -116,7 +116,7 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
           <p> Lịch hẹn đã được chấp nhận</p>
           <p>Số lượng: {listBookingAccepted.length}</p>{" "}
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
           {listBookingAccepted.map((item: any, index: number) => {
             return (
               <li
@@ -134,7 +134,7 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
           <p> Lịch hẹn đã hoàn thành</p>
           <p>Số lượng: {listBookingFinished.length}</p>{" "}
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
           {listBookingFinished.map((item: any, index: number) => {
             return (
               <li
@@ -152,7 +152,7 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
           <p> Lịch hẹn bị quá hạn</p>
           <p>Số lượng: {listBookingOverDate.length}</p>{" "}
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
           {listBookingOverDate.map((item: any, index: number) => {
             return (
               <li

@@ -4,8 +4,8 @@ import axios from "axios";
 import { URL } from "../../../helpers/constant";
 import { IDetailsBranch } from "./branches";
 import { ToastOptions } from "react-toastify";
-import { IDetailsDepartment } from "./department";
 import { IDetailsService } from "./services";
+import { IDetailsDepartment } from "./department-card";
 interface IEditBranches {
   getBranches(): Promise<any>;
   updateBranches(

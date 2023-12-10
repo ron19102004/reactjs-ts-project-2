@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { ProfileModuleController } from "../../admin/profile/profile.controller";
 import {
   EditServiceModuleController,
   EditUserServiceModuleController,
 } from "../../admin/edit-info/edit-info.controller";
 import Booking from "./booking";
-import { Button, Tooltip } from "@material-ui/core";
+import { Button, Divider, Tooltip } from "@material-ui/core";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ToastOptions, toast } from "react-toastify";
+import { Loading } from "../../admin/my-booking";
+const InfoBranch = lazy(() => import("../../../components/info-branch"));
+
 const toastConfigs: ToastOptions = {
   position: "top-right",
   autoClose: 2000,
@@ -166,7 +169,7 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
             </button>
           </section>
         </section>
-        <ul className="xl:space-y-10 xl:p-7 p-2 space-y-5">
+        <ul className="xl:space-y-10 xl:p-7 p-2 space-y-5 max-h-screen overflow-y-auto">
           {listViewInfo.map(
             (
               item: {
@@ -193,6 +196,12 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
           >
             Xem thêm bác sĩ
           </button>
+        </section>
+        <Divider />
+        <section className="p-3 pb-0">
+          <Suspense fallback={<Loading />}>
+            <InfoBranch />
+          </Suspense>
         </section>
       </section>
     </>

@@ -1,9 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Suspense, lazy } from "react";
 import DoctorImg from "../../../assets/kisspng-physician-surgeon-medicine-stock-photography-5aff8f8d1f1519.0003837915266978691273.png";
 import { IDepartment, ISpecialThing, departments, specialThings } from "./data";
 import "./style.scss";
 import Tooltip from "@material-ui/core/Tooltip";
+import { useSelector } from "react-redux";
+import { Loading } from "../../admin/my-booking";
+import { Divider } from "@material-ui/core";
+
+const FeedBack = lazy(() => import("./feedback"));
+const InfoBranch = lazy(() => import("../../../components/info-branch"));
 const HomeUser: React.FC = () => {
+  const userCurrent = useSelector(
+    (state: any) => state.authReducer?.userCurrent
+  );
+  const token = useSelector((state: any) => state.authReducer?.accessToken);
   return (
     <article className={`top-0 font-3 space-y-5`}>
       <section
@@ -59,11 +70,11 @@ const HomeUser: React.FC = () => {
         </div>
         <div className="w-full -translate-y-9 sm:translate-y-0 sm:w-[40%] font-medium lg:text-base text-sm xl:text-lg sm:text-color7 text-green-950  font-2 space-y-4">
           <div className="text-color4">
-            <h1 className="font-bold text-6xl font-3 leading-tight">Trang Dũng Hospital</h1>
+            <h1 className="font-bold text-6xl font-3 leading-tight">
+              Trang Dũng Hospital
+            </h1>
           </div>
-          <div
-            className={`bg-custom xl:p-5  p-3 rounded-lg `}
-          >
+          <div className={`bg-custom xl:p-5  p-3 rounded-lg `}>
             <p>
               Nổi tiếng là một trong những bệnh viện tư nhân hàng đầu tại miền
               Trung Việt Nam, bệnh viện TD Đà Nẵng cung cấp các dịch vụ chăm sóc
@@ -77,7 +88,7 @@ const HomeUser: React.FC = () => {
               tôi bao gồm từ khám sức khỏe toàn diện đến chăm sóc cấp cứu, phục
               vụ bệnh nhân ở mọi lứa tuổi.
             </p>
-          </div>  
+          </div>
         </div>
       </section>
       <section className="p-3">
@@ -129,6 +140,17 @@ const HomeUser: React.FC = () => {
             );
           })}
         </ul>
+      </section>
+      <section className="p-3 pb-0">
+        <Suspense fallback={<Loading />}>
+          <InfoBranch />
+        </Suspense>
+      </section>
+      <section className="">
+        <Divider />
+        <Suspense fallback={<Loading />}>
+          <FeedBack token={token} userCurrent={userCurrent} />
+        </Suspense>
       </section>
     </article>
   );

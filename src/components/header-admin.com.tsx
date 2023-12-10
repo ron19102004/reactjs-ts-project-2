@@ -70,7 +70,7 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
       <header
         className={`font-3 z-50 ${
           isFixed
-            ? "fixed transition-all bg-header-user text-color2"
+            ? "fixed transition-all bg-header-user text-cyan-300"
             : "bg-color2 text-color7"
         } min-w-full md:flex justify-between items-center px-3 md:px-6 py-1  `}
       >
@@ -79,7 +79,7 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
         >
           <div
             className={`md:hidden border-2 p-1 rounded-lg ${
-              isFixed ? "border-color2" : ""
+              isFixed ? "border-cyan-300" : ""
             }`}
           >
             {isOpen ? (
@@ -104,7 +104,7 @@ const HeaderAdmin: React.FC<IHeaderAdminProps> = ({ userCurrent }) => {
             isOpen
               ? `absolute z-50 left-0 translate-y-1 md:static md:translate-y-0 py-3 md:py-0 ${
                   isFixed
-                    ? "fixed transition-all bg-header-user text-color2"
+                    ? "fixed transition-all bg-header-user text-cyan-300 md:bg-transparent"
                     : "bg-color2 text-color7"
                 }`
               : "hidden"
