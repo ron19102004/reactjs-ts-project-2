@@ -76,7 +76,11 @@ const MyProfileUser: React.FC<IMyProfileUserProps> = ({
       <section className="font-2 space-y-1 grid grid-cols-1 md:grid-cols-2">
         <div className="flex flex-col justify-center items-center p-3 space-y-3">
           <div className={`relative opacity-100`}>
-            <Tooltip title={"Chỉnh sửa thông tin cá nhân"}>
+            <Tooltip
+              title={
+                !openEdit ? "Chỉnh sửa thông tin cá nhân" : "Lưu thông tin"
+              }
+            >
               <button
                 className={`z-10 w-8 h-8 absolute right-3 top-2.5 rounded-full p-1 flex justify-center items-center ${
                   openEdit ? "bg-color2" : "bg-color1"
@@ -86,7 +90,7 @@ const MyProfileUser: React.FC<IMyProfileUserProps> = ({
                 <img
                   src={openEdit ? saveIcon : pencilIcon}
                   alt="edit"
-                  className="w-5 h-5 shadow rounded-full"
+                  className="w-5 h-5 shadow rounded-full object-cover"
                 />
               </button>
             </Tooltip>
@@ -94,7 +98,7 @@ const MyProfileUser: React.FC<IMyProfileUserProps> = ({
               <img
                 src={details.avatar}
                 alt="avatar"
-                className="w-48 h-48 hover:scale-150 transition-all"
+                className="w-48 h-48 hover:scale-150 transition-all object-cover"
               />
             </div>
             {openEdit && (
@@ -157,10 +161,45 @@ const MyProfileUser: React.FC<IMyProfileUserProps> = ({
               Mã thông tin: {details.id}
             </h2>
             <h2 className="text-color2 font-2 text-lg ">
+              Tuổi:{" "}
+              <input
+                disabled={!openEdit}
+                type="number"
+                required
+                value={`${details.age}`}
+                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
+                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
+                }`}
+                onChange={(e) => {
+                  setDetails({ ...details, age: parseInt(e.target.value) });
+                }}
+              />
+            </h2>
+
+            <h2 className="text-color2 font-2 text-lg ">
+              Giới tính:
+              {!openEdit && (
+                <span>{details.sex === "male" ? "Nam" : "Nữ"}</span>
+              )}
+              {openEdit && (
+                <select
+                  className={`outline-none p6x-1 rounded-md h-8 ${
+                    openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
+                  }`}
+                  onChange={(e: any) => {
+                    setDetails({ ...details, sex: e.target.value });
+                  }}
+                >
+                  <option value={ESex.male}>Nam</option>
+                  <option value={ESex.female}>Nữ</option>
+                </select>
+              )}
+            </h2>
+            <h2 className="text-color2 font-2 text-lg ">
               Email:
               <input
                 disabled={!openEdit}
-                type="email"
+                type="text"
                 required
                 value={`${details.email}`}
                 className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
@@ -175,7 +214,7 @@ const MyProfileUser: React.FC<IMyProfileUserProps> = ({
               SĐT:
               <input
                 disabled={!openEdit}
-                type="tel"
+                type="text"
                 required
                 value={`${details.phoneNumber}`}
                 className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
@@ -200,40 +239,6 @@ const MyProfileUser: React.FC<IMyProfileUserProps> = ({
                   setDetails({ ...details, address: e.target.value });
                 }}
               />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Tuổi:{" "}
-              <input
-                disabled={!openEdit}
-                type="number"
-                required
-                value={`${details.age}`}
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetails({ ...details, age: parseInt(e.target.value) });
-                }}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Giới tính:
-              {!openEdit && (
-                <span>{details.sex === "male" ? "Nam" : "Nữ"}</span>
-              )}
-              {openEdit && (
-                <select
-                  className={`outline-none p6x-1 rounded-md h-8 ${
-                    openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                  }`}
-                  onChange={(e: any) => {
-                    setDetails({ ...details, sex: e.target.value });
-                  }}
-                >
-                  <option value={ESex.male}>Nam</option>
-                  <option value={ESex.female}>Nữ</option>
-                </select>
-              )}
             </h2>
           </div>
         </div>

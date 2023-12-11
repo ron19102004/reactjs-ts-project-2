@@ -86,7 +86,7 @@ const FeedBackCard: React.FC<{
           <img
             src={feedback?.user?.avatar}
             alt="avtar-user"
-            className="w-10 h-10 rounded-md"
+            className="w-10 h-10 rounded-md object-cover"
           />
         </div>
         <h1 className="font-3 text-color6">

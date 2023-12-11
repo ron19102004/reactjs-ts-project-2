@@ -101,7 +101,7 @@ class ProfileController {
   ) {
     try {
       const res = await axios.put(
-        `${URL}/users/master/update-infoself`,
+        `${URL}/users/update-infoself`,
         payload,
         {
           headers: {

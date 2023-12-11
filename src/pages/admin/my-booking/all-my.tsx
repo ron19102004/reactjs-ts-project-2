@@ -510,7 +510,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             <p>Số lượng: {listBookingConfirmedYet.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen p-3   rounded-xl`}
           >
             {listBookingConfirmedYet &&
               listBookingConfirmedYet.map((booking: any, index: number) => (
@@ -546,7 +546,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             <p>Số lượng: {listBookingAcceptYet.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen  p-3 rounded`}
           >
             {listBookingAcceptYet &&
               listBookingAcceptYet.map((booking: any, index: number) => (
@@ -582,7 +582,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             <p>Số lượng: {listBookingAccepted.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen p-3 rounded`}
           >
             {listBookingAccepted &&
               listBookingAccepted.map((booking: any, index: number) => (
@@ -617,7 +617,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             Danh sách từ chối <p>Số lượng: {listBookingRefused.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen  p-3 rounded`}
           >
             {listBookingRefused &&
               listBookingRefused.map((booking: any, index: number) => (
@@ -652,7 +652,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             Danh sách hoàn thành <p>Số lượng: {listBookingFinished.length}</p>
           </h1>
           <ul
-            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen`}
+            className={` grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-screen  p-3 rounded`}
           >
             {listBookingFinished &&
               listBookingFinished.map((booking: any, index: number) => (
@@ -1058,7 +1058,8 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
             status.finished === true) ||
           (status.rejected === true &&
             status.accepted === false &&
-            status.finished === false) || status.overDate === true? (
+            status.finished === false) ||
+          status.overDate === true ? (
             <>
               <div>
                 <Button
@@ -1070,7 +1071,9 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                 </Button>
                 <Dialog
                   open={open}
-                  onClose={()=>{setOpen(false)}}
+                  onClose={() => {
+                    setOpen(false);
+                  }}
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                 >

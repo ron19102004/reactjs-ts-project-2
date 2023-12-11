@@ -29,7 +29,7 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
   const navigate = useNavigate();
   const init = async () => {
     const fbs: any[] = await HomeModuleControllerUser.getFeedback();
-    setFeedbacks(fbs);
+    setFeedbacks(fbs);    
   };
   const addFb = () => {
     if (!token || token.length === 0) {
@@ -55,7 +55,7 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
       toast.error("Lỗi khi thêm bình luận.Vui lòng thử lại", toastConfigs);
       return;
     }
-    toast.success("Thêm bình luận thành công", toastConfigs);
+    toast.success("Bình luận đã được gửi về hệ thống. Chờ đội kiểm duyệt", toastConfigs);
     setPayload({
       content: "",
       subject: "",
@@ -63,6 +63,13 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
     init();
     setOpenAddFb(false);
   };
+  const cancel = () => {
+    setOpenAddFb(false);
+    setPayload({
+      content: "",
+      subject: "",
+    });
+  }
   return (
     <>
       <section className="px-3">
@@ -88,7 +95,7 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
                   <img
                     src={userCurrent?.avatar}
                     alt="avtar-user"
-                    className="w-10 h-10 rounded-md"
+                    className="w-10 h-10 rounded-md object-cover"
                   />
                 </div>
                 <h1 className="font-3 text-color6">
@@ -116,12 +123,18 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
                 }}
               />
             </li>
-            <li>
+            <li className="space-x-2">
               <button
                 className="bg-color5 hover:bg-color4 px-2 rounded py-1"
                 onClick={add}
               >
                 Thêm
+              </button>
+              <button
+                className="bg-red-400 hover:bg-red-500 text-cyan-100 px-2 rounded py-1"
+                onClick={cancel}
+              >
+                Hủy
               </button>
             </li>
           </ul>
@@ -156,7 +169,7 @@ const CardFeedBack: React.FC<{ feedback: any }> = ({ feedback }) => {
           <img
             src={feedback?.user?.avatar}
             alt="avtar-user"
-            className="w-10 h-10 rounded-md"
+            className="w-10 h-10 rounded-md object-cover"
           />
         </div>
         <h1 className="font-3 text-color6">

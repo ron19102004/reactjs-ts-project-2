@@ -17,6 +17,7 @@ import {
 import { ToastOptions, toast } from "react-toastify";
 import { EMethodsCheckUser } from "../my-booking/create-booking";
 import { UserModuleController } from "../my-booking/user.controller";
+import { Role } from "../../../redux/reducers/auth.reducer";
 const toastConfigs: ToastOptions = {
   position: "top-right",
   autoClose: 2000,
@@ -107,6 +108,13 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
       token,
       methodCheckUser
     );
+    if(user$.role === Role.user){
+      toast.error(
+        "Tài khoản user. Không có tác vụ trong này, vui lòng kiểm tra lại",
+        toastConfigs
+      );
+      return;
+    }
     if (!user$.survice) {
       toast.error(
         "Không tìm thấy thông tin khách hàng.Vui lòng kiểm tra lại",

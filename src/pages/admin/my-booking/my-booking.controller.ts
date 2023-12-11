@@ -99,7 +99,7 @@ class MyBookingAdminController {
       );
       if (response.data.status !== 200) {
         console.log(response);
-        toast.toast.error("Đã có lỗi sảy ra", toast.options);
+        toast.toast.error(response.data.message, toast.options);
         return false;
       }
       toast.toast.success("Thêm thành công", toast.options);

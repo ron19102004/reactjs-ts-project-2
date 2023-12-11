@@ -132,7 +132,7 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
                 <img
                   src={openEdit ? saveIcon : pencilIcon}
                   alt="edit"
-                  className="w-5 h-5 shadow rounded-full"
+                  className="w-5 h-5 shadow rounded-full object-cover"
                 />
               </button>
             </Tooltip>
@@ -140,7 +140,7 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
               <img
                 src={details.avatar}
                 alt="avatar"
-                className="w-48 h-48 hover:scale-150 transition-all"
+                className="w-48 h-48 hover:scale-150 transition-all object-cover"
               />
             </div>
             {openEdit && (
@@ -148,7 +148,7 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
                 <input
                   type="url"
                   value={userCurrent?.avatar}
-                  className="h-10 ring-4 outline-none w-full px-3 rounded bg-color2 font-3 text-color5"
+                  className="h-10 ring-4 outline-none w-full px-3 rounded bg-color2 font-3 text-color5 object-cover"
                   onChange={(e) => {
                     setDetails({ ...details, avatar: e.target.value });
                   }}
@@ -162,7 +162,7 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
                   <img
                     src={resetAvt}
                     alt="resetAvt"
-                    className="w-8 h-8 rounded"
+                    className="w-8 h-8 rounded object-cover"
                   />
                 </button>
               </div>

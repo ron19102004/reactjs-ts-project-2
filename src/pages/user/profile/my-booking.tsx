@@ -80,12 +80,12 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
           <p> Lịch hẹn chưa được chấp nhận</p>
           <p>Số lượng: {listBookingAcceptYet.length}</p>
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
           {listBookingAcceptYet.map((item: any, index: number) => {
             return (
               <li
                 key={index}
-                className="p-3 bg-color7 rounded-xl shadow-md hover:shadow-2xl"
+                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
               >
                 <CardBookingUser data={item} token={token} user_id={user_id} />
               </li>
@@ -98,12 +98,12 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
           <p> Lịch hẹn bị từ chối</p>
           <p>Số lượng: {listBookingRefused.length}</p>{" "}
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
           {listBookingRefused.map((item: any, index: number) => {
             return (
               <li
                 key={index}
-                className="p-3 bg-color7 rounded-xl shadow-md hover:shadow-2xl"
+                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
               >
                 <CardBookingUser data={item} token={token} user_id={user_id} />
               </li>
@@ -116,12 +116,12 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
           <p> Lịch hẹn đã được chấp nhận</p>
           <p>Số lượng: {listBookingAccepted.length}</p>{" "}
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
           {listBookingAccepted.map((item: any, index: number) => {
             return (
               <li
                 key={index}
-                className="p-3 bg-color7 rounded-xl shadow-md hover:shadow-2xl"
+                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
               >
                 <CardBookingUser data={item} token={token} user_id={user_id} />
               </li>
@@ -134,12 +134,12 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
           <p> Lịch hẹn đã hoàn thành</p>
           <p>Số lượng: {listBookingFinished.length}</p>{" "}
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
           {listBookingFinished.map((item: any, index: number) => {
             return (
               <li
                 key={index}
-                className="p-3 bg-color7 rounded-xl shadow-md hover:shadow-2xl"
+                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
               >
                 <CardBookingUser data={item} token={token} user_id={user_id} />
               </li>
@@ -152,12 +152,12 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
           <p> Lịch hẹn bị quá hạn</p>
           <p>Số lượng: {listBookingOverDate.length}</p>{" "}
         </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen">
+        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
           {listBookingOverDate.map((item: any, index: number) => {
             return (
               <li
                 key={index}
-                className="p-3 bg-color7 rounded-xl shadow-md hover:shadow-2xl"
+                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
               >
                 <CardBookingUser data={item} token={token} user_id={user_id} />
               </li>

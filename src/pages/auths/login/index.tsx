@@ -4,15 +4,27 @@ import SignInImg from "../../../assets/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Tooltip } from "@chakra-ui/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AuthModuleController, EMethodsLogin } from "../auth.controller";
 import { ValidatorCustomModule } from "../../../helpers/validator";
 import { toast, ToastOptions } from "react-toastify";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
+import { useEffect } from "react";
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userCurrent = useSelector(
+    (state: any) => state.authReducer?.userCurrent
+  );
+  const init = () => {
+    if (userCurrent) {
+      navigate("/");
+    }
+  };
+  useEffect(() => {
+    init();
+  }, []);
   const toastConfigs: ToastOptions = {
     position: "top-right",
     autoClose: 2000,
@@ -109,10 +121,13 @@ const Login: React.FC = () => {
             <div
               className={`flex flex-col justify-center items-center space-y-3`}
             >
-               <Button type="submit" variant="contained" color="primary" className="w-full bg-color2">
-               <span className="font-3">
-               Đăng nhập
-               </span>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="w-full bg-color2"
+              >
+                <span className="font-3">Đăng nhập</span>
               </Button>
               <NavLink
                 to={"/auth/forgot-password"}

@@ -8,6 +8,8 @@ import Button from "@material-ui/core/Button";
 import { ESex } from "../../admin/profile/my-profile";
 import { ValidatorCustomModule } from "../../../helpers/validator";
 import { AuthModuleController } from "../auth.controller";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export interface IPayloadRegistation {
   firstName: string;
@@ -21,6 +23,17 @@ export interface IPayloadRegistation {
 }
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const userCurrent = useSelector(
+    (state: any) => state.authReducer?.userCurrent
+  );
+  const init = () => {
+    if (userCurrent) {
+      navigate("/");
+    }
+  };
+  useEffect(() => {
+    init();
+  }, []);
   const toastConfigs: ToastOptions = {
     position: "top-right",
     autoClose: 2000,
@@ -55,9 +68,9 @@ const Register: React.FC = () => {
       return;
     }
     if ((payload.password + "").length < 8) {
-        toast.error("Mật khẩu phải trên 8 ký tự", toastConfigs);
-        return;
-      }
+      toast.error("Mật khẩu phải trên 8 ký tự", toastConfigs);
+      return;
+    }
     if (payload.password + "" !== re_password + "") {
       toast.error("Mật khẩu không khớp", toastConfigs);
       return;

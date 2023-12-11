@@ -12,6 +12,7 @@ import { icons } from "./all-my";
 import { UserModuleController } from "./user.controller";
 import { ToastOptions, toast } from "react-toastify";
 import { MyBookingAdminModuleController } from "./my-booking.controller";
+import { Role } from "../../../redux/reducers/auth.reducer";
 const icons$ = icons;
 export enum EMethodsCheckUser {
   uid = "uid",
@@ -86,6 +87,13 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
       token,
       methodCheckUser
     );
+    if (user$.role !== Role.user) {
+      toast.error(
+        "Người dùng có quyền admin. Vui lòng dùng tài khoản khác",
+        toastConfigs
+      );
+      return;
+    }
     if (!user$.survice) {
       toast.error(
         "Không tìm thấy thông tin khách hàng.Vui lòng kiểm tra lại",

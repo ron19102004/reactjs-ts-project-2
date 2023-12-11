@@ -11,6 +11,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ToastOptions, toast } from "react-toastify";
 import { Loading } from "../../admin/my-booking";
+import { NAME_SYSTEM } from "../../../helpers/constant";
 const InfoBranch = lazy(() => import("../../../components/info-branch"));
 
 const toastConfigs: ToastOptions = {
@@ -120,7 +121,7 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
     <>
       <section className="space-y-3">
         <h1 className="font-3 text-color2 font-2 text-2xl md:text-3xl text-center">
-          Đội ngũ các bác sĩ bệnh viện Trang Dũng
+          Đội ngũ các bác sĩ bệnh viện {NAME_SYSTEM}
         </h1>
         <section className="xl:px-7 px-2 flex flex-col md:flex-row md:items-center md:space-x-3 md:space-y-0 space-y-3">
           <h1
@@ -146,6 +147,7 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
               onChange={(e) => {
                 setValueFilter(parseInt(e.target.value));
               }}
+              value={valueFilter}
             >
               <option value="0">Chọn dịch vụ</option>
               {services &&
@@ -198,7 +200,7 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
           </button>
         </section>
         <Divider />
-        <section className="p-3 pb-0">
+        <section className="py-3 pb-0">
           <Suspense fallback={<Loading />}>
             <InfoBranch />
           </Suspense>
