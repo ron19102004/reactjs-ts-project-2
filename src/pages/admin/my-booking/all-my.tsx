@@ -1168,4 +1168,5 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
     </>
   );
 };
+
 export default AllBookingAdmin;
