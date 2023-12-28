@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { EditDepartmentModuleController } from "./edit-info.controller";
 import editIcon from "../../../assets/edit.png";
 import checkedIcon from "../../../assets/checked.png";
 import closeIcon from "../../../assets/reject.png";
 import { Button, Dialog, DialogActions, DialogTitle } from "@material-ui/core";
 import { ToastOptions, toast } from "react-toastify";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 const toastConfigs: ToastOptions = {
   position: "top-right",
   autoClose: 2000,
@@ -100,7 +101,7 @@ const EditRowDepartment: React.FC<{
     init();
   }, []);
   return (
-    <tr className="h-48">
+    <tr className="h-48 font-sans">
       <td className={`${isEdit ? "bg-color3 text-white" : ""}`}>
         {details.id}
       </td>
@@ -129,77 +130,56 @@ const EditRowDepartment: React.FC<{
           }}
         />
       </td>
-      <td className={`${isEdit ? " bg-color1 text-white" : ""}`}>
-        {isEdit ? (
-          <ReactQuill
-            theme="snow"
-            value={details.duties}
-            onChange={(e) => {
-              setDetails({ ...details, duties: e });
+      <td className={`${isEdit ? " bg-color1" : ""}`}>
+        <div className="h-48 overflow-auto">
+          <CKEditor
+            disabled={!isEdit}
+            editor={ClassicEditor}
+            data={details.duties}
+            onChange={(e, editor) => {
+              setDetails({ ...details, duties: editor.getData() });
             }}
-            className="h-36 w-[500px] -translate-y-5"
           />
-        ) : (
-          <ReactQuill
-            theme="snow"
-            value={details.duties}
-            className="h-36 w-[500px] -translate-y-5"
-          />
-        )}
+        </div>
       </td>
-      <td className={`${isEdit ? " bg-color1 text-white" : ""}`}>
-        {isEdit ? (
-          <ReactQuill
-            theme="snow"
-            value={details.description}
-            onChange={(e) => {
-              setDetails({ ...details, description: e });
+      <td className={`${isEdit ? " bg-color1 " : ""}`}>
+        <div className="h-48 overflow-auto">
+          <CKEditor
+            disabled={!isEdit}
+            editor={ClassicEditor}
+            data={details.description}
+            onChange={(e, editor) => {
+              setDetails({ ...details, description: editor.getData() });
             }}
-            className="h-36 w-[500px] -translate-y-5"
           />
-        ) : (
-          <ReactQuill
-            theme="snow"
-            value={details.description}
-            className="h-36 w-[500px] -translate-y-5"
-          />
-        )}
+        </div>
       </td>
-      <td className={`${isEdit ? " bg-color1 text-white" : ""}`}>
-        {isEdit ? (
-          <ReactQuill
-            theme="snow"
-            value={details.treatment_techniques}
-            onChange={(e) => {
-              setDetails({ ...details, treatment_techniques: e });
+      <td className={` ${isEdit ? " bg-color1 " : ""}`}>
+        <div className="h-48 overflow-auto">
+          <CKEditor
+            disabled={!isEdit}
+            editor={ClassicEditor}
+            data={details.treatment_techniques}
+            onChange={(e, editor) => {
+              setDetails({
+                ...details,
+                treatment_techniques: editor.getData(),
+              });
             }}
-            className="h-36 w-[500px] -translate-y-5"
           />
-        ) : (
-          <ReactQuill
-            theme="snow"
-            value={details.treatment_techniques}
-            className="h-36 w-[500px] -translate-y-5"
-          />
-        )}
+        </div>
       </td>
-      <td className={`${isEdit ? " bg-color1 text-white" : ""}`}>
-        {isEdit ? (
-          <ReactQuill
-            theme="snow"
-            value={details.equipment_system}
-            onChange={(e) => {
-              setDetails({ ...details, equipment_system: e });
+      <td className={`${isEdit ? " bg-color1" : ""}`}>
+        <div className="h-48 overflow-auto">
+          <CKEditor
+            disabled={!isEdit}
+            editor={ClassicEditor}
+            data={details.equipment_system}
+            onChange={(e, editor) => {
+              setDetails({ ...details, equipment_system: editor.getData() });
             }}
-            className="h-36 w-[500px] -translate-y-5"
           />
-        ) : (
-          <ReactQuill
-            theme="snow"
-            value={details.equipment_system}
-            className="h-36 w-[500px] -translate-y-5"
-          />
-        )}
+        </div>
       </td>
       <td className="space-y-1 p-1">
         {isEdit ? (

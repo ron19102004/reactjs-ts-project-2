@@ -11,30 +11,30 @@ export interface ISpecialThing {
 }
 export const specialThings: ISpecialThing[] = [
   {
-    title: "CHUYÊN GIA ĐẦU NGÀNH - BÁC SĨ GIỎI - CHUYÊN VIÊN GIÀU KINH NGHIỆM",
+    title: "Chuyên gia đầu ngành - Bác sĩ giỏi - Chuyên viên giàu kinh nghiệm",
     img: gtr1,
     label: `Chúng tôi tự hào giới thiệu đội ngũ chuyên gia với kiến thức sâu rộng và tầm nhìn tiên tiến, sẵn sàng mang đến giải pháp xuất sắc trong các lĩnh vực chuyên môn của mình.
 
     Bác sĩ giỏi của chúng tôi không chỉ là những người nắm vững kiến thức y khoa mà còn là những nhà nghiên cứu tiên tiến, luôn theo dõi và áp dụng những phát triển mới nhất trong lĩnh vực y tế. Họ cam kết cung cấp dịch vụ chăm sóc sức khỏe cao cấp, đồng thời đặt lợi ích và sức khỏe của bệnh nhân lên hàng đầu.`,
   },
   {
-    title: "TRANG THIẾT BỊ HIỆN ĐẠI BẬC NHẤT",
+    title: "Trang thiết bị hiện đại bật nhất",
     img: gtr2,
     label: `Trang thiết bị hiện đại của chúng tôi không chỉ là những công nghệ tiên tiến mà còn là biểu tượng của sự đổi mới và sang trọng. Chúng được thiết kế và sản xuất bởi những nhà kỹ sư hàng đầu, đảm bảo độ tin cậy, hiệu suất và tính thẩm mỹ.`,
   },
   {
-    title: "HIỆU QUẢ ĐIỀU TRỊ CAO THÀNH TỰU NỔI BẬT",
+    title: "Hiệu quả điều trị cao - Thành tựu nổi bật",
     img: gtr3,
     label: `Hiệu quả điều trị của chúng tôi không chỉ là kết quả số liệu mà còn là câu chuyện về sự chữa lành, đổi mới và chất lượng cuộc sống. Bác sĩ và chuyên gia của chúng tôi không ngừng nỗ lực để áp dụng những phương pháp điều trị tiên tiến nhất, sử dụng công nghệ hiện đại và tận dụng kiến thức chuyên sâu để đạt được kết quả tối ưu.`,
   },
   {
-    title: "QUY TRÌNH TOÀN DIỆN, KHOA HỌC, CHUYÊN NGHIỆP",
+    title: "Quy trình toàn điện, khoa học, chuyên nghiệm",
     img: gtr4,
     label: `
     Chúng tôi tự tin rằng quy trình toàn diện, khoa học, và chuyên nghiệp của chúng tôi sẽ đưa đến những trải nghiệm chăm sóc sức khỏe tốt nhất, đáp ứng mọi mong đợi và nhu cầu của quý vị. Hãy đồng hành cùng chúng tôi trên hành trình chăm sóc sức khỏe của bạn.`,
   },
   {
-    title: "DỊCH VỤ CAO CẤP CHI PHÍ HỢP LÝ",
+    title: "Dịch vụ cao cấp - Chi phí hợp lý",
     img: gtr5,
     label: `Chúng tôi cam kết cung cấp trải nghiệm đẳng cấp, linh hoạt và tiện lợi, đồng thời duy trì chi phí phù hợp với mọi người. Chất lượng là ưu tiên hàng đầu của chúng tôi, và chúng tôi không ngừng nỗ lực để mang lại giá trị tốt nhất cho mỗi khoản chi trả của bạn. Hãy đồng hành với chúng tôi để trải nghiệm sự chuyên nghiệp và hài lòng từ dịch vụ của chúng tôi!`,
   },

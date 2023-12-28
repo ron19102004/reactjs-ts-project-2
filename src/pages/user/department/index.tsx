@@ -11,6 +11,7 @@ import processIcon from "../../../assets/process.png";
 import equipmentIcon from "../../../assets/equipment.png";
 import { Loading } from "../../admin/my-booking";
 import backIcon from "../../../assets/back.png";
+import { NavLink } from "react-router-dom";
 const InfoBranch = lazy(() => import("../../../components/info-branch"));
 const icons = {
   intro: <img src={introduceIcon} alt="intro" className="w-6 h-6" />,
@@ -52,6 +53,11 @@ const DepartmentPage: React.FC = () => {
     setListViewDetails({
       department: null,
       listService: [],
+    });
+    setStatusInfo({
+      moreInfoEquip: false,
+      moreInfoIntro: false,
+      moreInfoProcess: false,
     });
   };
   const displayDetails = (department: any) => {
@@ -129,13 +135,26 @@ const DepartmentPage: React.FC = () => {
       )}
       {openDetails && (
         <main className="space-y-3 px-3 md:px-10 pb-10">
-          <section className="relative">
+          <section className="">
             <button
-              className="flex space-x-2 items-center absolute top-0 left-0"
+              className="text-color1 flex space-x-1 items-center top-0 left-0"
               onClick={back}
             >
-              <span>{icons.back}</span>
-              <span className="font-3 text-red-500 underline">Quay lại</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+                />
+              </svg>
+              <span className="underline">Quay lại</span>
             </button>
             <h1 className="font-3 text-xl text-center text-color2">
               {listViewDetails.department?.name.toUpperCase()}
@@ -151,7 +170,7 @@ const DepartmentPage: React.FC = () => {
             </div>
             <p
               className={`font-2 text-ellipsis ${
-                statusInfo.moreInfoIntro ? "" : "line-clamp-3"
+                statusInfo.moreInfoIntro ? "" : "line-clamp-6"
               }`}
             >
               <div dangerouslySetInnerHTML={objectHtmlDescription}></div>
@@ -164,7 +183,6 @@ const DepartmentPage: React.FC = () => {
                     setStatusInfo({ ...statusInfo, moreInfoIntro: true });
                   }}
                 >
-                  {" "}
                   Xem thêm
                 </span>
               ) : (
@@ -174,7 +192,6 @@ const DepartmentPage: React.FC = () => {
                     setStatusInfo({ ...statusInfo, moreInfoIntro: false });
                   }}
                 >
-                  {" "}
                   Thu gọn
                 </span>
               )}
@@ -203,7 +220,6 @@ const DepartmentPage: React.FC = () => {
                     setStatusInfo({ ...statusInfo, moreInfoEquip: true });
                   }}
                 >
-                  {" "}
                   Xem thêm
                 </span>
               ) : (
@@ -213,7 +229,6 @@ const DepartmentPage: React.FC = () => {
                     setStatusInfo({ ...statusInfo, moreInfoEquip: false });
                   }}
                 >
-                  {" "}
                   Thu gọn
                 </span>
               )}
@@ -242,7 +257,6 @@ const DepartmentPage: React.FC = () => {
                     setStatusInfo({ ...statusInfo, moreInfoProcess: true });
                   }}
                 >
-                  {" "}
                   Xem thêm
                 </span>
               ) : (
@@ -252,11 +266,17 @@ const DepartmentPage: React.FC = () => {
                     setStatusInfo({ ...statusInfo, moreInfoProcess: false });
                   }}
                 >
-                  {" "}
                   Thu gọn
                 </span>
               )}
             </p>
+          </section>
+          <section>
+            <img
+              src={listViewDetails.department.avatar}
+              alt="avatar"
+              className="rounded-md md:h-96 md:w-screen md:object-cover ring-1"
+            />
           </section>
           <section>
             <h1 className="font-3 text-xl text-color2">Các dịch vụ của khoa</h1>
@@ -281,6 +301,46 @@ const DepartmentPage: React.FC = () => {
               </ul>
             </section>
           )}
+          <button
+            className="text-color1 flex space-x-1 items-center top-0 left-0"
+            onClick={back}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+              />
+            </svg>
+            <span className="underline">Quay lại chuyên khoa</span>
+          </button>
+          <NavLink
+            to={"/"}
+            className="text-color1 flex space-x-1 items-center top-0 left-0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+              />
+            </svg>
+            <span className="underline">Về trang chủ</span>
+          </NavLink>
         </main>
       )}
       <Divider />

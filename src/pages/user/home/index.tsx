@@ -3,10 +3,9 @@ import { Suspense, lazy } from "react";
 import DoctorImg from "../../../assets/kisspng-physician-surgeon-medicine-stock-photography-5aff8f8d1f1519.0003837915266978691273.png";
 import { IDepartment, ISpecialThing, departments, specialThings } from "./data";
 import "./style.scss";
-import Tooltip from "@material-ui/core/Tooltip";
 import { useSelector } from "react-redux";
 import { Loading } from "../../admin/my-booking";
-import { Divider } from "@material-ui/core";
+import { Divider, Tooltip } from "@material-ui/core";
 import { NAME_SYSTEM } from "../../../helpers/constant";
 
 const FeedBack = lazy(() => import("./feedback"));
@@ -78,16 +77,16 @@ const HomeUser: React.FC = () => {
           <div className={`bg-custom xl:p-5  p-3 rounded-lg `}>
             <p>
               Nổi tiếng là một trong những bệnh viện tư nhân hàng đầu tại miền
-              Trung Việt Nam, bệnh viện {NAME_SYSTEM} Đà Nẵng cung cấp các dịch vụ chăm sóc
-              sức khỏe chất lượng cao, dễ tiếp cận, phục vụ cho khu vực rộng lớn
-              không chỉ ở Đà Nẵng. Bệnh viện phục vụ hơn 1.000 lượt bệnh nhân
-              ngoại trú và 400 lượt bệnh nhân nội trú mỗi ngày, với 45 khoa, 42
-              phòng điều trị và 8 phòng VIP. Chúng tôi cung cấp cơ sở vật chất
-              hiện đại, đầy đủ tiện nghi, môi trường chuyên nghiệp và thân
-              thiện, với sự đảm bảo chất lượng và sự hài lòng tuyệt vời của bệnh
-              nhân là trọng tâm của chúng tôi. Các chuyên khoa chính của chúng
-              tôi bao gồm từ khám sức khỏe toàn diện đến chăm sóc cấp cứu, phục
-              vụ bệnh nhân ở mọi lứa tuổi.
+              Trung Việt Nam, bệnh viện {NAME_SYSTEM} Đà Nẵng cung cấp các dịch
+              vụ chăm sóc sức khỏe chất lượng cao, dễ tiếp cận, phục vụ cho khu
+              vực rộng lớn không chỉ ở Đà Nẵng. Bệnh viện phục vụ hơn 1.000 lượt
+              bệnh nhân ngoại trú và 400 lượt bệnh nhân nội trú mỗi ngày, với 45
+              khoa, 42 phòng điều trị và 8 phòng VIP. Chúng tôi cung cấp cơ sở
+              vật chất hiện đại, đầy đủ tiện nghi, môi trường chuyên nghiệp và
+              thân thiện, với sự đảm bảo chất lượng và sự hài lòng tuyệt vời của
+              bệnh nhân là trọng tâm của chúng tôi. Các chuyên khoa chính của
+              chúng tôi bao gồm từ khám sức khỏe toàn diện đến chăm sóc cấp cứu,
+              phục vụ bệnh nhân ở mọi lứa tuổi.
             </p>
           </div>
         </div>
@@ -126,18 +125,17 @@ const HomeUser: React.FC = () => {
         >
           {departments.map((dep: IDepartment, index: number) => {
             return (
-              <Tooltip key={index} title={dep.label ?? "Comming soon"}>
-                <li
-                  className={`flex flex-col justify-center items-center p-3 space-y-3 border-8 rounded-t-3xl rounded-bl-3xl department`}
-                >
-                  <div className="basis-2/3 rounded-full border-4 border-color5 p-5 hover:bg-color5">
-                    <img src={dep.img} alt="gtr" className={`h-20 w-20`} />
-                  </div>
-                  <h1 className="flex-1 text-center font-bold md:text-lg text-base font-2">
-                    {dep.title}
-                  </h1>
-                </li>
-              </Tooltip>
+              <li
+                key={index}
+                className={`flex flex-col justify-center items-center p-3 space-y-3 border-8 rounded-t-3xl rounded-bl-3xl department`}
+              >
+                <div className="basis-2/3 rounded-full border-4 border-color5 p-5 hover:bg-color5">
+                  <img src={dep.img} alt="gtr" className={`h-20 w-20`} />
+                </div>
+                <h1 className="flex-1 text-center font-bold md:text-lg text-base font-2">
+                  {dep.title}
+                </h1>
+              </li>
             );
           })}
         </ul>

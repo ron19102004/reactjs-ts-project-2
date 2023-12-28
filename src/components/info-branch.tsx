@@ -16,13 +16,13 @@ const InfoBranch: React.FC = () => {
       <h1 className="font-3 text-color2 text-center text-lg md:text-2xl">
         LIÊN HỆ VỚI CHÚNG TÔI
       </h1>
-      <ul className="grid gap-10 grid-cols-1 lg:grid-cols-2 md:px-28 max-h-screen overflow-y-auto pb-8 px-2">
+      <ul className="grid gap-10 grid-cols-1 lg:grid-cols-2 md:px-28 max-h-screen overflow-y-auto  pb-4 md:pb-8 px-2">
         {list &&
           list.map((branch: any, index: number) => {
             return (
               <li
                 key={index}
-                className="md:flex md:space-x-2  shadow-lg hover:shadow-xl rounded-3xl p-2 "
+                className="md:flex md:space-x-2  shadow-lg hover:shadow-xl rounded-3xl p-2 md:p-4 "
               >
                 <div className="rounded-3xl md:basis-4/5">
                   <iframe

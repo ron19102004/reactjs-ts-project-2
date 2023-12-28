@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Suspense, useEffect, useState } from "react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import {
   EditBranchModuleController,
   EditDepartmentModuleController,
@@ -163,49 +164,59 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
               </div>
               <div className="font-2">
                 <label className="font-3 text-color2">Nhiệm vụ</label>
-                <ReactQuill
-                  theme="snow"
-                  value={payload.duties}
-                  onChange={(e) => {
-                    setPayload({ ...payload, duties: e });
-                  }}
-                  className="w-full outline-none rounded"
-                />
+                <div className=" overflow-auto">
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={payload.duties}
+                    onChange={(e, editor) => {
+                      setPayload({ ...payload, duties: editor.getData() });
+                    }}
+                  />
+                </div>
               </div>
               <div className="font-2">
                 <label className="font-3 text-color2">Mô tả</label>
-                <ReactQuill
-                  theme="snow"
-                  value={payload.description}
-                  onChange={(e) => {
-                    setPayload({ ...payload, description: e });
-                  }}
-                  className="w-full outline-none rounded"
-                />
+                <div className=" overflow-auto">
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={payload.description}
+                    onChange={(e, editor) => {
+                      setPayload({ ...payload, description: editor.getData() });
+                    }}
+                  />
+                </div>
               </div>
               <div className="font-2">
                 <label className="font-3 text-color2">
                   Thiết bị & Hệ thống
                 </label>
-                <ReactQuill
-                  theme="snow"
-                  value={payload.equipment_system}
-                  onChange={(e) => {
-                    setPayload({ ...payload, equipment_system: e });
-                  }}
-                  className="w-full outline-none rounded"
-                />
+                <div className="overflow-auto">
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={payload.equipment_system}
+                    onChange={(e, editor) => {
+                      setPayload({
+                        ...payload,
+                        equipment_system: editor.getData(),
+                      });
+                    }}
+                  />
+                </div>
               </div>
               <div className="font-2">
                 <label className="font-3 text-color2">Kỹ thuật điều trị</label>
-                <ReactQuill
-                  theme="snow"
-                  value={payload.treatment_techniques}
-                  onChange={(e) => {
-                    setPayload({ ...payload, treatment_techniques: e });
-                  }}
-                  className="w-full outline-none rounded"
-                />
+                <div className=" overflow-auto">
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={payload.treatment_techniques}
+                    onChange={(e, editor) => {
+                      setPayload({
+                        ...payload,
+                        treatment_techniques: editor.getData(),
+                      });
+                    }}
+                  />
+                </div>
               </div>
               <div className="font-2">
                 <label className="font-3 text-color2">Ảnh khoa</label>

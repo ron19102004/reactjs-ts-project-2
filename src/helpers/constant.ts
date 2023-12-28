@@ -1,5 +1,5 @@
 export const NAME_SYSTEM = 'ROLY Hospital'
-export const URL = "http://192.168.1.121:8000";
+export const URL = "http://192.168.1.7:8000";
 export const INFO = {
   facebook: `https://www.facebook.com/ron292004`,
 } as {

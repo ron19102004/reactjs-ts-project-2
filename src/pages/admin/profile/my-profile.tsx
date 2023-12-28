@@ -122,7 +122,9 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
       <section className="font-2 space-y-1">
         <div className="flex flex-col justify-center items-center p-3 space-y-3">
           <div className={`relative opacity-100`}>
-            <Tooltip title={"Chỉnh sửa thông tin cá nhân"}>
+            <Tooltip
+              title={openEdit ? "Lưu thông tin" : "Chỉnh sửa thông tin cá nhân"}
+            >
               <button
                 className={`z-10 w-8 h-8 absolute right-3 top-2.5 rounded-full p-1 flex justify-center items-center ${
                   openEdit ? "bg-color2" : "bg-color1"
@@ -202,7 +204,9 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
             <h1 className="font-3 text-color1 text-2xl text-center">
               Thông tin cá nhân
             </h1>
-            <h2 className="text-color2 font-2 text-lg ">Mã thông tin: {details.id}</h2>
+            <h2 className="text-color2 font-2 text-lg ">
+              Mã thông tin: {details.id}
+            </h2>
             <h2 className="text-color2 font-2 text-lg ">
               Email:
               <input

@@ -87,7 +87,8 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
       token,
       methodCheckUser
     );
-    if (user$.role !== Role.user) {
+    console.log(user$);
+    if (user$.data.role !== Role.user) {
       toast.error(
         "Người dùng có quyền admin. Vui lòng dùng tài khoản khác",
         toastConfigs
