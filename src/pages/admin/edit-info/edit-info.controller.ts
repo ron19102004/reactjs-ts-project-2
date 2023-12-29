@@ -88,7 +88,7 @@ interface IEditService {
   ): Promise<any>;
 }
 interface IEditUserService {
-  getAdminAndServiceForAd(admin_id: number, token: string): Promise<any>;
+  getAdminAndServiceForAd(admin_id: number): Promise<any>;
   getAdminAndService(): Promise<any>;
   removeAdminAndService(
     token: string,
@@ -153,20 +153,14 @@ class EditInfoController
     }
     return [];
   }
-  async getAdminAndServiceForAd(admin_id: number, token: string): Promise<any> {
+  async getAdminAndServiceForAd(admin_id: number): Promise<any> {
     try {
       const response = await axios.get(
         `${URL}/users-services/admin_id=${admin_id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
       );
       if (response.status !== 200) {
         console.log(response);
-        return;
+        return [];
       }
       return response.data;
     } catch (error: any) {
@@ -174,8 +168,8 @@ class EditInfoController
       if (error.response.status === 401) {
         console.log("Hết phiên làm việc vui lòng đăng nhập lại");
       }
+      return [];
     }
-    return [];
   }
   async getService(): Promise<any> {
     try {

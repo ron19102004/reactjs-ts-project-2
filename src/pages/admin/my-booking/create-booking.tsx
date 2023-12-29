@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,6 +12,8 @@ import { UserModuleController } from "./user.controller";
 import { ToastOptions, toast } from "react-toastify";
 import { MyBookingAdminModuleController } from "./my-booking.controller";
 import { Role } from "../../../redux/reducers/auth.reducer";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 const icons$ = icons;
 export enum EMethodsCheckUser {
   uid = "uid",
@@ -60,10 +61,9 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
   };
   const init = async () => {
     const listUService$ =
-      await EditUserServiceModuleController.getAdminAndServiceForAd(
-        admin_id,
-        token
-      );
+      await EditUserServiceModuleController.getAdminAndServiceForAd(admin_id);
+    console.log(listUService$);
+
     setListUService(listUService$);
   };
   useEffect(() => {
@@ -155,7 +155,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
   return (
     <div className="">
       <button
-        className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
+        className="bg-color5 font-7 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
         onClick={handleChangeStatusOpen}
       >
         Thêm lịch hẹn
@@ -166,14 +166,14 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title" className="text-color2">
-          <span className="font-3">Thêm lịch hẹn mới</span>
+          <span className="font-7 font-semibold">Thêm lịch hẹn mới</span>
         </DialogTitle>
         <DialogContent className="font-2 space-y-2 text-color2">
           <div className="space-y-2">
             <section className="flex space-x-2 items-center">
-              <h1 className="font-3">Thông tin khách hàng</h1>
+              <h1 className="font-6">Thông tin khách hàng</h1>
               <select
-                className="h-10 outline-none border-2 rounded p-1"
+                className="h-10 outline-none rounded p-1 font-6"
                 onChange={(e: any) => {
                   setMethodCheckUser(e.target.value);
                   setValueCheckUser("");
@@ -189,7 +189,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
                 <input
                   type="number"
                   required
-                  className="outline-none border-2 rounded h-10 w-full px-2"
+                  className="outline-none font-6 rounded h-10 w-full px-2"
                   placeholder="Ví dụ: 4id nhập 4"
                   onChange={(e) => {
                     changeValueCheckUser(e);
@@ -200,7 +200,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
                 <input
                   type="tel"
                   required
-                  className="outline-none border-2 rounded h-10 w-full px-2"
+                  className="outline-none font-6 rounded h-10 w-full px-2"
                   placeholder="Ví dụ: 0392477615"
                   onChange={(e) => {
                     changeValueCheckUser(e);
@@ -211,7 +211,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
                 <input
                   type="email"
                   required
-                  className="outline-none border-2 rounded h-10 w-full px-2"
+                  className="outline-none font-6 rounded h-10 w-full px-2"
                   placeholder="VD: abc@gmail.com"
                   onChange={(e) => {
                     changeValueCheckUser(e);
@@ -219,7 +219,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
                 />
               )}
               <button
-                className="h-10 w-[60%] md:w-[30%] justify-center flex items-center bg-color5 px-1 hover:bg-color4 text-xs md:text-base rounded shadow hover:shadow-md space-x-1"
+                className="h-10 w-[60%] md:w-[30%] justify-center flex items-center bg-color5 px-1 hover:bg-color4 text-xs md:text-base rounded shadow hover:shadow-md space-x-1 font-6"
                 color="primary"
                 onClick={handleCheckUser}
               >
@@ -233,7 +233,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
             {Object.keys(user.details).length > 0 && (
               <section className="">
                 <h1 className="font-3">Thông tin cơ bản khách hàng</h1>
-                <div className="p-2 border-2 h-28 overflow-y-auto  rounded">
+                <div className="p-2  h-28 overflow-y-auto  rounded">
                   <p>UID: {user.details.id}id</p>
                   <p>Họ đệm: {user.details.firstName}</p>
                   <p>Tên: {user.details.lastName}</p>
@@ -248,10 +248,10 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
           </div>
           <section className="space-y-2">
             <section className="flex space-x-2 items-center">
-              <h1 className="font-3">Dịch vụ</h1>
+              <h1 className="font-6">Dịch vụ</h1>
             </section>
             <select
-              className="h-10 outline-none border-2 rounded p-1 w-full"
+              className="h-10 outline-none rounded p-1 font-6 w-full"
               onChange={(e) => {
                 setIdUServiceSelectUser(parseInt(e.target.value));
               }}
@@ -262,7 +262,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
                   <option
                     value={item.id}
                     key={index}
-                    className="h-10 outline-none border-2 rounded p-1"
+                    className="h-10 outline-none rounded p-1"
                   >
                     {item.service.id}-{item.service.name}-{item.admin.firstName}{" "}
                     {item.admin.lastName}-{item.service.price}kVNĐ
@@ -270,38 +270,46 @@ const CreateBooking: React.FC<ICreateBookingProps> = ({
                 ))}
             </select>
           </section>
-          <section className={``}>
-            <h1 className="font-3">Ngày hẹn</h1>
+          <section className={`font-6`}>
+            <h1 className="font-6">Ngày hẹn</h1>
             <input
               type="date"
               required
-              className={`h-10 font-2 w-full outline-none border-2 p-2 rounded`}
+              className={`h-10 font-2 w-full outline-none p-2 rounded`}
               onChange={(e) => {
                 setAppointmentDate(e.target.value);
               }}
             />
           </section>
-          <section className={``}>
-            <h1 className="font-3">Ghi chú</h1>
-            <textarea
-              className={`h-32 font-2 w-full outline-none border-2 p-2 rounded`}
-              onChange={(e) => {
-                setNote(e.target.value);
-              }}
-            />
+          <section className={`font-6`}>
+            <h1 className="font-6">Ghi chú</h1>
+            <div className="font-sans">
+              <CKEditor
+                editor={ClassicEditor}
+                data={note}
+                onChange={(e, editor) => {
+                  setNote(editor.getData());
+                }}
+              />
+            </div>
           </section>
         </DialogContent>
         <DialogActions>
-          <Button
+          <button
             onClick={handleChangeStatusOpen}
-            color="secondary"
-            variant="contained"
+            type="button"
+            className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
           >
             Hủy
-          </Button>
-          <Button onClick={handleCreate} color="primary" variant="contained">
+          </button>
+
+          <button
+            onClick={handleCreate}
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+          >
             Thêm
-          </Button>
+          </button>
         </DialogActions>
       </Dialog>
     </div>

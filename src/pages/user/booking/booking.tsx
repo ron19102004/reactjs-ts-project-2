@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -11,6 +10,9 @@ import { useState } from "react";
 import { ToastOptions, toast } from "react-toastify";
 import { BookingUserModuleController } from "./booking.controller";
 import { useNavigate } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { ValidatorCustomModule } from "../../../helpers/validator";
 const toastConfigs: ToastOptions = {
   position: "top-right",
   autoClose: 2000,
@@ -29,14 +31,12 @@ interface IBookingProps {
     id: number;
     service: any;
   }[];
-  openInfo: boolean;
 }
 const Booking: React.FC<IBookingProps> = ({
   uService,
   user_id,
   token,
   admin_id,
-  openInfo,
 }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
@@ -78,29 +78,29 @@ const Booking: React.FC<IBookingProps> = ({
   };
   return (
     <div>
-      <Button
-        variant="contained"
-        color="secondary"
+      <button
+        type="button"
+        className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center"
         onClick={changeStatusOpen}
-        className={`${openInfo ? "w-full" : ""}`}
       >
         <span className="font-3">Đặt Hẹn</span>
-      </Button>
+      </button>
+
       <Dialog
         open={open}
         onClose={changeStatusOpen}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
-          <span className="font-3 text-color2">Đặt hẹn</span>
+          <span className="font-4 text-color2">Đặt hẹn</span>
         </DialogTitle>
         <DialogContent>
-          <section className="space-y-2 font-2 text-color2">
+          <section className="space-y-2 font-4 text-color2">
             <section className="flex space-x-2 items-center">
-              <h1 className="font-3">Dịch vụ</h1>
+              <h1 className="">Dịch vụ</h1>
             </section>
             <select
-              className="h-10 outline-none border-2 rounded p-1 w-full"
+              className="h-10 outline-none rounded p-1 w-full"
               onChange={(e) => {
                 setIdUServiceSelect(parseInt(e.target.value));
               }}
@@ -111,47 +111,54 @@ const Booking: React.FC<IBookingProps> = ({
                   <option
                     value={item.id}
                     key={index}
-                    className="h-10 outline-none border-2 rounded p-1"
+                    className="h-10 outline-none  rounded p-1"
                   >
                     {item?.service?.id}-{item?.service?.name}-
-                    {item?.service?.firstName} {item?.service?.lastName}-
-                    {item?.service?.price}kVNĐ
+                    {item?.service?.firstName} {item?.service?.lastName}
+                    {ValidatorCustomModule.convertCurrencyStringToNumber(`${item?.service?.price}.000kVNĐ`)}
                   </option>
                 ))}
             </select>
           </section>
-          <section className={`font-2 text-color2`}>
-            <h1 className="font-3">Ngày hẹn</h1>
+          <section className={`font-4 text-color2`}>
+            <h1 className="">Ngày hẹn</h1>
             <input
               type="date"
               required
-              className={`h-10 font-2 w-full outline-none border-2 p-2 rounded`}
+              className={`h-10 font-4 w-full outline-none  p-2 rounded`}
               onChange={(e) => {
                 setAppointmentDate(e.target.value);
               }}
             />
           </section>
-          <section className={`font-2 text-color2`}>
-            <h1 className="font-3">Ghi chú</h1>
-            <textarea
-              className={`h-32 font-2 w-full outline-none border-2 p-2 rounded`}
-              onChange={(e) => {
-                setNote(e.target.value);
-              }}
-            />
+          <section className={`font-4 text-color2`}>
+            <h1 className="">Ghi chú</h1>
+            <div className="overflow-auto font-sans">
+              <CKEditor
+                editor={ClassicEditor}
+                data={note}
+                onChange={(e, editor) => {
+                  setNote(editor.getData());
+                }}
+              />
+            </div>
           </section>
         </DialogContent>
         <DialogActions>
-          <Button
+          <button
+            type="button"
+            className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center"
             onClick={changeStatusOpen}
-            color="secondary"
-            variant="contained"
           >
             Hủy
-          </Button>
-          <Button onClick={booking} color="primary" variant="contained">
+          </button>
+          <button
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+            onClick={booking}
+          >
             Đặt lịch
-          </Button>
+          </button>
         </DialogActions>
       </Dialog>
     </div>

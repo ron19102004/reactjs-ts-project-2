@@ -65,9 +65,9 @@ const AnalyticsBookingDateChart: React.FC<IAnalyticsBookingDateChartProps> = ({
     init();
   }, []);
   return (
-    <article className="font-2">
+    <article className="font-7">
       <section className="space-y-2">
-        <h1 className="font-3 xl:text-xl text-color2">
+        <h1 className="font-7 xl:text-xl text-color2">
           Thống kê số liệu trong ngày
         </h1>
         <div className="space-x-2 text-white ">

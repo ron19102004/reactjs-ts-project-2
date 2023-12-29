@@ -56,7 +56,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
   return (
     <>
       <header
-        className={`font-3 z-50 ${
+        className={`font-7 z-50 ${
           isFixed
             ? "fixed transition-all bg-header-user text-cyan-300 "
             : "bg-color2 text-color7 absolute md:static"
@@ -84,7 +84,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
             <div>
               <img src={LOGO} alt="logo" className={`w-10 md:w-14`} />
             </div>
-            <h1 className="font-semibold text-lg md:text-2xl">{NAME_SYSTEM}</h1>
+            <h1 className="font-semibold font-6 text-lg md:text-2xl">{NAME_SYSTEM}</h1>
           </div>
         </section>
         <nav

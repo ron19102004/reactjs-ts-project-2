@@ -23,7 +23,8 @@ import { Loading } from ".";
 import { TelebotModuleController } from "./telebot.controller";
 import pencilIcon from "../../../assets/pencil.png";
 import saveIcon from "../../../assets/save.png";
-
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 const CreateBooking = React.lazy(() => import("./create-booking"));
 enum ESearchMethod {
   phone = "phoneNumber",
@@ -402,8 +403,8 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
     <article className=" p-3 ">
       <main className="space-y-3">
         <section>
-          <h1 className="font-3 text-color6 xl:text-2xl text-lg flex space-x-1">
-            <span className="pointer-events-none">Tìm kiếm</span>
+          <h1 className="font-7 text-color6 xl:text-2xl text-lg flex space-x-1">
+            <span className="pointer-events-none font-7">Tìm kiếm</span>
             <section>
               <Tooltip
                 title={`${isOpenBoxSearch ? "Đóng tím kiếm" : "Mở tìm kiếm"}`}
@@ -420,7 +421,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           </h1>
           {isOpenBoxSearch && (
             <div
-              className={`flex justify-center md:justify-start md:space-x-3 md:flex-row flex-col space-y-3 md:space-y-0 font-2`}
+              className={`flex justify-center md:justify-start md:space-x-3 md:flex-row flex-col space-y-3 md:space-y-0 font-6`}
             >
               <select
                 className="rounded-md h-10 px-2 text-color2 outline-none bg-color7 shadow-xl font-3"
@@ -456,7 +457,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
         </section>
         {isOpenBoxSearch && (
           <section className={`space-y-3`}>
-            <h1 className="font-3 text-color6 xl:text-2xl ">
+            <h1 className="font-7 text-color6 xl:text-2xl ">
               {listResultForSearch.length} Kết quả tìm kiếm
             </h1>
             <ul
@@ -464,19 +465,15 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
             >
               {listResultForSearch &&
                 listResultForSearch.map((booking: any, index: number) => (
-                  <li
+                  <CardBookingAdmin
                     key={index}
-                    className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
-                  >
-                    <CardBookingAdmin
-                      data={booking}
-                      handleChangeList={handleChangeListSearch}
-                      admin_id={admin_id}
-                      token={token}
-                      toastOptions={toastConfigs}
-                      user_service={booking.uService}
-                    />
-                  </li>
+                    data={booking}
+                    handleChangeList={handleChangeListSearch}
+                    admin_id={admin_id}
+                    token={token}
+                    toastOptions={toastConfigs}
+                    user_service={booking.uService}
+                  />
                 ))}
             </ul>
             <Divider />
@@ -484,8 +481,8 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
         )}
 
         <section className="md:flex md:justify-between md:items-center space-y-2 md:space-y-0">
-          <h1 className="font-3 text-color6 xl:text-2xl text-lg  flex space-x-1">
-            <span className="pointer-events-none">
+          <h1 className="font-7 text-color6 xl:text-2xl text-lg  flex space-x-1">
+            <span className="pointer-events-none font-7">
               Danh sách các hồ sơ khách hàng
             </span>
             <section>
@@ -505,7 +502,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           </Suspense>
         </section>
         <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
-          <h1 className="font-3 text-color2 text-xl">
+          <h1 className="font-7 text-color2 text-xl">
             Danh sách chưa xác nhận
             <p>Số lượng: {listBookingConfirmedYet.length}</p>
           </h1>
@@ -514,19 +511,15 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           >
             {listBookingConfirmedYet &&
               listBookingConfirmedYet.map((booking: any, index: number) => (
-                <li
+                <CardBookingAdmin
                   key={index}
-                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
-                >
-                  <CardBookingAdmin
-                    user_service={booking.uService}
-                    data={booking}
-                    handleChangeList={handleChangeListConfirmYet}
-                    admin_id={admin_id}
-                    token={token}
-                    toastOptions={toastConfigs}
-                  />
-                </li>
+                  data={booking}
+                  handleChangeList={handleChangeListConfirmYet}
+                  admin_id={admin_id}
+                  token={token}
+                  toastOptions={toastConfigs}
+                  user_service={booking.uService}
+                />
               ))}
           </ul>
           {listBookingConfirmedYet.length >= 8 && (
@@ -541,7 +534,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           )}
         </section>
         <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
-          <h1 className="font-3 text-color2 text-xl">
+          <h1 className="font-7 text-color2 text-xl">
             Danh sách chưa chấp nhận
             <p>Số lượng: {listBookingAcceptYet.length}</p>
           </h1>
@@ -550,19 +543,15 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           >
             {listBookingAcceptYet &&
               listBookingAcceptYet.map((booking: any, index: number) => (
-                <li
+                <CardBookingAdmin
                   key={index}
-                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
-                >
-                  <CardBookingAdmin
-                    user_service={booking.uService}
-                    data={booking}
-                    handleChangeList={handleChangeListAcceptYet}
-                    admin_id={admin_id}
-                    token={token}
-                    toastOptions={toastConfigs}
-                  />
-                </li>
+                  data={booking}
+                  handleChangeList={handleChangeListAcceptYet}
+                  admin_id={admin_id}
+                  token={token}
+                  toastOptions={toastConfigs}
+                  user_service={booking.uService}
+                />
               ))}
           </ul>
           {listBookingAcceptYet.length >= 8 && (
@@ -577,7 +566,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           )}
         </section>
         <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
-          <h1 className="font-3 text-color2 text-xl">
+          <h1 className="font-7 text-color2 text-xl">
             Danh sách chưa kết thúc
             <p>Số lượng: {listBookingAccepted.length}</p>
           </h1>
@@ -586,19 +575,15 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           >
             {listBookingAccepted &&
               listBookingAccepted.map((booking: any, index: number) => (
-                <li
+                <CardBookingAdmin
                   key={index}
-                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
-                >
-                  <CardBookingAdmin
-                    user_service={booking.uService}
-                    data={booking}
-                    handleChangeList={handleChangeListAccept}
-                    admin_id={admin_id}
-                    token={token}
-                    toastOptions={toastConfigs}
-                  />
-                </li>
+                  data={booking}
+                  handleChangeList={handleChangeListAccept}
+                  admin_id={admin_id}
+                  token={token}
+                  toastOptions={toastConfigs}
+                  user_service={booking.uService}
+                />
               ))}
           </ul>
           {listBookingAccepted.length >= 8 && (
@@ -613,7 +598,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           )}
         </section>
         <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
-          <h1 className="font-3 text-color2 text-xl">
+          <h1 className="font-7 text-color2 text-xl">
             Danh sách từ chối <p>Số lượng: {listBookingRefused.length}</p>
           </h1>
           <ul
@@ -621,19 +606,15 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           >
             {listBookingRefused &&
               listBookingRefused.map((booking: any, index: number) => (
-                <li
+                <CardBookingAdmin
                   key={index}
-                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
-                >
-                  <CardBookingAdmin
-                    user_service={booking.uService}
-                    data={booking}
-                    handleChangeList={handleChangeListRefused}
-                    admin_id={admin_id}
-                    token={token}
-                    toastOptions={toastConfigs}
-                  />
-                </li>
+                  data={booking}
+                  handleChangeList={handleChangeListRefused}
+                  admin_id={admin_id}
+                  token={token}
+                  toastOptions={toastConfigs}
+                  user_service={booking.uService}
+                />
               ))}
           </ul>
           {listBookingRefused.length >= 8 && (
@@ -648,7 +629,7 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           )}
         </section>
         <section className={`${isOpen ? "" : "hidden"} space-y-3`}>
-          <h1 className="font-3 text-color2 text-xl">
+          <h1 className="font-7 text-color2 text-xl">
             Danh sách hoàn thành <p>Số lượng: {listBookingFinished.length}</p>
           </h1>
           <ul
@@ -656,19 +637,15 @@ const AllBookingAdmin: React.FC<IAllBookingAdminProps> = ({
           >
             {listBookingFinished &&
               listBookingFinished.map((booking: any, index: number) => (
-                <li
+                <CardBookingAdmin
                   key={index}
-                  className="p-3 rounded space-y-2 flex flex-col justify-between shadow-xl hover:shadow-2xl"
-                >
-                  <CardBookingAdmin
-                    user_service={booking.uService}
-                    data={booking}
-                    handleChangeList={handleChangeListFinished}
-                    admin_id={admin_id}
-                    token={token}
-                    toastOptions={toastConfigs}
-                  />
-                </li>
+                  data={booking}
+                  handleChangeList={handleChangeListFinished}
+                  admin_id={admin_id}
+                  token={token}
+                  toastOptions={toastConfigs}
+                  user_service={booking.uService}
+                />
               ))}
           </ul>
           {listBookingFinished.length >= 8 && (
@@ -853,11 +830,11 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
     setOpenEditNote(!openEditNote);
   };
   return (
-    <>
+    <li className="w-full p-6 bg-white border border-gray-200 rounded shadow ">
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-2 font-2">
         <div className="">
-          <h1 className="font-3">Thông tin khách hàng</h1>
-          <ul>
+          <h1 className="font-7">Thông tin khách hàng</h1>
+          <ul className="font-4">
             <li>
               <span>Mã số thứ tự: b{data.id}id</span>
             </li>
@@ -884,26 +861,56 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
           </ul>
         </div>
         <div className="">
-          <h1 className="font-3">Trạng thái lịch hẹn</h1>
-          <ul className="space-y-1">
+          <h1 className="font-7">Trạng thái lịch hẹn</h1>
+          <ul className="space-y-1 font-4">
             <li className="flex space-x-1 items-center">
-              <span>{status.confirm ? icons.checked : icons.refused}</span>
+              <span>
+                {status.confirm ? (
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                ) : (
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                )}
+              </span>
               <span>Xác thực</span>
             </li>
             <li className="flex space-x-1 items-center">
-              <span>{status.rejected ? icons.checked : icons.refused}</span>
+              <span>
+                {status.rejected ? (
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                ) : (
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                )}
+              </span>
               <span>Từ chối</span>
             </li>
             <li className="flex space-x-1 items-center">
-              <span>{status.accepted ? icons.checked : icons.refused}</span>
+              <span>
+                {status.accepted ? (
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                ) : (
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                )}
+              </span>
               <span>Chấp nhận</span>
             </li>
             <li className="flex space-x-1 items-center">
-              <span>{status.finished ? icons.checked : icons.refused}</span>
+              <span>
+                {status.finished ? (
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                ) : (
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                )}
+              </span>
               <span>Hoàn thành</span>
             </li>
             <li className="flex space-x-1 items-center">
-              <span>{status.overDate ? icons.checked : icons.refused}</span>
+              <span>
+                {status.overDate ? (
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                ) : (
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                )}
+              </span>
               <span>Quá thời gian</span>
             </li>
           </ul>
@@ -917,31 +924,31 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
               />
             </button>
           </div>
-          <textarea
-            disabled={!openEditNote}
-            className={`bg-slate-200 p-1 w-full h-20 rounded font-2 outline-none ${
-              openEditNote ? "ring-2" : ""
-            }`}
-            value={note}
-            onChange={(e) => {
-              setNote(e.target.value);
-            }}
-          />
+          <div className="overflow-auto max-h-24 font-sans">
+            <CKEditor
+              disabled={!openEditNote}
+              editor={ClassicEditor}
+              data={note}
+              onChange={(e, editor) => {
+                setNote(editor.getData());
+              }}
+            />
+          </div>
         </div>
         <div className="">
-          <h1 className="font-3">Dịch vụ sử dụng</h1>
-          <ul className="">
+          <h1 className="font-7">Dịch vụ sử dụng</h1>
+          <ul className="font-4">
             <li>
               <span>Tên dịch vụ: {user_service?.service?.name}</span>
             </li>
             <li>
-              <span>Giá dịch vụ: {user_service?.service?.price}kVNĐ</span>
+              <span>Giá dịch vụ: {ValidatorCustomModule.convertCurrencyStringToNumber(`${user_service?.service?.price}.000kVNĐ`)}</span>
             </li>
           </ul>
         </div>
         <div className="">
-          <h1 className="font-3">Thông tin lịch hẹn</h1>
-          <ul className="card-info-list">
+          <h1 className="font-7">Thông tin lịch hẹn</h1>
+          <ul className="card-info-list font-4">
             <li>
               <span>Ngày đặt lịch hẹn: {data.timeInit}</span>
             </li>
@@ -981,7 +988,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  <span className="font-3">Vui lòng nhập mã xác thực</span>
+                  <span className="font-7">Vui lòng nhập mã xác thực</span>
                 </DialogTitle>
                 <DialogContent>
                   <section className="flex flex-col justify-center items-center space-y-3">
@@ -1041,14 +1048,13 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
           status.accepted === true &&
           status.finished === false ? (
             <>
-              <Button
+              <button
+                type="button"
                 onClick={handleFinish}
-                variant="contained"
-                color="primary"
-                className="bg-red-400"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
               >
-                <span className="font-3">Hoàn thành</span>
-              </Button>
+                <span className="font-7">Hoàn thành</span>
+              </button>
             </>
           ) : (
             ""
@@ -1062,13 +1068,13 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
           status.overDate === true ? (
             <>
               <div>
-                <Button
-                  variant="contained"
-                  color="secondary"
+                <button
                   onClick={handleClickOpen}
+                  type="button"
+                  className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center"
                 >
-                  <span className="font-3">Xóa</span>
-                </Button>
+                  Xóa
+                </button>
                 <Dialog
                   open={open}
                   onClose={() => {
@@ -1083,25 +1089,24 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                     </span>
                   </DialogTitle>
                   <DialogActions>
-                    <Button
+                    <button
                       onClick={() => {
                         handleClose(false);
                       }}
-                      color="secondary"
-                      variant="contained"
+                      type="button"
+                      className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center"
                     >
-                      <span className="font-3">Húy</span>
-                    </Button>
-                    <Button
+                      Hủy
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => {
                         handleClose(true);
                       }}
-                      color="primary"
-                      variant="contained"
-                      autoFocus
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
                     >
-                      <span className="font-2">Đồng ý</span>
-                    </Button>
+                      <span className="font-7">Đồng ý</span>
+                    </button>
                   </DialogActions>
                 </Dialog>
               </div>
@@ -1112,13 +1117,14 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
         </div>
         <div>
           <div>
-            <Button
-              variant="contained"
-              color="primary"
+            <button
+              type="button"
               onClick={changeStatusOpenSendMessage}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
             >
-              <span className="font-3">Gửi thông báo</span>
-            </Button>
+              <span className="font-7">Gửi thông báo</span>
+            </button>
+
             <Dialog
               open={openSendMessage}
               onClose={changeStatusOpenSendMessage}
@@ -1133,7 +1139,7 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
               </DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  <h1 className="font-3 text-color2">Tin nhắn</h1>
+                  <h1 className="font-7 text-color2">Tin nhắn</h1>
                   <textarea
                     className="w-full h-36 outline-none border-2 rounded text-color2 font-2 p-2"
                     onChange={(e) => {
@@ -1143,29 +1149,28 @@ const CardBookingAdmin: React.FC<ICardBookingAdminProps> = ({
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button
+                <button
                   onClick={() => {
                     changeStatusOpenSendMessage();
                   }}
-                  color="secondary"
-                  variant="contained"
+                  type="button"
+                  className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center"
                 >
-                  <span className="font-3">Húy</span>
-                </Button>
-                <Button
+                  Hủy
+                </button>
+                <button
+                  type="button"
                   onClick={sendMessage}
-                  color="primary"
-                  variant="contained"
-                  autoFocus
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
                 >
-                  <span className="font-3">Gửi tin nhắn</span>
-                </Button>
+                  Gửi tin nhắn
+                </button>
               </DialogActions>
             </Dialog>
           </div>
         </div>
       </section>
-    </>
+    </li>
   );
 };
 

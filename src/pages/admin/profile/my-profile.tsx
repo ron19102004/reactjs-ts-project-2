@@ -2,16 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { EditUserServiceModuleController } from "../edit-info/edit-info.controller";
-import { Tooltip } from "@material-ui/core";
 import pencilIcon from "../../../assets/pencil.png";
 import saveIcon from "../../../assets/save.png";
-import resetAvt from "../../../assets/image-file-reset.png";
 import { ToastOptions, toast } from "react-toastify";
 import { ProfileModuleController } from "./profile.controller";
 import { useDispatch } from "react-redux";
 import { AuthModuleController } from "../../auths/auth.controller";
 import { IDetailsWork } from "./accounts-admin";
-
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 const toastConfigs: ToastOptions = {
   position: "top-right",
   autoClose: 2000,
@@ -109,297 +108,343 @@ const MyProfileAdmin: React.FC<IMyProfileAdminProps> = ({
     await AuthModuleController.reloadUserCurrent$(dispatch, token);
     const uServices =
       await EditUserServiceModuleController.getAdminAndServiceForAd(
-        userCurrent?.id,
-        token
+        userCurrent?.id
       );
     setListUService(uServices);
+    console.log(detailsWork);
   };
   useEffect(() => {
     init();
   }, []);
   return (
     <>
-      <section className="font-2 space-y-1">
-        <div className="flex flex-col justify-center items-center p-3 space-y-3">
-          <div className={`relative opacity-100`}>
-            <Tooltip
-              title={openEdit ? "Lưu thông tin" : "Chỉnh sửa thông tin cá nhân"}
-            >
+      <div className="bg-white rounded-lg shadow-xl pb-8">
+        <div className="w-full h-[250px]">
+          <img
+            src={details?.avatar}
+            className="w-full h-full animate-pulse object-cover blur rounded-tl-lg rounded-tr-lg"
+          />
+        </div>
+        <div className="flex flex-col items-center -mt-20">
+          <img
+            src={details?.avatar}
+            className="w-40 h-40 object-cover z-10 border-4 border-white rounded-full"
+          />
+          <div className="flex flex-col justify-center items-center">
+            <div className="flex items-center space-x-2 mt-2">
+              <p className="text-2xl font-7">
+                {details?.firstName} {details?.lastName}
+              </p>
+              <span className="bg-blue-500 rounded-full p-1" title="Verified">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-gray-100 h-2.5 w-2.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="4"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </span>
+            </div>
+            <div>
               <button
-                className={`z-10 w-8 h-8 absolute right-3 top-2.5 rounded-full p-1 flex justify-center items-center ${
-                  openEdit ? "bg-color2" : "bg-color1"
-                }`}
+                type="button"
+                className={
+                  openEdit
+                    ? "text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center flex items-center space-x-1 "
+                    : "py-2.5 px-5 text-sm font-medium focus:outline-none rounded-full border   focus:z-10 focus:ring-4  focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700 flex items-center space-x-1"
+                }
                 onClick={changeStatusOpenEdit}
               >
-                <img
-                  src={openEdit ? saveIcon : pencilIcon}
-                  alt="edit"
-                  className="w-5 h-5 shadow rounded-full object-cover"
-                />
-              </button>
-            </Tooltip>
-            <div className="w-48 h-48 overflow-hidden rounded-full ring-4 ring-color5 transition-all">
-              <img
-                src={details.avatar}
-                alt="avatar"
-                className="w-48 h-48 hover:scale-150 transition-all object-cover"
-              />
-            </div>
-            {openEdit && (
-              <div className="w-[90%] absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] flex flex-col justify-center items-center space-y-2">
-                <input
-                  type="url"
-                  value={userCurrent?.avatar}
-                  className="h-10 ring-4 outline-none w-full px-3 rounded bg-color2 font-3 text-color5 object-cover"
-                  onChange={(e) => {
-                    setDetails({ ...details, avatar: e.target.value });
-                  }}
-                />
-                <button
-                  className="absolute -bottom-[90%]"
-                  onClick={() => {
-                    setDetails({ ...details, avatar: userCurrent?.avatar });
-                  }}
-                >
+                <div>
                   <img
-                    src={resetAvt}
-                    alt="resetAvt"
-                    className="w-8 h-8 rounded object-cover"
+                    src={!openEdit ? pencilIcon : saveIcon}
+                    alt="icon"
+                    className="w-4 h-4"
                   />
-                </button>
-              </div>
-            )}
-          </div>
-          <h1 className="font-3 text-color1 text-4xl text-center">
-            {details.firstName} {details.lastName}
-          </h1>
-          <h2 className="font-3 underline text-color1 text-lg text-center">
-            {detailsWork?.position?.toUpperCase()}
-          </h2>
-          {openEdit && (
-            <div className="space-y-3 flex flex-col ">
-              <input
-                type="text"
-                value={details.firstName}
-                className="h-8 ring-4 outline-none px-3 rounded bg-color2 font-3 text-color5 text-center"
-                placeholder="Họ tên đệm"
-                onChange={(e) => {
-                  setDetails({ ...details, firstName: e.target.value });
-                }}
-              />
-              <input
-                type="text"
-                value={details.lastName}
-                className="h-8 ring-4 outline-none px-3 rounded bg-color2 font-3 text-color5 text-center"
-                placeholder="Tên"
-                onChange={(e) => {
-                  setDetails({ ...details, lastName: e.target.value });
-                }}
-              />
+                </div>
+                <div>{openEdit ? "Lưu thông tin" : "Chỉnh sửa thông tin"}</div>
+              </button>
             </div>
-          )}
-        </div>
-        <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center">
-          <div className="bg-white card-profile-custom rounded-md p-3">
-            <h1 className="font-3 text-color1 text-2xl text-center">
-              Thông tin cá nhân
-            </h1>
-            <h2 className="text-color2 font-2 text-lg ">
-              Mã thông tin: {details.id}
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Email:
-              <input
-                disabled={!openEdit}
-                type="email"
-                required
-                value={`${details.email}`}
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : "w-[80%] "
-                }`}
-                onChange={(e) => {
-                  setDetails({ ...details, email: e.target.value });
-                }}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              SĐT:
-              <input
-                disabled={!openEdit}
-                type="tel"
-                required
-                value={`${details.phoneNumber}`}
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetails({ ...details, phoneNumber: e.target.value });
-                }}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Địa chỉ:{" "}
-              <input
-                disabled={!openEdit}
-                type="text"
-                required
-                value={`${details.address}`}
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetails({ ...details, address: e.target.value });
-                }}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Tuổi:{" "}
-              <input
-                disabled={!openEdit}
-                type="number"
-                required
-                value={`${details.age}`}
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetails({ ...details, age: parseInt(e.target.value) });
-                }}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Giới tính:
-              {!openEdit && (
-                <span>{details.sex === "male" ? "Nam" : "Nữ"}</span>
-              )}
-              {openEdit && (
-                <select
-                  className={`outline-none p6x-1 rounded-md h-8 ${
-                    openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                  }`}
-                  onChange={(e: any) => {
-                    setDetails({ ...details, sex: e.target.value });
-                  }}
-                >
-                  <option value={ESex.male}>Nam</option>
-                  <option value={ESex.female}>Nữ</option>
-                </select>
-              )}
-            </h2>
-          </div>
-          <div className="card-profile-custom bg-white rounded-md p-3">
-            <h1 className="font-3 text-color1 text-2xl text-center">
-              Trực thuộc chi nhánh - Khoa
-            </h1>
-            <h2 className="text-color2 font-2 text-lg ">
-              Mã nhánh: {userCurrent?.branch.id ?? "Chưa có"}
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Mã khoa: {userCurrent?.department.id ?? "Chưa có"}
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Tên nhánh: {userCurrent?.branch.name ?? "Chưa có"}
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Tên khoa: {userCurrent?.department.name ?? "Chưa có"}
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Đường dây nóng: {userCurrent?.branch.hotline ?? "Chưa có"}
-            </h2>
-          </div>
-          <div className="bg-white card-profile-custom rounded-md p-3">
-            <h1 className="font-3 text-color1 text-2xl text-center">
-              Thông tin công việc
-            </h1>
-            <h2 className="text-color2 font-2 text-lg ">
-              Vị trí:{" "}
-              <input
-                disabled={!openEdit}
-                type="text"
-                required
-                value={`${detailsWork.position ?? ""}`}
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetailsWork({ ...detailsWork, position: e.target.value });
-                }}
-                placeholder={detailsWork.position ? "" : "Chưa có"}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Chuyên môn:{" "}
-              <input
-                disabled={!openEdit}
-                type="text"
-                required
-                value={`${detailsWork.areas_of_expertise ?? ""}`}
-                placeholder={detailsWork.areas_of_expertise ? "" : "Chưa có"}
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetailsWork({
-                    ...detailsWork,
-                    areas_of_expertise: e.target.value,
-                  });
-                }}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Tổ chức:{" "}
-              <input
-                disabled={!openEdit}
-                type="text"
-                required
-                value={`${detailsWork.member_of_organization ?? ""}`}
-                placeholder={
-                  detailsWork.member_of_organization ? "" : "Chưa có"
-                }
-                className={`disabled:bg-white outline-none px-1 rounded-md h-8 ${
-                  openEdit ? "ring-4 w-full bg-color2 text-color5 " : ""
-                }`}
-                onChange={(e) => {
-                  setDetailsWork({
-                    ...detailsWork,
-                    member_of_organization: e.target.value,
-                  });
-                }}
-              />
-            </h2>
-            <h2 className="text-color2 font-2 text-lg ">
-              Mô tả:{" "}
-              <textarea
-                disabled={!openEdit}
-                required
-                placeholder={detailsWork.bio ? "" : "Chưa có"}
-                value={`${detailsWork.bio ?? ""}`}
-                className={`disabled:bg-white h-full px-1 outline-none rounded-md w-full ${
-                  openEdit ? "ring-4 bg-color2 text-color5 " : "border-2 "
-                }`}
-                onChange={(e) => {
-                  setDetailsWork({ ...detailsWork, bio: e.target.value });
-                }}
-              />
-            </h2>
-          </div>
-          <div className="bg-white card-profile-custom rounded-md p-3">
-            <h1 className="font-3 text-color1 text-2xl text-center">
-              Các dịch vụ của tôi
-            </h1>
-            <ul className="list-decimal m-3">
-              {listUService &&
-                listUService.map((item: any, index: number) => {
-                  return (
-                    <li className="text-color2 font-2 text-lg " key={index}>
-                      {item?.service.name}
-                    </li>
-                  );
-                })}
-            </ul>
           </div>
         </div>
-      </section>
+      </div>
+      <div className="grid gap-3 grid-cols-1 lg:grid-cols-2">
+        <div className="my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
+          <div className="w-full flex flex-col ">
+            <div className="flex-1 bg-white rounded-lg shadow-xl p-8">
+              <h4 className="text-xl text-gray-900 font-bold">
+                Thông tin cá nhân
+              </h4>
+              <ul className="mt-2 text-gray-700">
+                {openEdit && (
+                  <li className="flex items-center border-y py-2">
+                    <span className="font-bold w-24">URL ảnh:</span>
+                    <span className="text-gray-700">
+                      <input
+                        type="url"
+                        required
+                        value={details?.avatar}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetails({ ...details, avatar: e.target.value });
+                        }}
+                      />
+                    </span>
+                  </li>
+                )}
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Họ tên đệm:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      `${details?.firstName}`
+                    ) : (
+                      <input
+                        type="text"
+                        required
+                        value={details?.firstName}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetails({ ...details, firstName: e.target.value });
+                        }}
+                      />
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Tên:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      `${details?.lastName}`
+                    ) : (
+                      <input
+                        type="text"
+                        required
+                        value={details?.lastName}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetails({ ...details, lastName: e.target.value });
+                        }}
+                      />
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Tuổi:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      `${details?.age}`
+                    ) : (
+                      <input
+                        type="number"
+                        required
+                        value={details?.age}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetails({
+                            ...details,
+                            age: parseInt(e.target.value),
+                          });
+                        }}
+                      />
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Số điện thoại:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      `${details?.phoneNumber}`
+                    ) : (
+                      <input
+                        type="tel"
+                        required
+                        value={details?.phoneNumber}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetails({
+                            ...details,
+                            phoneNumber: e.target.value,
+                          });
+                        }}
+                      />
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Email:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      `${details?.email}`
+                    ) : (
+                      <input
+                        type="email"
+                        required
+                        value={details?.email}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetails({ ...details, email: e.target.value });
+                        }}
+                      />
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Địa chỉ:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      `${details?.address}`
+                    ) : (
+                      <input
+                        type="text"
+                        required
+                        value={details?.address}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetails({ ...details, address: e.target.value });
+                        }}
+                      />
+                    )}
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
+          <div className="w-full flex flex-col ">
+            <div className="flex-1 bg-white rounded-lg shadow-xl p-8">
+              <h4 className="text-xl text-gray-900 font-bold">
+                Thông tin công việc
+              </h4>
+              <ul className="mt-2 text-gray-700">
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Lính vực chuyên môn:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      `${detailsWork?.areas_of_expertise}`
+                    ) : (
+                      <input
+                        type="text"
+                        required
+                        value={detailsWork?.areas_of_expertise}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetailsWork({
+                            ...detailsWork,
+                            areas_of_expertise: e.target.value,
+                          });
+                        }}
+                      />
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Thành viên tổ chức:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      `${detailsWork?.member_of_organization}`
+                    ) : (
+                      <input
+                        type="text"
+                        required
+                        value={detailsWork?.member_of_organization}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetailsWork({
+                            ...detailsWork,
+                            member_of_organization: e.target.value,
+                          });
+                        }}
+                      />
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Chức vụ:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      `${detailsWork?.position}`
+                    ) : (
+                      <input
+                        type="text"
+                        required
+                        value={detailsWork?.position}
+                        className={`border outline-none px-2 py-1 rounded focus:ring`}
+                        onChange={(e) => {
+                          setDetailsWork({
+                            ...detailsWork,
+                            position: e.target.value,
+                          });
+                        }}
+                      />
+                    )}
+                  </span>
+                </li>
+                <li className=" border-y py-2">
+                  <span className="font-bold w-24">Mô tả:</span>
+                  <span className="text-gray-700">
+                    {!openEdit ? (
+                      <div
+                        className="overflow-auto max-h-60"
+                        dangerouslySetInnerHTML={{ __html: detailsWork.bio }}
+                      ></div>
+                    ) : (
+                      <div className="overflow-auto font-sans">
+                        <CKEditor
+                          editor={ClassicEditor}
+                          data={detailsWork.bio}
+                          onChange={(e, editor) => {
+                            setDetailsWork({
+                              ...detailsWork,
+                              bio: editor.getData(),
+                            });
+                          }}
+                        />
+                      </div>
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Trực thuộc chi nhánh:</span>
+                  <span className="text-gray-700">
+                    {userCurrent?.branch?.id + "-" ?? "Chưa cập nhật"}
+                    {userCurrent?.branch?.name ?? "Chưa cập nhật"}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Trực thuộc khoa:</span>
+                  <span className="text-gray-700">
+                    {userCurrent?.department?.id + "-" ?? "Chưa cập nhật"}
+                    {userCurrent?.department?.name ?? "Chưa cập nhật"}
+                  </span>
+                </li>
+                <li className="flex items-center border-y py-2">
+                  <span className="font-bold w-24">Các dịch vụ của tôi:</span>
+                  <span className="text-gray-700">
+                    <ul className="list-decimal m-3">
+                      {listUService &&
+                        listUService.map((item: any, index: number) => {
+                          return (
+                            <li className="" key={index}>
+                              {item?.service.name}
+                            </li>
+                          );
+                        })}
+                    </ul>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

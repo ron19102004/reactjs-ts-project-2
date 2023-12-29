@@ -62,14 +62,14 @@ const AccountsAdmin: React.FC<IAccountsProps> = ({ admin_id, token }) => {
   return (
     <article className="font-2 space-y-3">
       <section className="space-y-3 md:space-y-0 md:flex md:space-x-2 md:items-center">
-        <h1 className="font-3 xl:text-2xl text-lg text-color2 pointer-events-none ">
+        <h1 className="font-7 xl:text-2xl text-lg  pointer-events-none ">
           Các tài khoản quản lý
         </h1>
       </section>
       <section className="overflow-x-auto w-full overflow-y-auto max-h-screen">
         <table className="branches-table min-w-full">
           <thead className="bg-color2 text-color7">
-            <tr className="font-3">
+            <tr className="font-7">
               <th className="">Mã tài khoản (UID) </th>
               <th className="">Mã-Tên chi nhánh (CID) </th>
               <th className="">Mã-Tên khoa (KID) </th>

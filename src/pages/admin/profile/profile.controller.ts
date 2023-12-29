@@ -42,6 +42,15 @@ class ProfileController {
       return [];
     }
   }
+  async findAccountsForAdminById(id:number) {
+    try {      
+      const res = await axios.get(`${URL}/users/details-admin/id=${id}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
   async findAllAccountsForAdminSkipTake(skip: number, take: number) {
     try {
       const res = await axios.get(

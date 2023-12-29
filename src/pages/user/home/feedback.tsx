@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { HomeModuleControllerUser } from "./home.controller";
 import commentIcon from "../../../assets/comments.png";
 import { useNavigate } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { ToastOptions, toast } from "react-toastify";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 const toastConfigs: ToastOptions = {
   position: "top-right",
   autoClose: 2000,
@@ -29,7 +29,7 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
   const navigate = useNavigate();
   const init = async () => {
     const fbs: any[] = await HomeModuleControllerUser.getFeedback();
-    setFeedbacks(fbs);    
+    setFeedbacks(fbs);
   };
   const addFb = () => {
     if (!token || token.length === 0) {
@@ -55,7 +55,10 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
       toast.error("Lỗi khi thêm bình luận.Vui lòng thử lại", toastConfigs);
       return;
     }
-    toast.success("Bình luận đã được gửi về hệ thống. Chờ đội kiểm duyệt", toastConfigs);
+    toast.success(
+      "Bình luận đã được gửi về hệ thống. Chờ đội kiểm duyệt",
+      toastConfigs
+    );
     setPayload({
       content: "",
       subject: "",
@@ -69,7 +72,7 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
       content: "",
       subject: "",
     });
-  }
+  };
   return (
     <>
       <section className="px-3">
@@ -77,11 +80,26 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
           Phản hồi của khách hàng
         </h1>
       </section>
-      <section className="px-3">
+
+      <section>
+        <ul className="max-h-screen overflow-y-auto grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-3">
+          {feedbacks.length > 0 &&
+            feedbacks.map((feedback: any, index: number) => {
+              return (
+                <li key={index} className="">
+                  <CardFeedBack feedback={feedback} />
+                </li>
+              );
+            })}
+        </ul>
+      </section>
+      <section className="p-3">
         <button
-          className="flex space-x-1 items-center bg-blue-500 text-white px-2 rounded-md py-1"
           onClick={addFb}
+          type="button"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full w-full md:w-auto text-sm px-5 py-2.5 text-center flex space-x-1 items-center justify-center"
         >
+          {" "}
           <div>
             <img src={commentIcon} alt="comment" className="w-5 h-5" />
           </div>
@@ -98,64 +116,54 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
                     className="w-10 h-10 rounded-md object-cover"
                   />
                 </div>
-                <h1 className="font-3 text-color6">
+                <h1 className="font-7 text-color6">
                   {userCurrent?.firstName} {userCurrent?.lastName}
                 </h1>
               </div>
             </li>
             <li className="">
-              <label>Tiêu đề</label>
+              <label className="font-4">Tiêu đề</label>
               <input
                 type="text"
                 onChange={(e) => {
                   setPayload({ ...payload, subject: e.target.value });
                 }}
-                className="w-full outline-none h-10 border-2 rounded px-2"
+                className="w-full outline-none h-10  rounded px-2"
               />
             </li>
             <li>
-              <label>Nội dung</label>
-              <ReactQuill
-                theme="snow"
-                value={payload.content}
-                onChange={(e) => {
-                  setPayload({ ...payload, content: e });
-                }}
-              />
+              <label className="font-4">Nội dung</label>
+              <div className="overflow-auto font-sans">
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={payload.content}
+                  onChange={(e, editor) => {
+                    setPayload({ ...payload, content: editor.getData() });
+                  }}
+                />
+              </div>
             </li>
             <li className="space-x-2">
               <button
-                className="bg-color5 hover:bg-color4 px-2 rounded py-1"
-                onClick={add}
-              >
-                Thêm
-              </button>
-              <button
-                className="bg-red-400 hover:bg-red-500 text-cyan-100 px-2 rounded py-1"
                 onClick={cancel}
+                type="button"
+                className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
               >
-                Hủy
+                <span className="font-7">Hủy</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={add}
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+              >
+                <span className="font-7">Thêm</span>
               </button>
             </li>
           </ul>
         ) : (
           ""
         )}
-      </section>
-      <section>
-        <ul className="max-h-screen overflow-y-auto grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-3">
-          {feedbacks.length > 0 &&
-            feedbacks.map((feedback: any, index: number) => {
-              return (
-                <li
-                  key={index}
-                  className="bg-slate-100 p-2 rounded-xl shadow-xl hover:shadow-2xl"
-                >
-                  <CardFeedBack feedback={feedback} />
-                </li>
-              );
-            })}
-        </ul>
       </section>
     </>
   );
@@ -164,35 +172,38 @@ const CardFeedBack: React.FC<{ feedback: any }> = ({ feedback }) => {
   const obHtmlContent = { __html: feedback?.data?.content };
   return (
     <>
-      <div className="flex space-x-1 text-gray-900 items-end">
-        <div className="w-10 h-10">
-          <img
-            src={feedback?.user?.avatar}
-            alt="avtar-user"
-            className="w-10 h-10 rounded-md object-cover"
-          />
+      <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow ">
+        <div className="flex space-x-1 text-gray-900 items-end">
+          <div className="w-10 h-10">
+            <img
+              src={feedback?.user?.avatar}
+              alt="avtar-user"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          </div>
+
+          <h1 className="font-7 text-color6">
+            {feedback?.user?.firstName} {feedback?.user?.lastName}
+          </h1>
         </div>
-        <h1 className="font-3 text-color6">
-          {feedback?.user?.firstName} {feedback?.user?.lastName}
-        </h1>
-      </div>
-      <div>
-        <h1 className="text-color2 inline-block">
-          Tiêu đề:{" "}
-          <span className="font-1 inline-block">{feedback?.data.subject}</span>
-        </h1>
-        <h1 className="text-color2">
-          Nội dung:{" "}
-          <span
-            className="font-1"
-            dangerouslySetInnerHTML={obHtmlContent}
-          ></span>
-        </h1>
-      </div>
-      <div className="font-sans text-xs">
-        <span>
+        <p className="font-sans text-xs">
           Time: {new Date(feedback?.data.created_at + "").toUTCString()}
-        </span>
+        </p>
+        <div>
+          <h1 className="font-4  inline-block">
+            Tiêu đề:{` `}
+            <span className="font-6 text-sm inline-block">
+              {feedback?.data.subject}
+            </span>
+          </h1>
+          <h1 className="font-4">
+            Nội dung:
+            <div
+              className="font-6 text-sm border p-1 rounded"
+              dangerouslySetInnerHTML={obHtmlContent}
+            ></div>
+          </h1>
+        </div>
       </div>
     </>
   );

@@ -6,12 +6,13 @@ import {
   EditUserServiceModuleController,
 } from "../../admin/edit-info/edit-info.controller";
 import Booking from "./booking";
-import { Button, Divider, Tooltip } from "@material-ui/core";
+import { Divider, Tooltip } from "@material-ui/core";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ToastOptions, toast } from "react-toastify";
 import { Loading } from "../../admin/my-booking";
 import { NAME_SYSTEM } from "../../../helpers/constant";
+import { NavLink } from "react-router-dom";
 const InfoBranch = lazy(() => import("../../../components/info-branch"));
 
 const toastConfigs: ToastOptions = {
@@ -32,7 +33,7 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
   const [services, setServices] = useState<any[]>([]);
   const [nav, setNav] = useState<{ skip: number; take: number }>({
     skip: 0,
-    take: 5,
+    take: 8,
   });
   const [listViewInfo, setListViewInfo] = useState<
     {
@@ -92,6 +93,7 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
   };
   const [openFilter, setOpenFilter] = useState<boolean>(false);
   const [valueFilter, setValueFilter] = useState<number>(0);
+  const [isFillter, setIsFillter] = useState<boolean>(false);
   const filter = async () => {
     if (valueFilter === 0) {
       toast.warning("Vui lòng chọn dịch vụ", toastConfigs);
@@ -112,20 +114,22 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
       }
     );
     setListViewInfo(result);
+    setIsFillter(true);
   };
   const cancelFilter = () => {
     setListViewInfo(listViewInfoBackup);
     setValueFilter(0);
+    setIsFillter(false);
   };
   return (
     <>
       <section className="space-y-3">
-        <h1 className="font-3 text-color2 font-2 text-2xl md:text-3xl text-center">
+        <h1 className=" text-color2 font-6 font-semibold text-2xl md:text-3xl text-center">
           Đội ngũ các bác sĩ bệnh viện {NAME_SYSTEM}
         </h1>
         <section className="xl:px-7 px-2 flex flex-col md:flex-row md:items-center md:space-x-3 md:space-y-0 space-y-3">
           <h1
-            className="font-3 text-xl text-color6 cursor-pointer "
+            className="font-6 font-semibold text-xl text-color6 cursor-pointer "
             onClick={() => {
               setOpenFilter(!openFilter);
             }}
@@ -143,7 +147,7 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
             }`}
           >
             <select
-              className={`font-2 text-color2 h-10 px-2 rounded-md outline-none focus:right-2 border-2`}
+              className={`font-6 text-color2 h-10 px-2 rounded-md outline-none focus:right-2 border-2`}
               onChange={(e) => {
                 setValueFilter(parseInt(e.target.value));
               }}
@@ -157,21 +161,27 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
                   </option>
                 ))}
             </select>
-            <button
-              className="bg-color5 h-10 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
-              onClick={filter}
-            >
-              Lọc
-            </button>
-            <button
-              className="bg-red-400 h-10 text-color5 px-2 py-1 rounded hover:bg-red-500 font-3 shadow hover:shadow-md"
-              onClick={cancelFilter}
-            >
-              Hủy bộ lọc
-            </button>
+            {!isFillter && (
+              <button
+                type="button"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={filter}
+              >
+                Lọc
+              </button>
+            )}
+            {isFillter && (
+              <button
+                type="button"
+                className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                onClick={cancelFilter}
+              >
+                Hủy lọc
+              </button>
+            )}
           </section>
         </section>
-        <ul className="xl:space-y-10 xl:p-7 p-2 space-y-5 max-h-screen overflow-y-auto">
+        <ul className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-h-screen overflow-y-auto">
           {listViewInfo.map(
             (
               item: {
@@ -185,19 +195,53 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
             ) => {
               return (
                 <li key={index}>
-                  <CardAdmin item={item} token={token} user_id={user_id} />
+                  <div className="w-full h-full bg-white border border-gray-200 rounded-lg shadow p-5">
+                    <div className="flex flex-col items-center justify-between h-full">
+                      <div className="flex flex-col items-center">
+                        <img
+                          className="w-24 h-24 rounded-full shadow-lg object-cover"
+                          src={item.infoAdmin?.avatar}
+                          alt={item.infoAdmin?.avatar}
+                        />
+                        <h5 className="mb-1 font-7 text-color2 text-xl font-medium ">
+                          {item.infoAdmin?.firstName} {item.infoAdmin?.lastName}
+                        </h5>
+                        <span className="text-sm text-gray-500">
+                          {item.infoAdmin?.position}
+                        </span>
+                      </div>
+                      <div className="flex space-x-3 items-center">
+                        <Booking
+                          admin_id={item.infoAdmin.id}
+                          uService={item.uServices}
+                          token={token}
+                          user_id={user_id}
+                        />
+
+                        <NavLink
+                          className="py-2.5 px-5  text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
+                          to={`/booking/details/${item.infoAdmin.id}`}
+                        >
+                          Chi tiết
+                        </NavLink>
+                      </div>
+                    </div>
+                  </div>
+                  {/* <CardAdmin item={item} token={token} user_id={user_id} /> */}
                 </li>
               );
             }
           )}
         </ul>
         <section className="flex flex-col justify-center items-center">
-          <button
-            className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
-            onClick={moreAdmin}
-          >
-            Xem thêm bác sĩ
-          </button>
+          {listViewInfo.length % nav.take === 0 && (
+            <button
+              className="bg-color5 text-color2 px-2 py-1 rounded hover:bg-color4 font-3 shadow hover:shadow-md"
+              onClick={moreAdmin}
+            >
+              Xem thêm bác sĩ
+            </button>
+          )}
         </section>
         <Divider />
         <section className="py-3 pb-0">
@@ -207,168 +251,6 @@ const ListAdmin: React.FC<IListAdminProps> = ({ token, user_id }) => {
         </section>
       </section>
     </>
-  );
-};
-interface ICardAdminProps {
-  item: {
-    infoAdmin: any;
-    uServices: {
-      id: number;
-      service: any;
-    }[];
-  };
-  user_id: number;
-  token: string;
-}
-const CardAdmin: React.FC<ICardAdminProps> = ({ item, token, user_id }) => {
-  const [openInfo, setOpenInfo] = useState<boolean>(false);
-  return (
-    <section className="shadow-lg hover:shadow-xl grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 p-3 rounded-xl">
-      <section className="flex flex-col justify-center items-center transition-all space-y-1">
-        <div className="overflow-hidden w-64 h-64 flex flex-col justify-center items-center rounded ">
-          <img
-            src={item.infoAdmin?.avatar}
-            alt="avatar"
-            className="w-64 h-64 overflow-hidden object-cover transition-all hover:scale-150 rounded"
-          />
-        </div>
-        <h1 className="font-3 text-center text-color2 text-2xl xl:text-xl">
-          {item?.infoAdmin?.position} {item.infoAdmin.firstName}{" "}
-          {item.infoAdmin.lastName}
-        </h1>
-      </section>
-      <div className=" rounded-md p-3 flex flex-col justify-between">
-        <section>
-          <h1 className="font-3 text-color1 text-2xl text-center">
-            Thông tin cá nhân
-          </h1>
-          <h2 className="text-color2 font-2 text-lg ">
-            Mã thông tin: {item.infoAdmin.id}
-          </h2>
-          <h2 className="text-color2 font-2 text-lg ">
-            Email: {item.infoAdmin.email}
-          </h2>
-          <h2 className="text-color2 font-2 text-lg ">
-            SĐT: {item.infoAdmin.phoneNumber}
-          </h2>
-          <h2 className="text-color2 font-2 text-lg ">
-            Địa chỉ: {item.infoAdmin.address}
-          </h2>
-          <h2 className="text-color2 font-2 text-lg ">
-            Tuổi: {item.infoAdmin.age}
-          </h2>
-          <h2 className="text-color2 font-2 text-lg ">
-            Giới tính: {item.infoAdmin.sex}
-          </h2>
-        </section>
-        {!openInfo && (
-          <section className="flex justify-between items-center">
-            <Booking
-              admin_id={item.infoAdmin.id}
-              uService={item.uServices}
-              token={token}
-              user_id={user_id}
-              openInfo={openInfo}
-            />
-            <div className="lg:hidden">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                  setOpenInfo(!openInfo);
-                }}
-              >
-                <span className="font-3">Thêm thông tin</span>
-              </Button>
-            </div>
-          </section>
-        )}
-      </div>
-      <div
-        className={`rounded-md p-3 ${
-          openInfo ? "block lg:block" : "hidden lg:block"
-        }`}
-      >
-        <h1 className="font-3 text-color1 text-2xl text-center">
-          Trực thuộc chi nhánh - Khoa
-        </h1>
-        <h2 className="text-color2 font-2 text-lg ">
-          Mã nhánh: {item.infoAdmin?.branch.id ?? "Chưa cập nhật"}
-        </h2>
-        <h2 className="text-color2 font-2 text-lg ">
-          Mã khoa: {item.infoAdmin?.department.id ?? "Chưa cập nhật"}
-        </h2>
-        <h2 className="text-color2 font-2 text-lg ">
-          Tên nhánh: {item.infoAdmin?.branch.name ?? "Chưa cập nhật"}
-        </h2>
-        <h2 className="text-color2 font-2 text-lg ">
-          Tên khoa: {item.infoAdmin?.department.name ?? "Chưa cập nhật"}
-        </h2>
-        <h2 className="text-color2 font-2 text-lg ">
-          Đường dây nóng: {item.infoAdmin?.branch.hotline ?? "Chưa cập nhật"}
-        </h2>
-        <h1 className="font-3 text-color1 text-2xl text-center">Các dịch vụ</h1>
-        <ul className="list-decimal m-3">
-          {item.uServices &&
-            item.uServices.map((item: any, index: number) => {
-              return (
-                <li className="text-color2 font-2 text-lg " key={index}>
-                  {item?.service.name}
-                </li>
-              );
-            })}
-        </ul>
-      </div>
-      <div
-        className={`rounded-md p-3 ${
-          openInfo ? "block lg:block" : "hidden lg:block"
-        }`}
-      >
-        <h1 className="font-3 text-color1 text-2xl text-center">
-          Thông tin công việc
-        </h1>
-        <h2 className="text-color2 font-2 text-lg ">
-          Vị trí: {item.infoAdmin?.position ?? "Chưa cập nhật"}
-        </h2>
-        <h2 className="text-color2 font-2 text-lg ">
-          Chuyên môn: {item.infoAdmin?.areas_of_expertise ?? "Chưa cập nhật"}
-        </h2>
-        <h2 className="text-color2 font-2 text-lg ">
-          Tổ chức: {item.infoAdmin?.member_of_organization ?? "Chưa cập nhật"}
-        </h2>
-        <h2 className="text-color2 font-2 text-lg ">
-          Mô tả:
-          <textarea
-            value={item.infoAdmin?.bio ?? "Chưa cập nhật"}
-            disabled
-            className="w-full h-56 lg:h-48 px-1 outline-none rounded bg-slate-100"
-          ></textarea>
-        </h2>
-        {openInfo && (
-          <section className="space-y-2">
-            <Booking
-              admin_id={item.infoAdmin.id}
-              uService={item.uServices}
-              token={token}
-              user_id={user_id}
-              openInfo={openInfo}
-            />
-            <div className="lg:hidden">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                  setOpenInfo(!openInfo);
-                }}
-                className="w-full"
-              >
-                <span className="font-3">Thu gọn thông tin</span>
-              </Button>
-            </div>
-          </section>
-        )}
-      </div>
-    </section>
   );
 };
 export default ListAdmin;

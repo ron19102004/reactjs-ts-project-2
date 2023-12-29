@@ -12,6 +12,7 @@ import equipmentIcon from "../../../assets/equipment.png";
 import { Loading } from "../../admin/my-booking";
 import backIcon from "../../../assets/back.png";
 import { NavLink } from "react-router-dom";
+import { ValidatorCustomModule } from "../../../helpers/validator";
 const InfoBranch = lazy(() => import("../../../components/info-branch"));
 const icons = {
   intro: <img src={introduceIcon} alt="intro" className="w-6 h-6" />,
@@ -90,8 +91,8 @@ const DepartmentPage: React.FC = () => {
       {!openDetails && (
         <main className="space-y-3">
           <section>
-            <h1 className="font-3 text-xl text-center text-color2">
-              DANH SÁCH CHUYÊN KHOA
+            <h1 className="font-6 font-semibold text-xl md:text-3xl text-center text-color2">
+              Dánh sách chuyên khoa
             </h1>
             <div className="flex flex-col items-center">
               <Divider
@@ -104,28 +105,35 @@ const DepartmentPage: React.FC = () => {
             </div>
           </section>
           <section className="p-5 lg:p-10">
-            <ul className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:mx-32">
+            <ul className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:mx-32 max-h-screen overflow-auto">
               {list.map((item: any, index: number) => {
                 return (
                   <li
                     key={index}
-                    className=" shadow-md hover:shadow-lg rounded-2xl p-4 space-y-2 flex flex-col justify-center items-center"
+                    // className=" shadow-md hover:shadow-lg rounded-2xl p-4 space-y-2 flex flex-col justify-center items-center"
                   >
-                    <button
-                      className="flex flex-col items-center justify-center rounded-full"
-                      onClick={() => {
-                        displayDetails(item);
-                      }}
-                    >
-                      <img
-                        src={item.avatar}
-                        alt=""
-                        className="w-32 h-32 object-cover rounded-full cursor-pointer shadow hover:shadow-md border-2"
-                      />
-                    </button>
-                    <h1 className="text-center font-3 text-color2">
-                      {item.name}
-                    </h1>
+                    <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow p-5">
+                      <div className="flex flex-col items-center">
+                        <img
+                          src={item.avatar}
+                          alt=""
+                          className="w-32 h-32 object-cover rounded-full cursor-pointer shadow hover:shadow-md border-2"
+                        />
+                        <h5 className="font-3  font-medium text-color2 ">
+                          {item.name}
+                        </h5>
+                        <div className="flex">
+                          <button
+                            onClick={() => {
+                              displayDetails(item);
+                            }}
+                            className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 "
+                          >
+                            Chi tiêt
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </li>
                 );
               })}
@@ -134,7 +142,7 @@ const DepartmentPage: React.FC = () => {
         </main>
       )}
       {openDetails && (
-        <main className="space-y-3 px-3 md:px-10 pb-10">
+        <main className="font-sans space-y-3 px-3 md:px-10 pb-10">
           <section className="">
             <button
               className="text-color1 flex space-x-1 items-center top-0 left-0"
@@ -169,7 +177,7 @@ const DepartmentPage: React.FC = () => {
               <Divider />
             </div>
             <p
-              className={`font-2 text-ellipsis ${
+              className={`font-sans text-ellipsis ${
                 statusInfo.moreInfoIntro ? "" : "line-clamp-6"
               }`}
             >
@@ -206,7 +214,7 @@ const DepartmentPage: React.FC = () => {
               <Divider />
             </div>
             <p
-              className={`font-2 text-ellipsis ${
+              className={`font-sans text-ellipsis ${
                 statusInfo.moreInfoEquip ? "" : "line-clamp-3"
               }`}
             >
@@ -243,7 +251,7 @@ const DepartmentPage: React.FC = () => {
               <Divider />
             </div>
             <p
-              className={`font-2 text-ellipsis ${
+              className={`font-sans text-ellipsis ${
                 statusInfo.moreInfoProcess ? "" : "line-clamp-3"
               }`}
             >
@@ -344,7 +352,7 @@ const DepartmentPage: React.FC = () => {
         </main>
       )}
       <Divider />
-      <section className="p-3 pb-0">
+      <section className="p-3 pb-5">
         <Suspense fallback={<Loading />}>
           <InfoBranch />
         </Suspense>
@@ -365,7 +373,9 @@ const CardService: React.FC<{
       </h1>
       <section>
         <span className="font-3 text-color2 underline">Mô tả:</span>
-        <p className={`${sttDes ? "" : "line-clamp-3"} text-ellipsis font-2`}>
+        <p
+          className={`${sttDes ? "" : "line-clamp-3"} text-ellipsis font-sans`}
+        >
           <div dangerouslySetInnerHTML={obHtmlDescription}></div>
         </p>
         <p className="float-right">
@@ -394,7 +404,10 @@ const CardService: React.FC<{
       </section>
       <section>
         <span className="font-3 text-color2">
-          <span className="underline">Giá:</span> {value.price}kVNĐ
+          <span className="underline">Giá:</span>{" "}
+          {ValidatorCustomModule.convertCurrencyStringToNumber(
+            `${value.price}.000kVNĐ`
+          )}
         </span>
       </section>
     </div>

@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { EditDepartmentModuleController } from "./edit-info.controller";
-import editIcon from "../../../assets/edit.png";
-import checkedIcon from "../../../assets/checked.png";
-import closeIcon from "../../../assets/reject.png";
-import { Button, Dialog, DialogActions, DialogTitle } from "@material-ui/core";
+import { Dialog, DialogActions, DialogTitle } from "@material-ui/core";
 import { ToastOptions, toast } from "react-toastify";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -19,11 +16,7 @@ const toastConfigs: ToastOptions = {
   progress: undefined,
   theme: "light",
 };
-const icons = {
-  edit: <img src={editIcon} alt="edit" className="w-5" />,
-  check: <img src={checkedIcon} alt="check" className="w-5" />,
-  close: <img src={closeIcon} alt="close" className="w-5" />,
-};
+
 export interface IDetailsDepartment {
   name: string;
   description: string;
@@ -60,14 +53,14 @@ const EditRowDepartment: React.FC<{
     avatar: item.avatar,
   });
   const [detailsBackup, setDetailsBackup] = useState<IDetailsDepartment>({
-    branch_id: 0,
-    description: "",
-    duties: "",
-    equipment_system: "",
-    id: 0,
-    name: "",
-    treatment_techniques: "",
-    avatar: "",
+    branch_id: item.branch.id,
+    description: item.description,
+    duties: item.duties,
+    equipment_system: item.equipment_system,
+    id: item.id,
+    name: item.name,
+    treatment_techniques: item.treatment_techniques,
+    avatar: item.avatar,
   });
 
   const init = () => {};
@@ -185,15 +178,13 @@ const EditRowDepartment: React.FC<{
         {isEdit ? (
           <>
             <div>
-              <Button
-                variant="contained"
-                color="primary"
-                className="w-full"
+              <button
+                type="button"
                 onClick={changeDialogEdit}
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
               >
-                {icons.check}
-                <span className="font-3">Lưu</span>
-              </Button>
+                <span className="font-7">Lưu</span>
+              </button>
               <Dialog
                 open={openDialogEdit}
                 onClose={changeDialogEdit}
@@ -201,51 +192,53 @@ const EditRowDepartment: React.FC<{
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  <span className="font-3">
+                  <span className="font73">
                     {"Bạn có chắc chắn muốn lưu chỉnh sửa này không?"}
                   </span>
                 </DialogTitle>
                 <DialogActions>
-                  <Button onClick={changeDialogEdit} color="secondary">
-                    <span className="font-3">Hủy</span>
-                  </Button>
-                  <Button onClick={handleSave} color="primary" autoFocus>
-                    <span className="font-3">Đồng ý</span>
-                  </Button>
+                  <button
+                    onClick={changeDialogEdit}
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Hủy</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSave}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Đồng ý</span>
+                  </button>
                 </DialogActions>
               </Dialog>
             </div>
-            <Button
-              variant="contained"
-              color="secondary"
-              className="w-full"
+            <button
               onClick={handleCancelEdit}
+              type="button"
+              className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
             >
-              {icons.close}
-              <span className="font-3">Hủy</span>
-            </Button>
+              <span className="font-7">Hủy</span>
+            </button>
           </>
         ) : (
           <>
-            <Button
-              variant="contained"
-              color="primary"
-              className="w-full"
+            <button
+              type="button"
               onClick={changeStatusIsEdit}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
             >
-              {icons.edit}
-              <span className="font-3">Sửa</span>
-            </Button>
+              <span className="font-7">Sửa</span>
+            </button>
             <div>
-              <Button
-                variant="contained"
-                color="secondary"
-                className="w-full"
+              <button
                 onClick={changeDialogDelete}
+                type="button"
+                className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
               >
-                {icons.close}
-                <span className="font-3">Xóa</span>
-              </Button>
+                <span className="font-7">Xóa</span>
+              </button>
               <Dialog
                 open={openDialogDelete}
                 onClose={changeDialogDelete}
@@ -258,12 +251,21 @@ const EditRowDepartment: React.FC<{
                   </span>
                 </DialogTitle>
                 <DialogActions>
-                  <Button onClick={changeDialogDelete} color="secondary">
-                    <span className="font-3">Hủy</span>
-                  </Button>
-                  <Button onClick={handleDelete} color="primary" autoFocus>
-                    <span className="font-3">Đồng ý</span>
-                  </Button>
+                  <button
+                    onClick={changeDialogDelete}
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Hủy</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Đồng ý</span>
+                  </button>
                 </DialogActions>
               </Dialog>
             </div>

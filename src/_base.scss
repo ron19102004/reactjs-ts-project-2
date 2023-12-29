@@ -1,11 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@600&display=swap");
 // @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');//color
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap"); //color
+@import url("https://fonts.googleapis.com/css2?family=Dosis:wght@300&family=Roboto:wght@100&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@600&display=swap");
+
 $color1: #068d9d;
 $color2: #53599a;
 $color3: #6d9dc5;
@@ -20,10 +28,37 @@ $color-header: #53599ad1;
 $font1: "Noto Sans", ui-sans-serif;
 $font2: "Quicksand", ui-sans-serif;
 $font3: "Lexend", ui-sans-serif;
-$font4:'Roboto', sans-serif;
-$font5:'Nunito', sans-serif;
-$font6:'Plus Jakarta Sans', sans-serif;
-$font7:'Roboto', sans-serif;
+$font4: "Roboto", sans-serif;
+$font5: "Nunito", sans-serif;
+$font6: "Plus Jakarta Sans", sans-serif;
+$font7: "Roboto", sans-serif;
+$font8: "Dosis", sans-serif;
+$font9: "Space Grotesk", sans-serif;
+$font10: "Readex Pro", sans-serif;
+/* Thêm vào file CSS của bạn hoặc inline CSS tùy thuộc vào cách bạn tổ chức mã nguồn của mình */
+
+/* Chỉ định thanh cuộn cho các trình duyệt WebKit (như Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 5px; /* Độ rộng của thanh cuộn */
+  height: 5px;
+}
+
+/* Track (phần nền của thanh cuộn) */
+::-webkit-scrollbar-track {
+  background-color: $color2; /* Màu nền của track */
+}
+
+/* Handle (thanh cuộn thực sự) */
+::-webkit-scrollbar-thumb {
+  background-color: $color1; /* Màu nền của handle */
+  border-radius: 6px; /* Bo tròn các góc của handle */
+}
+
+/* Đặt màu của handle khi được hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: $color6;
+}
+
 //set font
 .font-1 {
   font-family: $font1;
@@ -34,6 +69,15 @@ $font7:'Roboto', sans-serif;
 .font-3 {
   font-family: $font5;
 }
-.font-4{
+.font-4 {
   font-family: $font7;
+}
+.font-5 {
+  font-family: $font8;
+}
+.font-6 {
+  font-family: $font9;
+}
+.font-7 {
+  font-family: $font10;
 }

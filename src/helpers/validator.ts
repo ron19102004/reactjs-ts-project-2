@@ -6,8 +6,18 @@ export interface IValidatorModule {
   getDate(): string;
   isNumber(number: string): boolean;
   compareDate(date1: string, date2: string): number;
+  convertCurrencyStringToNumber(currencyString: string):string;
 }
 export class ValidatorModule implements IValidatorModule {
+  convertCurrencyStringToNumber(currencyString: string) {
+     // Loại bỏ ký tự không phải số
+  const number = parseFloat(currencyString.replace(/[^\d]/g, ''));
+
+  // Chuyển đổi thành số và định dạng
+  const formattedNumber = new Intl.NumberFormat('vi-VN').format(number);
+
+  return formattedNumber + 'đ';
+  }
   compareDate(d1: string, d2: string): number {
     const date1 = new Date(d1.split("-").reverse().join("-"));
     const date2 = new Date(d2.split("-").reverse().join("-"));

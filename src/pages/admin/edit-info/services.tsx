@@ -5,14 +5,10 @@ import {
   EditDepartmentModuleController,
   EditServiceModuleController,
 } from "./edit-info.controller";
-import editIcon from "../../../assets/edit.png";
-import checkedIcon from "../../../assets/checked.png";
-import closeIcon from "../../../assets/reject.png";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -30,11 +26,7 @@ const toastConfigs: ToastOptions = {
   progress: undefined,
   theme: "light",
 };
-const icons = {
-  edit: <img src={editIcon} alt="edit" className="w-5" />,
-  check: <img src={checkedIcon} alt="check" className="w-5" />,
-  close: <img src={closeIcon} alt="close" className="w-5" />,
-};
+
 interface IEditServiceProps {
   admin_id: number;
   token: string;
@@ -84,32 +76,32 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
   return (
     <article className="font-2 space-y-3">
       <section className="space-y-3 md:space-y-0 md:flex md:space-x-2 md:items-center">
-        <h1 className="font-3 xl:text-2xl text-lg text-color2 pointer-events-none ">
+        <h1 className="font-7 xl:text-2xl text-lg text-color2 pointer-events-none ">
           Thông tin các dịch vụ
         </h1>
         <div>
-          <Button
-            variant="contained"
-            color="primary"
+          <button
+            type="button"
             onClick={changeStatusOpenAddService}
+            className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
-            <span className="font-3">Thêm dịch vụ mới</span>
-          </Button>
+            <span className="font-3">Thêm dịch vụ mới</span>{" "}
+          </button>
           <Dialog
             open={openAddService}
             onClose={changeStatusOpenAddService}
             aria-labelledby="form-dialog-title"
           >
             <DialogTitle id="form-dialog-title">
-              <span className="font-3 text-color2">Thêm dịch vụ mới</span>
+              <span className="font-7 text-color2">Thêm dịch vụ mới</span>
             </DialogTitle>
             <form
               onSubmit={handleSubmit(createService)}
               className="text-color2"
             >
               <DialogContent>
-                <div className="font-2">
-                  <label className="font-3">Khoa</label>
+                <div className="font-4">
+                  <label className="font-4">Khoa</label>
                   <select
                     required
                     {...register("department_id")}
@@ -125,8 +117,8 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
                       })}
                   </select>
                 </div>
-                <div className="font-2">
-                  <label className="font-3">Tên dịch vụ</label>
+                <div className="font-4">
+                  <label className="font-4">Tên dịch vụ</label>
                   <input
                     type="text"
                     required
@@ -134,8 +126,8 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
                     className="w-full h-10 outline-none border-2 rounded px-2"
                   />
                 </div>
-                <div className="font-2">
-                  <label className="font-3">Giá (kVNĐ)</label>
+                <div className="font-4">
+                  <label className="font-4">Giá (kVNĐ)</label>
                   <input
                     type="number"
                     required
@@ -143,8 +135,8 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
                     className="w-full h-10 outline-none border-2 rounded px-2"
                   />
                 </div>
-                <div className="font-2">
-                  <label className="font-3">Mô tả</label>
+                <div className="font-4">
+                  <label className="font-4">Mô tả</label>
                   <div className="overflow-auto">
                     <CKEditor
                       editor={ClassicEditor}
@@ -156,15 +148,19 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
                   </div>
                 </div>
                 <DialogActions>
-                  <Button
+                  <button
                     onClick={changeStatusOpenAddService}
-                    color="secondary"
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
                   >
-                    <span className="font-3">Hủy</span>
-                  </Button>
-                  <Button type="submit" color="primary">
+                    <span className="font-7">Hủy</span>
+                  </button>
+                  <button
+                    type="submit"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
                     <span className="font-3">Thêm</span>
-                  </Button>
+                  </button>
                 </DialogActions>
               </DialogContent>
             </form>
@@ -174,7 +170,7 @@ const EditService: React.FC<IEditServiceProps> = ({ admin_id, token }) => {
       <section className="overflow-x-auto w-full h-screen overflow-y-auto">
         <table className="branches-table min-w-full">
           <thead className="bg-color2 text-color7">
-            <tr className="font-3">
+            <tr className="font-7">
               <th className="">Mã số dịch vụ</th>
               <th className="">Mã số khoa</th>
               <th className="">Tên dịch vụ</th>
@@ -225,29 +221,19 @@ const EditRowService: React.FC<{
   };
 
   const [details, setDetails] = useState<IDetailsService>({
-    department_id: 0,
-    description: "",
-    id: 0,
-    name: "",
-    price: 0,
+    department_id: item?.department.id,
+    description: item?.description,
+    id: item?.id,
+    name: item?.name,
+    price: item?.price,
   });
   const [detailsBackup, setDetailsBackup] = useState<IDetailsService>({
-    department_id: 0,
-    description: "",
-    id: 0,
-    name: "",
-    price: 0,
+    department_id: item?.department.id,
+    description: item?.description,
+    id: item?.id,
+    name: item?.name,
+    price: item?.price,
   });
-
-  const init = () => {
-    setDetails({
-      department_id: item.department.id,
-      description: item.description,
-      id: item.id,
-      name: item.name,
-      price: item.price,
-    });
-  };
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const changeStatusIsEdit = () => {
     if (!isEdit) {
@@ -274,9 +260,7 @@ const EditRowService: React.FC<{
     });
     handleDeleteItem(details.id);
   };
-  useEffect(() => {
-    init();
-  }, []);
+  useEffect(() => {}, []);
   return (
     <tr className="h-48 font-sans">
       <td className={`${isEdit ? "bg-color3 text-white" : ""}`}>
@@ -323,15 +307,14 @@ const EditRowService: React.FC<{
         {isEdit ? (
           <>
             <div>
-              <Button
-                variant="contained"
-                color="primary"
-                className="w-full"
+              <button
+                type="button"
                 onClick={changeDialogEdit}
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
               >
-                {icons.check}
-                <span className="font-3">Lưu</span>
-              </Button>
+                <span className="font-7">Lưu</span>
+              </button>
+
               <Dialog
                 open={openDialogEdit}
                 onClose={changeDialogEdit}
@@ -344,46 +327,49 @@ const EditRowService: React.FC<{
                   </span>
                 </DialogTitle>
                 <DialogActions>
-                  <Button onClick={changeDialogEdit} color="secondary">
-                    <span className="font-3">Hủy</span>
-                  </Button>
-                  <Button onClick={handleSave} color="primary" autoFocus>
-                    <span className="font-3">Đồng ý</span>
-                  </Button>
+                  <button
+                    onClick={changeDialogEdit}
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Hủy</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSave}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Đồng ý</span>
+                  </button>
                 </DialogActions>
               </Dialog>
             </div>
-            <Button
-              variant="contained"
-              color="secondary"
-              className="w-full"
+            <button
               onClick={handleCancelEdit}
+              type="button"
+              className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
             >
-              {icons.close}
-              <span className="font-3">Hủy</span>
-            </Button>
+              <span className="font-7">Hủy</span>
+            </button>
           </>
         ) : (
           <>
-            <Button
-              variant="contained"
-              color="primary"
-              className="w-full"
+            <button
+              type="button"
               onClick={changeStatusIsEdit}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
             >
-              {icons.edit}
-              <span className="font-3">Sửa</span>
-            </Button>
+              <span className="font-7">Sửa</span>
+            </button>
             <div>
-              <Button
-                variant="contained"
-                color="secondary"
-                className="w-full"
+              <button
                 onClick={changeDialogDelete}
+                type="button"
+                className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
               >
-                {icons.close}
-                <span className="font-3">Xóa</span>
-              </Button>
+                <span className="font-7">Xóa</span>
+              </button>
               <Dialog
                 open={openDialogDelete}
                 onClose={changeDialogDelete}
@@ -391,17 +377,26 @@ const EditRowService: React.FC<{
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  <span className="font-3">
+                  <span className="font-7">
                     {"Bạn có chắc chắn muốn xóa dịch vụ này không?"}
                   </span>
                 </DialogTitle>
                 <DialogActions>
-                  <Button onClick={changeDialogDelete} color="secondary">
-                    <span className="font-3">Hủy</span>
-                  </Button>
-                  <Button onClick={handleDelete} color="primary" autoFocus>
-                    <span className="font-3">Đồng ý</span>
-                  </Button>
+                  <button
+                    onClick={changeDialogDelete}
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Hủy</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Đồng ý</span>
+                  </button>
                 </DialogActions>
               </Dialog>
             </div>

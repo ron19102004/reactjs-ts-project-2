@@ -54,6 +54,19 @@ class HomeControllerUser {
       return false;
     }
   }
+  async del(token: string, admin_id: number, fbId: number) {
+    try {
+      await axios.delete(`${URL}/feedback/${admin_id}/feedbackId=${fbId}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
 }
 export const HomeModuleControllerUser: HomeControllerUser =
   new HomeControllerUser();

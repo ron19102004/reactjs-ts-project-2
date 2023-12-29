@@ -8,7 +8,6 @@ import {
   EditDepartmentModuleController,
 } from "./edit-info.controller";
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -108,28 +107,28 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
   return (
     <article className="font-2 space-y-3">
       <section className="space-y-3 md:space-y-0 md:flex md:space-x-2 md:items-center">
-        <h1 className="font-3 xl:text-2xl text-lg text-color2 pointer-events-none">
+        <h1 className="font-7 xl:text-2xl text-lg text-color2 pointer-events-none">
           Thông tin các khoa
         </h1>
         <div>
-          <Button
-            variant="contained"
-            color="primary"
+          <button
+            type="button"
             onClick={changeStatusOpenAddDepartment}
+            className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
-            <span className="font-3">Thêm khoa mới</span>
-          </Button>
+            <span className="font-3">Thêm khoa mới</span>{" "}
+          </button>
           <Dialog
             open={openAddDepartment}
             onClose={changeStatusOpenAddDepartment}
             aria-labelledby="form-dialog-title"
           >
             <DialogTitle id="form-dialog-title">
-              <span className="font-3 text-color2">Thêm khoa mới</span>
+              <span className="font-7 text-color2">Thêm khoa mới</span>
             </DialogTitle>
             <DialogContent>
-              <div className="font-2">
-                <label className="font-3 text-color2">Chi nhánh</label>
+              <div className="font-4">
+                <label className="font-4 text-color2">Chi nhánh</label>
                 <select
                   required
                   onChange={(e) => {
@@ -150,8 +149,8 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                     })}
                 </select>
               </div>
-              <div className="font-2">
-                <label className="font-3 text-color2">Tên khoa</label>
+              <div className="font-4">
+                <label className="font-4 text-color2">Tên khoa</label>
                 <input
                   type="text"
                   required
@@ -162,8 +161,8 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   placeholder="Ví dụ: Khoa ngoại tổng hợp"
                 />
               </div>
-              <div className="font-2">
-                <label className="font-3 text-color2">Nhiệm vụ</label>
+              <div className="font-4">
+                <label className="font-4 text-color2">Nhiệm vụ</label>
                 <div className=" overflow-auto">
                   <CKEditor
                     editor={ClassicEditor}
@@ -174,8 +173,8 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   />
                 </div>
               </div>
-              <div className="font-2">
-                <label className="font-3 text-color2">Mô tả</label>
+              <div className="font-4">
+                <label className="font-4 text-color2">Mô tả</label>
                 <div className=" overflow-auto">
                   <CKEditor
                     editor={ClassicEditor}
@@ -186,8 +185,8 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   />
                 </div>
               </div>
-              <div className="font-2">
-                <label className="font-3 text-color2">
+              <div className="font-4">
+                <label className="font-4 text-color2">
                   Thiết bị & Hệ thống
                 </label>
                 <div className="overflow-auto">
@@ -203,8 +202,8 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   />
                 </div>
               </div>
-              <div className="font-2">
-                <label className="font-3 text-color2">Kỹ thuật điều trị</label>
+              <div className="font-4">
+                <label className="font-4 text-color2">Kỹ thuật điều trị</label>
                 <div className=" overflow-auto">
                   <CKEditor
                     editor={ClassicEditor}
@@ -218,8 +217,8 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                   />
                 </div>
               </div>
-              <div className="font-2">
-                <label className="font-3 text-color2">Ảnh khoa</label>
+              <div className="font-4">
+                <label className="font-4 text-color2">Ảnh khoa</label>
                 <input
                   type="text"
                   onChange={(e) => {
@@ -230,21 +229,23 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
                 />
               </div>
               <DialogActions>
-                <Button
+                <button
                   onClick={changeStatusOpenAddDepartment}
-                  color="secondary"
-                >
-                  <span className="font-3">Hủy</span>
-                </Button>
-                <Button
                   type="button"
+                  className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                >
+                  <span className="font-7">Hủy</span>
+                </button>
+                <button
                   onClick={() => {
                     createDepartment(payload);
                   }}
-                  color="primary"
+                  type="submit"
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
                 >
                   <span className="font-3">Thêm</span>
-                </Button>
+                </button>
+                
               </DialogActions>
             </DialogContent>
           </Dialog>
@@ -253,7 +254,7 @@ const EditDepartment: React.FC<IEditDepartmentProps> = ({
       <section className="overflow-x-auto h-screen overflow-y-auto">
         <table className="branches-table min-w-full">
           <thead className="bg-color2 text-color7">
-            <tr className="font-3">
+            <tr className="font-7">
               <th className="">Mã số khoa</th>
               <th className="">Mã chi nhánh</th>
               <th className="">Tên khoa</th>

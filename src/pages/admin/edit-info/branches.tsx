@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { EditBranchModuleController } from "./edit-info.controller";
-import editIcon from "../../../assets/edit.png";
-import checkedIcon from "../../../assets/checked.png";
-import closeIcon from "../../../assets/reject.png";
-
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -23,11 +18,6 @@ const toastConfigs: ToastOptions = {
   draggable: true,
   progress: undefined,
   theme: "light",
-};
-const icons = {
-  edit: <img src={editIcon} alt="edit" className="w-5" />,
-  check: <img src={checkedIcon} alt="check" className="w-5" />,
-  close: <img src={closeIcon} alt="close" className="w-5" />,
 };
 interface IEditBranchesProps {
   admin_id: number;
@@ -63,41 +53,42 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
     init();
   };
   return (
-    <article className="font-2 space-y-3">
+    <article className="font-7 space-y-3">
       <section className="space-y-3 md:space-y-0 md:flex md:space-x-2 md:items-center">
-        <h1 className="font-3 xl:text-2xl text-lg text-color2 pointer-events-none">
+        <h1 className="font-7 xl:text-2xl text-lg text-color2 pointer-events-none">
           Thông tin các chi nhánh
         </h1>
         <div>
-          <Button
-            variant="contained"
-            color="primary"
+          <button
+            type="button"
             onClick={changeStatusOpenAddBranch}
+            className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
-            <span className="font-3">Thêm chi nhánh mới</span>
-          </Button>
+            <span className="font-7">Thêm chi nhánh mới</span>
+          </button>
+
           <Dialog
             open={openAddBranch}
             onClose={changeStatusOpenAddBranch}
             aria-labelledby="form-dialog-title"
           >
             <DialogTitle id="form-dialog-title">
-              <span className="font-3 text-color2">Thêm chi nhánh mới</span>
+              <span className="font-7 text-color2">Thêm chi nhánh mới</span>
             </DialogTitle>
             <form onSubmit={handleSubmit(createBranch)} className="text-color2">
               <DialogContent>
-                <div className="font-2">
-                  <label className="font-3">Tên chi nhánh</label>
+                <div className="font-4">
+                  <label className="font-4">Tên chi nhánh</label>
                   <input
                     type="text"
                     required
                     {...register("name")}
-                    className="w-full h-10 outline-none border-2 rounded px-2"
+                    className="w-full font-4 h-10 outline-none border-2 rounded px-2"
                     placeholder="Ví dụ: Bệnh viện đa khoa TDHospital"
                   />
                 </div>
-                <div className="font-2">
-                  <label className="font-3">Địa chỉ</label>
+                <div className="font-4">
+                  <label className="">Địa chỉ</label>
                   <input
                     type="text"
                     required
@@ -106,8 +97,8 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                     placeholder="Ví dụ: Đà Nẵng"
                   />
                 </div>
-                <div className="font-2">
-                  <label className="font-3">Email</label>
+                <div className="font-4">
+                  <label className="">Email</label>
                   <input
                     type="email"
                     required
@@ -116,8 +107,8 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                     placeholder="Ví dụ: ron19102004@gmail.com"
                   />
                 </div>
-                <div className="font-2">
-                  <label className="font-3">Đường dây nóng</label>
+                <div className="font-4">
+                  <label className="">Đường dây nóng</label>
                   <input
                     type="text"
                     required
@@ -127,24 +118,24 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                     pattern="(0|84)[0-9]{9}"
                   />
                 </div>
-                <div className="font-2">
-                  <label className="font-3">Mô tả</label>
+                <div className="font-4">
+                  <label className="font-4">Mô tả</label>
                   <textarea
                     {...register("description")}
                     className="w-full h-32 outline-none border-2 rounded px-2"
                   />
                 </div>
-                <div className="font-2">
-                  <label className="font-3">Link bản đồ</label>
+                <div className="font-4">
+                  <label className="">Link bản đồ</label>
                   <input
-                    type="text"
+                    type="url"
                     {...register("src_map")}
                     className="w-full h-10 outline-none border-2 rounded px-2"
                     placeholder="Ví dụ: https://......"
                   />
                 </div>
-                <div className="font-2">
-                  <label className="font-3">Ngày thành lập</label>
+                <div className="font-4">
+                  <label className="">Ngày thành lập</label>
                   <input
                     type="date"
                     required
@@ -153,12 +144,19 @@ const EditBranches: React.FC<IEditBranchesProps> = ({ admin_id, token }) => {
                   />
                 </div>
                 <DialogActions>
-                  <Button onClick={changeStatusOpenAddBranch} color="secondary">
-                    <span className="font-3">Hủy</span>
-                  </Button>
-                  <Button type="submit" color="primary">
+                  <button
+                    onClick={changeStatusOpenAddBranch}
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Hủy</span>
+                  </button>
+                  <button
+                    type="submit"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
                     <span className="font-3">Thêm</span>
-                  </Button>
+                  </button>
                 </DialogActions>
               </DialogContent>
             </form>
@@ -235,18 +233,17 @@ const EditRowBranches: React.FC<{
     established_at: item.establish_at,
   });
   const [detailsBackup, setDetailsBackup] = useState<IDetailsBranch>({
-    address: "",
-    description: "",
-    email: "",
-    hotline: "",
-    id: 0,
-    name: "",
-    src_map: "",
-    established_at: "",
+    id: item.id,
+    name: item.name,
+    email: item.email,
+    address: item.address,
+    description: item.description,
+    hotline: item.hotline,
+    src_map: item.src_map,
+    established_at: item.establish_at,
   });
 
-  const init = () => {
-  };
+  const init = () => {};
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const changeStatusIsEdit = () => {
     if (!isEdit) {
@@ -364,15 +361,13 @@ const EditRowBranches: React.FC<{
         {isEdit ? (
           <>
             <div>
-              <Button
-                variant="contained"
-                color="primary"
-                className="w-full"
+              <button
+                type="button"
                 onClick={changeDialogEdit}
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
               >
-                {icons.check}
-                <span className="font-3">Lưu</span>
-              </Button>
+                <span className="font-7">Lưu</span>
+              </button>
               <Dialog
                 open={openDialogEdit}
                 onClose={changeDialogEdit}
@@ -380,51 +375,54 @@ const EditRowBranches: React.FC<{
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  <span className="font-3">
+                  <span className="font-7">
                     {"Bạn có chắc chắn muốn lưu chỉnh sửa này không?"}
                   </span>
                 </DialogTitle>
                 <DialogActions>
-                  <Button onClick={changeDialogEdit} color="secondary">
-                    <span className="font-3">Hủy</span>
-                  </Button>
-                  <Button onClick={handleSave} color="primary" autoFocus>
-                    <span className="font-3">Đồng ý</span>
-                  </Button>
+                  <button
+                    onClick={changeDialogEdit}
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Hủy</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSave}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Đồng ý</span>
+                  </button>
                 </DialogActions>
               </Dialog>
             </div>
-            <Button
-              variant="contained"
-              color="secondary"
-              className="w-full"
+            <button
               onClick={handleCancelEdit}
+              type="button"
+              className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
             >
-              {icons.close}
-              <span className="font-3">Hủy</span>
-            </Button>
+              <span className="font-7">Hủy</span>
+            </button>
           </>
         ) : (
           <>
-            <Button
-              variant="contained"
-              color="primary"
-              className="w-full"
+            <button
+              type="button"
               onClick={changeStatusIsEdit}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
             >
-              {icons.edit}
-              <span className="font-3">Sửa</span>
-            </Button>
+              <span className="font-7">Sửa</span>
+            </button>
             <div>
-              <Button
-                variant="contained"
-                color="secondary"
-                className="w-full"
+              <button
+                type="button"
                 onClick={changeDialogDelete}
+                className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
               >
-                {icons.close}
                 <span className="font-3">Xóa</span>
-              </Button>
+              </button>
+
               <Dialog
                 open={openDialogDelete}
                 onClose={changeDialogDelete}
@@ -437,12 +435,20 @@ const EditRowBranches: React.FC<{
                   </span>
                 </DialogTitle>
                 <DialogActions>
-                  <Button onClick={changeDialogDelete} color="secondary">
-                    <span className="font-3">Hủy</span>
-                  </Button>
-                  <Button onClick={handleDelete} color="primary" autoFocus>
-                    <span className="font-3">Đồng ý</span>
-                  </Button>
+                  <button
+                    onClick={changeDialogDelete}
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Hủy</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    <span className="font-7">Đồng ý</span>
+                  </button>
                 </DialogActions>
               </Dialog>
             </div>

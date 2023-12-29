@@ -20,6 +20,7 @@ import BookingUser from "./pages/user/booking";
 import DepartmentPage from "./pages/user/department";
 import Page403 from "./pages/errors/403";
 import Page404 from "./pages/errors/404";
+import DetailsAdmin from "./pages/user/booking/details-admin";
 
 const App: React.FC = () => {
   const userCurrent = useSelector(
@@ -59,14 +60,31 @@ const App: React.FC = () => {
                       userCurrent?.role !== Role.user ? (
                         <MyBookingAdmin />
                       ) : (
-                        <ProfileUser />
+                        <Navigate to={"/my-profile"} />
                       )
                     ) : (
                       <Navigate to={"/auth/login"} />
                     )
                   }
                 />
-                <Route path="/booking" element={<BookingUser />} />
+                <Route
+                  path="/booking/*"
+                  element={
+                    <Routes>
+                      <Route
+                        path="/"
+                        element={
+                         userCurrent === null || userCurrent?.role === Role.user ? (
+                            <BookingUser />
+                          ) : (
+                            <Page403 />
+                          )
+                        }
+                      />
+                      <Route path="/details/:id" element={<DetailsAdmin />} />
+                    </Routes>
+                  }
+                />
                 <Route
                   path="/edit-info"
                   element={

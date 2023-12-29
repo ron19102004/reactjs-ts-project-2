@@ -2,8 +2,7 @@
 import { useEffect, useState } from "react";
 import { BookingUserModuleController } from "../booking/booking.controller";
 import { ValidatorCustomModule } from "../../../helpers/validator";
-import { icons } from "../../admin/my-booking/all-my";
-import { Divider } from "@material-ui/core";
+import { NavLink } from "react-router-dom";
 
 interface IMyBookingUser {
   user_id: number;
@@ -62,117 +61,71 @@ const MyBookingUser: React.FC<IMyBookingUser> = ({ user_id, token }) => {
     init();
   }, []);
   return (
-    <div className="space-y-3">
-      <section className="space-y-3 flex items-center flex-col">
-        <h1 className="font-3 text-3xl text-color2 text-center">
-          Lịch hẹn của tôi
-        </h1>
-        <Divider
-          style={{
-            backgroundColor: "#53599A",
-            height: "2px",
-          }}
-          className=" w-full md:w-[50%]"
-        />
-      </section>
-      <section className="space-y-3">
-        <h2 className="font-3 text-xl text-color2 text-center ">
-          <p> Lịch hẹn chưa được chấp nhận</p>
-          <p>Số lượng: {listBookingAcceptYet.length}</p>
-        </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
-          {listBookingAcceptYet.map((item: any, index: number) => {
-            return (
-              <li
-                key={index}
-                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
-              >
-                <CardBookingUser data={item} token={token} user_id={user_id} />
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-      <section className="space-y-3">
-        <h2 className="font-3 text-xl text-color2 text-center">
-          <p> Lịch hẹn bị từ chối</p>
-          <p>Số lượng: {listBookingRefused.length}</p>{" "}
-        </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
-          {listBookingRefused.map((item: any, index: number) => {
-            return (
-              <li
-                key={index}
-                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
-              >
-                <CardBookingUser data={item} token={token} user_id={user_id} />
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-      <section className="space-y-3">
-        <h2 className="font-3 text-xl text-color2 text-center">
-          <p> Lịch hẹn đã được chấp nhận</p>
-          <p>Số lượng: {listBookingAccepted.length}</p>{" "}
-        </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
-          {listBookingAccepted.map((item: any, index: number) => {
-            return (
-              <li
-                key={index}
-                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
-              >
-                <CardBookingUser data={item} token={token} user_id={user_id} />
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-      <section className="space-y-3">
-        <h2 className="font-3 text-xl text-color2 text-center">
-          <p> Lịch hẹn đã hoàn thành</p>
-          <p>Số lượng: {listBookingFinished.length}</p>{" "}
-        </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
-          {listBookingFinished.map((item: any, index: number) => {
-            return (
-              <li
-                key={index}
-                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
-              >
-                <CardBookingUser data={item} token={token} user_id={user_id} />
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-      <section className="space-y-3">
-        <h2 className="font-3 text-xl text-color2 text-center">
-          <p> Lịch hẹn bị quá hạn</p>
-          <p>Số lượng: {listBookingOverDate.length}</p>{" "}
-        </h2>
-        <ul className="grid gap-3 grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-screen p-3 rounded-xl">
-          {listBookingOverDate.map((item: any, index: number) => {
-            return (
-              <li
-                key={index}
-                className="p-3 bg-color7 rounded-xl shadow-lg hover:shadow-xl"
-              >
-                <CardBookingUser data={item} token={token} user_id={user_id} />
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+    <div className="my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
+      <div className="w-full flex flex-col ">
+        <div className="flex-1 bg-white rounded-lg shadow-xl p-8">
+          <h4 className="text-xl text-gray-900 font-bold">
+            Thông tin lịch hẹn
+          </h4>
+          <ul className="mt-2 text-gray-700">
+            <li className="items-center border-y py-2">
+              <h1 className="font-6 text-lg underline">
+                Các lịch hẹn chưa chấp nhận
+              </h1>
+              <ul className="grid gap-3 max-h-screen overflow-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {listBookingAcceptYet.map((data: any, index: number) => {
+                  return <CardBookingUser data={data} key={index} />;
+                })}
+              </ul>
+            </li>
+            <li className="items-center border-y py-2">
+              <h1 className="font-6 text-lg underline">
+                Các lịch hẹn đang diễn ra
+              </h1>
+              <ul className="grid gap-3 max-h-screen overflow-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {listBookingAccepted.map((data: any, index: number) => {
+                  return <CardBookingUser data={data} key={index} />;
+                })}
+              </ul>
+            </li>
+            <li className="items-center border-y py-2">
+              <h1 className="font-6 text-lg underline">
+                Các lịch hẹn bị từ chối
+              </h1>
+              <ul className="grid gap-3 max-h-screen overflow-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {listBookingRefused.map((data: any, index: number) => {
+                  return <CardBookingUser data={data} key={index} />;
+                })}
+              </ul>
+            </li>
+            <li className="items-center border-y py-2">
+              <h1 className="font-6 text-lg underline">
+                Các lịch hẹn đã hoàn thành
+              </h1>
+              <ul className="grid gap-3 max-h-screen overflow-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {listBookingFinished.map((data: any, index: number) => {
+                  return <CardBookingUser data={data} key={index} />;
+                })}
+              </ul>
+            </li>
+            <li className="items-center border-y py-2">
+              <h1 className="font-6 text-lg underline">
+                Các lịch hẹn quá thời gian
+              </h1>
+              <ul className="grid gap-3 max-h-screen overflow-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {listBookingOverDate.map((data: any, index: number) => {
+                  return <CardBookingUser data={data} key={index} />;
+                })}
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
-const icons$ = icons;
 interface ICardBookingUserProps {
   data: any;
-  user_id: number;
-  token: string;
 }
 const CardBookingUser: React.FC<ICardBookingUserProps> = ({ data }) => {
   const [statusBooking, setStatusBooking] = useState<{
@@ -215,103 +168,104 @@ const CardBookingUser: React.FC<ICardBookingUserProps> = ({ data }) => {
     init();
   }, []);
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-6 gap-3">
-      <section>
-        <h1 className="font-3">Thông tin hồ sơ</h1>
-        <ul className="font-2">
-          <li>
-            <span>Mã hồ sơ: </span>
-            <span>{data.id}</span>
-          </li>
-          <li>
-            <span>Tên dịch vụ: </span>
-            <span>{data.uService?.service?.name}</span>
-          </li>
-          <li>
-            <span>Giá dịch vụ: </span>
-            <span>{data.uService?.service?.price}kVNĐ</span>
-          </li>
-          <li>
-            <span>Ngày khởi tạo: </span>
-            <span>{data.timeInit}</span>
-          </li>
-          <li>
-            <span>Ngày hẹn: </span>
-            <span>{data.appointment_date}</span>
-          </li>
-          <li>
-            <span>Ghi chú: </span>
-            <textarea
-              className="w-full h-20 p-1 outline-none bg-slate-200 rounded-xl"
-              disabled
-              value={data.note.length > 0 ? data.note : "Không có"}
-            />
-          </li>
-        </ul>
-      </section>
-      <section>
-        <h1 className="font-3">Thông tin bác sĩ</h1>
-        <ul className="font-2">
-          <li>
-            <span>Mã thông tin: </span>
-            <span>{data?.admin?.id}</span>
-          </li>
-          <li>
-            <span>Họ và tên: </span>
-            <span>
-              {data?.admin?.firstName} {data?.admin?.lastName}
-            </span>
-          </li>
-          <li>
-            <span>Chức vụ: </span>
-            <span>{data?.admin?.position}</span>
-          </li>
-          <li>
-            <span>Email: </span>
-            <span>{data?.admin?.email}</span>
-          </li>
-          <li>
-            <span>Số điện thoại: </span>
-            <span>{data?.admin?.phoneNumber}</span>
-          </li>
-        </ul>
-      </section>
-      <section>
-        <h1 className="font-3">Trạng thái hồ sơ</h1>
-        <ul className="font-2">
-          <li className="flex space-x-1 items-center">
-            <span>
-              {statusBooking.confirmed ? icons$.checked : icons$.refused}
-            </span>
-            <span>Xác thực</span>
-          </li>
-          <li className="flex space-x-1 items-center">
-            <span>
-              {statusBooking.rejected ? icons$.checked : icons$.refused}
-            </span>
-            <span>Từ chối</span>
-          </li>
-          <li className="flex space-x-1 items-center">
-            <span>
-              {statusBooking.accepted ? icons$.checked : icons$.refused}
-            </span>
-            <span>Chấp nhận</span>
-          </li>
-          <li className="flex space-x-1 items-center">
-            <span>
-              {statusBooking.finished ? icons$.checked : icons$.refused}
-            </span>
-            <span>Hoàn thành</span>
-          </li>
-          <li className="flex space-x-1 items-center">
-            <span>
-              {statusBooking.overDate ? icons$.checked : icons$.refused}
-            </span>
-            <span>Quá thời hạn</span>
-          </li>
-        </ul>
-      </section>
-    </section>
+    <li className="max-w-sm p-6 bg-white border border-gray-200 rounded shadow ">
+      <h1 className="font-7 flex items-center">
+        <span>Trạng thái hồ sơ </span>
+      </h1>
+      <ul className="font-2 grid  grid-cols-2">
+        <li className="flex space-x-1 items-center">
+          <span>
+            {statusBooking.confirmed ? (
+              <div className="w-2 h-2 rounded-full bg-green-500" />
+            ) : (
+              <div className="w-2 h-2 rounded-full bg-red-500" />
+            )}
+          </span>
+          <span>Xác thực</span>
+        </li>
+        <li className="flex space-x-1 items-center">
+          <span>
+            {statusBooking.rejected ? (
+              <div className="w-2 h-2 rounded-full bg-green-500" />
+            ) : (
+              <div className="w-2 h-2 rounded-full bg-red-500" />
+            )}
+          </span>
+          <span>Từ chối</span>
+        </li>
+        <li className="flex space-x-1 items-center">
+          <span>
+            {statusBooking.accepted ? (
+              <div className="w-2 h-2 rounded-full bg-green-500" />
+            ) : (
+              <div className="w-2 h-2 rounded-full bg-red-500" />
+            )}
+          </span>
+          <span>Chấp nhận</span>
+        </li>
+        <li className="flex space-x-1 items-center">
+          <span>
+            {statusBooking.finished ? (
+              <div className="w-2 h-2 rounded-full bg-green-500" />
+            ) : (
+              <div className="w-2 h-2 rounded-full bg-red-500" />
+            )}
+          </span>
+          <span>Hoàn thành</span>
+        </li>
+        <li className="flex space-x-1 items-center">
+          <span>
+            {statusBooking.overDate ? (
+              <div className="w-2 h-2 rounded-full bg-green-500" />
+            ) : (
+              <div className="w-2 h-2 rounded-full bg-red-500" />
+            )}
+          </span>
+          <span>Quá thời hạn</span>
+        </li>
+      </ul>
+      <h1 className="font-7 flex items-center">
+        <span>Thông tin hồ sơ </span>
+      </h1>
+      <ul className="font-4">
+        <li>
+          <span>Mã hồ sơ: </span>
+          <span className="font-3">{data.id}</span>
+        </li>
+        <li>
+          <span>Tên dịch vụ: </span>
+          <span className="font-3">{data.uService?.service?.name}</span>
+        </li>
+        <li>
+          <span>Giá dịch vụ: </span>
+          <span className="font-3">{ValidatorCustomModule.convertCurrencyStringToNumber(`${data.uService?.service?.price}.000kVNĐ`)}</span>
+        </li>
+        <li>
+          <span>Ngày khởi tạo: </span>
+          <span className="font-3">{data.timeInit}</span>
+        </li>
+        <li>
+          <span>Ngày hẹn: </span>
+          <span className="font-3">{data.appointment_date}</span>
+        </li>
+        <li>
+          <span>Ghi chú: </span>
+          <div
+            className="border p-2 font-sans max-h-20 overflow-auto"
+            dangerouslySetInnerHTML={{ __html: data.note }}
+          ></div>
+        </li>
+      </ul>
+      <h1 className="font-7">
+        Thông tin bác sĩ:{" "}
+        <NavLink
+          to={`/booking/details/${data?.admin?.id}`}
+          className={"underline hover:text-blue-700"}
+        >
+          {data?.admin?.lastName}
+        </NavLink>
+      </h1>
+    </li>
   );
 };
 export default MyBookingUser;

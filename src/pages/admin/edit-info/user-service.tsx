@@ -8,7 +8,6 @@ import editIcon from "../../../assets/edit.png";
 import checkedIcon from "../../../assets/checked.png";
 import closeIcon from "../../../assets/reject.png";
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -18,6 +17,7 @@ import { ToastOptions, toast } from "react-toastify";
 import { EMethodsCheckUser } from "../my-booking/create-booking";
 import { UserModuleController } from "../my-booking/user.controller";
 import { Role } from "../../../redux/reducers/auth.reducer";
+import { ValidatorCustomModule } from "../../../helpers/validator";
 const toastConfigs: ToastOptions = {
   position: "top-right",
   autoClose: 2000,
@@ -108,7 +108,7 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
       token,
       methodCheckUser
     );
-    if(user$.role === Role.user){
+    if (user$.role === Role.user) {
       toast.error(
         "Tài khoản user. Không có tác vụ trong này, vui lòng kiểm tra lại",
         toastConfigs
@@ -131,17 +131,17 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
   return (
     <article className="font-2 space-y-3">
       <section className="space-y-3 md:space-y-0 md:flex md:space-x-2 md:items-center">
-        <h1 className="font-3 xl:text-2xl text-lg text-color2 pointer-events-none ">
+        <h1 className="font-7 xl:text-2xl text-lg text-color2 pointer-events-none ">
           Thông tin dịch vụ & nhân viên
         </h1>
         <div>
-          <Button
-            variant="contained"
-            color="primary"
+          <button
+            type="button"
             onClick={changeStatusOpenAddUService}
+            className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
             <span className="font-3">Thêm liên kết</span>
-          </Button>
+          </button>
           <Dialog
             open={openAddUService}
             onClose={changeStatusOpenAddUService}
@@ -151,12 +151,12 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
               <span className="font-3 text-color2">Thêm liên kết</span>
             </DialogTitle>
 
-            <DialogContent className="font-2">
+            <DialogContent className="font-4">
               <div className="space-y-2">
                 <section className="flex space-x-2 items-center">
-                  <h1 className="font-3">Thông tin khách hàng</h1>
+                  <h1 className="font-7">Thông tin khách hàng</h1>
                   <select
-                    className="h-10 outline-none border-2 rounded p-1"
+                    className="h-10 outline-none  rounded p-1"
                     onChange={(e: any) => {
                       setMethodCheckUser(e.target.value);
                       setValueCheckUser("");
@@ -174,7 +174,7 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
                     <input
                       type="number"
                       required
-                      className="outline-none border-2 rounded h-10 w-full px-2"
+                      className="outline-none rounded h-10 w-full px-2"
                       placeholder="Ví dụ: 4id nhập 4"
                       onChange={(e) => {
                         changeValueCheckUser(e);
@@ -185,7 +185,7 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
                     <input
                       type="tel"
                       required
-                      className="outline-none border-2 rounded h-10 w-full px-2"
+                      className="outline-none rounded h-10 w-full px-2"
                       placeholder="Ví dụ: 0392477615"
                       onChange={(e) => {
                         changeValueCheckUser(e);
@@ -196,7 +196,7 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
                     <input
                       type="email"
                       required
-                      className="outline-none border-2 rounded h-10 w-full px-2"
+                      className="outline-none rounded h-10 w-full px-2"
                       placeholder="VD: abc@gmail.com"
                       onChange={(e) => {
                         changeValueCheckUser(e);
@@ -217,8 +217,8 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
 
                 {Object.keys(user.details).length > 0 && (
                   <section className="">
-                    <h1 className="font-3">Thông tin cơ bản khách hàng</h1>
-                    <div className="p-2 border-2 h-28 overflow-y-auto  rounded">
+                    <h1 className="font-7">Thông tin cơ bản khách hàng</h1>
+                    <div className="p-2  h-28 overflow-y-auto rounded">
                       <p>UID: {user.details.id}id</p>
                       <p>Họ đệm: {user.details.firstName}</p>
                       <p>Tên: {user.details.lastName}</p>
@@ -238,7 +238,7 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
                   <h1 className="font-3">Dịch vụ</h1>
                 </section>
                 <select
-                  className="h-10 outline-none border-2 rounded p-1 w-full"
+                  className="h-10 outline-none  rounded p-1 w-full"
                   onChange={(e) => {
                     setIdServiceSelectUser(parseInt(e.target.value));
                   }}
@@ -249,21 +249,29 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
                       <option
                         value={item.id}
                         key={index}
-                        className="h-10 outline-none border-2 rounded p-1"
+                        className="h-10 outline-none rounded p-1"
                       >
                         {item.id}-{item.name}-{item.department.name}-
-                        {item.price}kVNĐ
+                        {ValidatorCustomModule.convertCurrencyStringToNumber(`${item.price}.000kVNĐ`)}
                       </option>
                     ))}
                 </select>
               </section>
               <DialogActions>
-                <Button onClick={changeStatusOpenAddUService} color="secondary">
-                  <span className="font-3">Hủy</span>
-                </Button>
-                <Button type="submit" color="primary" onClick={createService}>
-                  <span className="font-3">Thêm</span>
-                </Button>
+                <button
+                  onClick={changeStatusOpenAddUService}
+                  type="button"
+                  className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                >
+                  <span className="font-7">Hủy</span>
+                </button>
+
+                <button
+                  onClick={createService}
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                >
+                  <span className="font-7">Đồng ý</span>
+                </button>
               </DialogActions>
             </DialogContent>
           </Dialog>
@@ -272,7 +280,7 @@ const EditUserService: React.FC<IEditUserServiceProps> = ({
       <section className="overflow-x-auto w-full">
         <table className="branches-table min-w-full">
           <thead className="bg-color2 text-color7">
-            <tr className="font-3">
+            <tr className="font-7">
               <th className="">Mã số liên kết</th>
               <th className="">Mã số dịch vụ</th>
               <th className="">Mã số nhân viên (AID) </th>
@@ -334,15 +342,13 @@ const EditRowUService: React.FC<{
       <td className={``}>{item.service.name}</td>
       <td className="space-y-1 p-1">
         <div>
-          <Button
-            variant="contained"
-            color="secondary"
-            className="w-full"
+          <button
             onClick={changeDialogDelete}
+            type="button"
+            className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
           >
-            {icons.close}
-            <span className="font-3">Xóa</span>
-          </Button>
+            <span className="font-7">Hủy</span>
+          </button>
           <Dialog
             open={openDialogDelete}
             onClose={changeDialogDelete}
@@ -350,17 +356,26 @@ const EditRowUService: React.FC<{
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              <span className="font-3">
+              <span className="font-7">
                 {"Bạn có chắc chắn muốn xóa dịch vụ này không?"}
               </span>
             </DialogTitle>
             <DialogActions>
-              <Button onClick={changeDialogDelete} color="secondary">
-                <span className="font-3">Hủy</span>
-              </Button>
-              <Button onClick={handleDelete} color="primary" autoFocus>
-                <span className="font-3">Đồng ý</span>
-              </Button>
+              <button
+                onClick={changeDialogDelete}
+                type="button"
+                className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+              >
+                <span className="font-7">Hủy</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+              >
+                <span className="font-7">Đồng ý</span>
+              </button>
             </DialogActions>
           </Dialog>
         </div>

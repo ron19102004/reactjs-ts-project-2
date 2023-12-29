@@ -32,21 +32,18 @@ const FeedBackAdmin: React.FC<{ token: string; admin_id: number }> = ({
   return (
     <>
       <section className="px-3">
-        <h1 className="font-semibold font-3 text-center md:text-start text-color2 text-2xl">
+        <h1 className="font-semibold font-7 text-center md:text-start text-color2 text-2xl">
           Phản hồi của khách hàng
         </h1>
       </section>
-
       <section>
         <ul className="max-h-screen overflow-y-auto grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-3">
           {feedbacks.length > 0 &&
             feedbacks.map((feedback: any, index: number) => {
               return (
-                <li
-                  key={index}
-                  className="bg-slate-100 p-2 rounded-xl shadow-xl hover:shadow-2xl"
-                >
+                <li key={index} className="">
                   <FeedBackCard
+                  init={init}
                     admin_id={admin_id}
                     feedback={feedback}
                     token={token}
@@ -63,7 +60,8 @@ const FeedBackCard: React.FC<{
   feedback: any;
   token: string;
   admin_id: number;
-}> = ({ feedback, token, admin_id }) => {
+  init:()=> Promise<void>
+}> = ({ feedback, token, admin_id ,init}) => {
   const [confirm, setConfirm] = useState<boolean>(feedback?.data?.confirmed);
   const confirm$ = async () => {
     const re = await HomeModuleControllerUser.confirm(
@@ -79,48 +77,76 @@ const FeedBackCard: React.FC<{
     setConfirm(true);
   };
   const obHtmlContent = { __html: feedback?.data?.content };
+  const deleteF = async () => {
+    const re = await HomeModuleControllerUser.del(
+      token,
+      admin_id,
+      feedback?.data?.id
+    );
+    if (!re) {
+      toast.error("Xử lý duyệt bị lỗi", toastConfigs);
+      return;
+    }
+    init()
+    toast.success("Đã xóa", toastConfigs);
+    setConfirm(true);
+  };
   return (
     <>
-      <div className="flex space-x-1 text-gray-900 items-end">
-        <div className="w-10 h-10">
-          <img
-            src={feedback?.user?.avatar}
-            alt="avtar-user"
-            className="w-10 h-10 rounded-md object-cover"
-          />
+      {" "}
+      <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow relative">
+        <div className="flex space-x-1 text-gray-900 items-end">
+          <div className="w-10 h-10">
+            <img
+              src={feedback?.user?.avatar}
+              alt="avtar-user"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          </div>
+
+          <h1 className="font-7 text-color6">
+            {feedback?.user?.firstName} {feedback?.user?.lastName}
+          </h1>
         </div>
-        <h1 className="font-3 text-color6">
-          {feedback?.user?.firstName} {feedback?.user?.lastName}
-        </h1>
-      </div>
-      <div>
-        <h1 className="text-color2">
-          <span className="font-3">Tiêu đề: </span>
-          <span className="font-1">{feedback?.data.subject}</span>
-        </h1>
-        <h1 className="text-color2">
-          <span className="font-3">Nội dung: </span>
-          <span
-            className="font-1"
-            dangerouslySetInnerHTML={obHtmlContent}
-          ></span>
-        </h1>
-      </div>
-      <div className="font-sans text-xs">
-        <span>
+        <p className="font-sans text-xs">
           Time: {new Date(feedback?.data.created_at + "").toUTCString()}
-        </span>
+        </p>
+        <div>
+          <h1 className="font-4  inline-block">
+            Tiêu đề:{` `}
+            <span className="font-6 text-sm inline-block">
+              {feedback?.data.subject}
+            </span>
+          </h1>
+          <h1 className="font-4">
+            Nội dung:
+            <div
+              className="font-6 text-sm border p-1 rounded"
+              dangerouslySetInnerHTML={obHtmlContent}
+            ></div>
+          </h1>
+        </div>
+        <div className="absolute top-1 right-1 flex justify-center items-center  space-x-1">
+          {!confirm ? (
+            <button
+              type="button"
+              onClick={confirm$}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+            >
+              <span className="font-7">Duyệt</span>
+            </button>
+          ) : (
+            ""
+          )}
+          <button
+            onClick={deleteF}
+            type="button"
+            className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+          >
+            <span className="font-7">Xóa</span>
+          </button>
+        </div>
       </div>
-      {!confirm ? (
-        <button
-          className="bg-red-400 hover:bg-red-500 text-white px-2 py-1 rounded-lg"
-          onClick={confirm$}
-        >
-          Duyệt
-        </button>
-      ) : (
-        ""
-      )}
     </>
   );
 };

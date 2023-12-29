@@ -10,7 +10,7 @@ const ProfileUser: React.FC = () => {
   );
   const token = useSelector((state: any) => state.authReducer?.accessToken);
   return (
-    <article className="p-3 md:mt-0 pt-14 space-y-3">
+    <article className="p-3 md:mt-0 pt-14 md:pt-3 space-y-3">
       <section>
         <Suspense fallback={<Loading />}>
           <MyProfileUser userCurrent={userCurrent} token={token} />

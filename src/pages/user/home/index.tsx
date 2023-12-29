@@ -16,7 +16,7 @@ const HomeUser: React.FC = () => {
   );
   const token = useSelector((state: any) => state.authReducer?.accessToken);
   return (
-    <article className={`top-0 font-3 space-y-5`}>
+    <article className={`top-0 space-y-5`}>
       <section
         className={`flex flex-col sm:flex-row sm:justify-center sm:items-center sm:space-x-20 bg-color2 min-h-screen px-5 sm:px-0`}
       >
@@ -68,13 +68,13 @@ const HomeUser: React.FC = () => {
             <img src={DoctorImg} alt="doctor" className={`w-[100%]`} />
           </section>
         </div>
-        <div className="w-full -translate-y-9 sm:translate-y-0 sm:w-[40%] font-medium lg:text-base text-sm xl:text-lg sm:text-color7 text-green-950  font-2 space-y-4">
+        <div className="w-full -translate-y-9 sm:translate-y-0 sm:w-[40%] font-medium lg:text-base text-sm xl:text-lg sm:text-color7 text-green-950 space-y-4">
           <div className="text-color4">
-            <h1 className="font-bold text-6xl font-3 leading-tight">
+            <h1 className="font-bold text-6xl font-7 leading-tight">
               {NAME_SYSTEM}
             </h1>
           </div>
-          <div className={`bg-custom xl:p-5  p-3 rounded-lg `}>
+          <div className={`bg-custom xl:p-5  p-3 rounded-lg font-7 `}>
             <p>
               Nổi tiếng là một trong những bệnh viện tư nhân hàng đầu tại miền
               Trung Việt Nam, bệnh viện {NAME_SYSTEM} Đà Nẵng cung cấp các dịch
@@ -92,11 +92,11 @@ const HomeUser: React.FC = () => {
         </div>
       </section>
       <section className="p-3">
-        <h1 className="text-center font-semibold md:text-2xl text-lg text-color2">
+        <h1 className="text-center font-semibold md:text-2xl text-lg text-color2 uppercase font-6">
           GIÁ TRỊ KHÁC BIỆT CỦA {NAME_SYSTEM}
         </h1>
         <ul
-          className={`grid gap-4 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 p-4 max-h-screen overflow-y-auto`}
+          className={`grid gap-4 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 p-4 max-h-screen overflow-y-auto font-4`}
         >
           {specialThings.map((specialThing: ISpecialThing, index: number) => {
             return (
@@ -107,7 +107,7 @@ const HomeUser: React.FC = () => {
                   <div className="basis-2/3">
                     <img src={specialThing.img} alt="gtr" className={`h-20`} />
                   </div>
-                  <h1 className="flex-1 text-center font-bold md:text-lg text-base font-2">
+                  <h1 className="flex-1 text-center font-bold md:text-lg text-base">
                     {specialThing.title}
                   </h1>
                 </li>
@@ -117,11 +117,11 @@ const HomeUser: React.FC = () => {
         </ul>
       </section>
       <section>
-        <h1 className="text-center font-semibold md:text-2xl text-lg text-color2">
+        <h1 className="text-center font-semibold md:text-2xl text-lg text-color2  font-6">
           CHUYÊN KHOA TIÊU BIỂU
         </h1>
         <ul
-          className={`grid gap-4 xl:grid-cols-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 py-4 px-6 max-h-screen overflow-y-auto`}
+          className={`grid gap-4 xl:grid-cols-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 py-4 px-6 max-h-screen overflow-y-auto font-4`}
         >
           {departments.map((dep: IDepartment, index: number) => {
             return (
@@ -132,7 +132,7 @@ const HomeUser: React.FC = () => {
                 <div className="basis-2/3 rounded-full border-4 border-color5 p-5 hover:bg-color5">
                   <img src={dep.img} alt="gtr" className={`h-20 w-20`} />
                 </div>
-                <h1 className="flex-1 text-center font-bold md:text-lg text-base font-2">
+                <h1 className="flex-1 text-center font-bold md:text-lg text-base">
                   {dep.title}
                 </h1>
               </li>
