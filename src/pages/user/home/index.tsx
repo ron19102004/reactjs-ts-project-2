@@ -68,7 +68,7 @@ const HomeUser: React.FC = () => {
             <img src={DoctorImg} alt="doctor" className={`w-[100%]`} />
           </section>
         </div>
-        <div className="w-full -translate-y-9 sm:translate-y-0 sm:w-[40%] font-medium lg:text-base text-sm xl:text-lg sm:text-color7 text-green-950 space-y-4">
+        <div className="w-full -translate-y-9 sm:translate-y-0 sm:w-[40%] font-medium lg:text-base text-sm xl:text-lg text-color7  space-y-4">
           <div className="text-color4">
             <h1 className="font-bold text-6xl font-7 leading-tight">
               {NAME_SYSTEM}

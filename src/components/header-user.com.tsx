@@ -60,7 +60,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent, token }) => {
     setOpenNotify(!openNotify);
   };
   useEffect(() => {
-    setInterval(()=>handleQuantityNotify(), 60000)
+    setInterval(()=>handleQuantityNotify(), 10000)
     const handleScroll = () => {
       const offset = window.scrollY;
       setIsFixed(offset > 100);

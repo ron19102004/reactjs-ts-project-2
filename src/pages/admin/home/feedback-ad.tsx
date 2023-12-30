@@ -66,7 +66,7 @@ const FeedBackAdmin: React.FC<{ token: string; admin_id: number }> = ({
             onChange={changeConfirm}
             className="sr-only peer"
           />
-          <div className="w-11 h-6 bg-red-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-red-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-red-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-red-600 peer-checked:bg-blue-600"></div>
+          <div className="w-11 h-6 bg-red-200 peer-focus:outline-none  peer-focus:ring-blue-300  rounded-full peer dark:bg-red-700   dark:border-red-600 peer-checked:bg-blue-600"></div>
           <span
             className={`ms-3 text-sm font-medium font-7 ${
               confirm ? " text-blue-600" : " text-red-600"
@@ -167,7 +167,7 @@ const FeedBackCard: React.FC<{
           <textarea
             value={feedback?.data?.content}
             onChange={() => {}}
-            className="w-full max-h-56 overflow-auto px-2 py-1 rounded-3xl"
+            className="w-full max-h-56 overflow-auto px-2 py-1 rounded-xl"
           >
             {" "}
           </textarea>
@@ -327,7 +327,7 @@ const FocusFeedBack: React.FC<{
                 ></div>
               </p>
               <div className="w-full">
-                <button
+                <span
                   onClick={() => {
                     const name =
                       feedback?.user?.firstName +
@@ -335,7 +335,7 @@ const FocusFeedBack: React.FC<{
                       feedback?.user?.lastName;
                     changeUserReply(feedback?.user?.id, name);
                   }}
-                  className="flex items-center text-xs font-4 float-right hover:underline"
+                  className="cursor-pointer flex items-center text-xs font-4 float-right hover:underline"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -352,7 +352,7 @@ const FocusFeedBack: React.FC<{
                     />
                   </svg>
                   <span>Phản hồi</span>
-                </button>
+                </span>
               </div>
             </div>
           </div>
@@ -478,7 +478,7 @@ const FocusFeedBack: React.FC<{
                             </h1>
                           )}
                         </div>
-                        <button
+                        <span
                           onClick={() => {
                             const name =
                               comment?.user?.firstName +
@@ -486,7 +486,7 @@ const FocusFeedBack: React.FC<{
                               comment?.user?.lastName;
                             changeUserReply(comment?.user?.id, name);
                           }}
-                          className="flex items-center text-xs font-4 hover:underline"
+                          className="cursor-pointer flex items-center text-xs font-4 hover:underline"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -503,7 +503,7 @@ const FocusFeedBack: React.FC<{
                             />
                           </svg>
                           <span>Phản hồi</span>
-                        </button>
+                        </span>
                       </div>
                     </li>
                   );
@@ -546,9 +546,9 @@ const FocusFeedBack: React.FC<{
                   setContent(e.target.value);
                 }}
               />
-              <button
+              <span
                 onClick={reply}
-                className="absolute top-2 right-1 outline-none border-hidden ring-0 rounded-3xl p-1 px-2"
+                className=" cursor-pointer absolute top-2 right-1 outline-none border-hidden ring-0 rounded-3xl p-1 px-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -564,7 +564,7 @@ const FocusFeedBack: React.FC<{
                     d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
                   />
                 </svg>
-              </button>
+              </span>
             </div>
           </div>
         </DialogContent>
