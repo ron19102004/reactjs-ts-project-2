@@ -55,6 +55,52 @@ class HomeAdminController {
     }
     return [];
   }
+  async getStatus() {
+    try {
+      const res = await axios.get(`${URL}/status`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+  async getStatusByName(name: string) {
+    try {
+      const res = await axios.get(`${URL}/status/name=${name}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+  async changeStatusById(id: number, token: string) {
+    try {
+      const res = await axios.put(`${URL}/status/id=${id}`,{}, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+  async addStatus(payload: { name: string; value: boolean }, token: string) {
+    try {
+      const res = await axios.post(`${URL}/status`, payload, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
 }
 export const HomeAdminModuleController: HomeAdminController =
   new HomeAdminController();

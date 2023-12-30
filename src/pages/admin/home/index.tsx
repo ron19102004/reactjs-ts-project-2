@@ -2,9 +2,9 @@
 import React, { Suspense, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Loading } from "../my-booking";
-import FeedBackAdmin from "./feedback-ad";
 const ChartAnalyticsDate = React.lazy(() => import("./chart-date"));
 const ChartAnalyticsMonth = React.lazy(() => import("./chart-month"));
+const FeedBackAdmin = React.lazy(() => import("./feedback-ad"));
 const HomeAdmin: React.FC = () => {
   const userCurrent = useSelector(
     (state: any) => state.authReducer?.userCurrent
@@ -23,7 +23,9 @@ const HomeAdmin: React.FC = () => {
           </Suspense>
         </section>
         <section>
-          <FeedBackAdmin admin_id={userCurrent?.id} token={token} />
+          <Suspense fallback={<Loading />}>
+            <FeedBackAdmin admin_id={userCurrent?.id} token={token} />
+          </Suspense>
         </section>
       </main>
     </article>
