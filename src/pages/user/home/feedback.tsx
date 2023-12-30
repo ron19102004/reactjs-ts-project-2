@@ -171,7 +171,7 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
     </>
   );
 };
- const CardFeedBack: React.FC<{
+const CardFeedBack: React.FC<{
   feedback: any;
   token: string;
   id_user: number;
@@ -241,7 +241,7 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
     </>
   );
 };
- const FocusFeedBack: React.FC<{
+const FocusFeedBack: React.FC<{
   open: boolean;
   setOpen: () => void;
   feedback: any;
@@ -261,7 +261,12 @@ const FeedBack: React.FC<{ token: string; userCurrent: any }> = ({
     );
     setListCommet(res);
   };
+  const navigate = useNavigate();
   const changeUserReply = (id: number, name: string) => {
+    if (!token) {
+      navigate("/auth/login");
+      return;
+    }
     setUserBeReplyId(id);
     setNameUserBeReply(name);
   };
