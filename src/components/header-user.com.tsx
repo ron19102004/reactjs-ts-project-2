@@ -2,7 +2,7 @@
 
 import { NavLink, useNavigate } from "react-router-dom";
 import LOGO from "../assets/logo.png";
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./styles/header.scss";
@@ -12,6 +12,10 @@ import { AuthModuleController } from "../pages/auths/auth.controller";
 import { ToastOptions, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { NAME_SYSTEM } from "../helpers/constant";
+import { Loading } from "../pages/admin/my-booking";
+import { NotifyModuleControllerUser } from "../pages/user/notify/notify.controller";
+
+const Notify = lazy(() => import("../pages/user/notify/index"));
 interface IRoute {
   title: string;
   icon: any;
@@ -24,8 +28,9 @@ const routes: IRoute[] = [
 ];
 interface IHeaderUserProps {
   userCurrent: any;
+  token: string;
 }
-const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
+const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent, token }) => {
   const toastConfigs: ToastOptions = {
     position: "top-center",
     autoClose: 2000,
@@ -40,7 +45,22 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
   const dispatch = useDispatch();
   const [isFixed, setIsFixed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [openNotify, setOpenNotify] = useState(false);
+  const [quantityNotify, setQuantityNotify] = useState<number>(0);
+  const handleQuantityNotify = async () => {
+    if (userCurrent) {
+      const count = await NotifyModuleControllerUser.countSeenYet(
+        userCurrent?.id,
+        token
+      );
+      setQuantityNotify(count);
+    }
+  };
+  const changeOpenNotify = () => {
+    setOpenNotify(!openNotify);
+  };
   useEffect(() => {
+    setInterval(()=>handleQuantityNotify(), 60000)
     const handleScroll = () => {
       const offset = window.scrollY;
       setIsFixed(offset > 100);
@@ -65,26 +85,59 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
         <section
           className={`flex justify-between md:justify-normal items-center space-x-3`}
         >
-          <div
-            className={`md:hidden border-2 p-1 rounded-lg ${
-              isFixed ? "border-cyan-300" : ""
-            }`}
-          >
-            {isOpen ? (
-              <button onClick={changeStatusHeader}>
-                <CloseIcon />
-              </button>
-            ) : (
-              <button onClick={changeStatusHeader}>
-                <MenuIcon />
-              </button>
-            )}
+          <div className="md:hidden flex space-x-4 items-center">
+            <div
+              className={`md:hidden border-2 p-1.5 rounded-lg ${
+                isFixed ? "border-cyan-300" : ""
+              }`}
+            >
+              {isOpen ? (
+                <span onClick={changeStatusHeader}>
+                  <CloseIcon />
+                </span>
+              ) : (
+                <span onClick={changeStatusHeader}>
+                  <MenuIcon />
+                </span>
+              )}
+            </div>
+            <Tooltip
+              label={`${
+                quantityNotify !== 0
+                  ? `Có ${quantityNotify} thông báo chưa đọc`
+                  : "Thông báo"
+              }`}
+            >
+              <span className={`relative md:hidden`} onClick={changeOpenNotify}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-8 h-8 "
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+                  />
+                </svg>
+                {quantityNotify > 0 && (
+                  <span className="absolute -top-0 -right-0 text-red-500 flex justify-center items-center text-xs">
+                    <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                  </span>
+                )}
+              </span>
+            </Tooltip>
           </div>
           <div className={`flex items-center space-x-3`}>
             <div>
               <img src={LOGO} alt="logo" className={`w-10 md:w-14`} />
             </div>
-            <h1 className="font-semibold font-6 text-lg md:text-2xl">{NAME_SYSTEM}</h1>
+            <h1 className="font-semibold font-6 text-lg md:text-2xl">
+              {NAME_SYSTEM}
+            </h1>
           </div>
         </section>
         <nav
@@ -145,11 +198,62 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
                         ? `flex items-center px-5 py-2 mx-3 md:mx-0  ${
                             isFixed ? "a-active-fixed" : "a-active"
                           }`
-                        : `flex items-center px-5 py-2 mx-3 md:mx-0 ${isFixed ? "a-fixed" : "a"}`
+                        : `flex items-center px-5 py-2 mx-3 md:mx-0 ${
+                            isFixed ? "a-fixed" : "a"
+                          }`
                     }
                   >
                     Tài khoản của tôi
                   </NavLink>
+                </li>
+                <li>
+                  <Tooltip
+                    label={`${
+                      quantityNotify !== 0
+                        ? `Có ${quantityNotify} thông báo chưa đọc`
+                        : "Thông báo"
+                    }`}
+                  >
+                    <span
+                      className={`relative hidden md:block`}
+                      onClick={changeOpenNotify}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6 "
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+                        />
+                      </svg>
+                      {quantityNotify > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 text-red-500 flex justify-center items-center text-xs">
+                          <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                        </span>
+                      )}
+                    </span>
+                  </Tooltip>
+                  {openNotify ? (
+                    <>
+                      <Suspense fallback={<Loading />}>
+                        <Notify
+                          id_user={userCurrent?.id}
+                          open={openNotify}
+                          setOpen={changeOpenNotify}
+                          token={token}
+                          quantityNotifySeenYet={quantityNotify}
+                        />
+                      </Suspense>
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </li>
                 <li className={`link`}>
                   <button
@@ -179,7 +283,9 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ userCurrent }) => {
                       ? `flex items-center px-5 py-2 mx-3 md:mx-0  ${
                           isFixed ? "a-active-fixed" : "a-active"
                         }`
-                      : ` flex items-center px-5 py-2 mx-3 md:mx-0 ${isFixed ? "a-fixed" : "a"}`
+                      : ` flex items-center px-5 py-2 mx-3 md:mx-0 ${
+                          isFixed ? "a-fixed" : "a"
+                        }`
                   }
                 >
                   Đăng nhập

@@ -271,7 +271,7 @@ const FocusFeedBack: React.FC<{
     init();
     setInterval(() => {
       init();
-    }, 15000);
+    }, 10000);
   }, []);
   const deleteF = async (idFeedBack:number) => {
     const re = await HomeModuleControllerUser.del(
@@ -322,7 +322,7 @@ const FocusFeedBack: React.FC<{
               </div>
               <p className="-mt-4 text-gray-200 pt-1">
                 <div
-                  className="font-2 text-sm border p-1 rounded"
+                  className="font-2 text-sm border p-1 rounded max-h-44 overflow-auto"
                   dangerouslySetInnerHTML={{ __html: feedback?.data?.content }}
                 ></div>
               </p>
@@ -446,7 +446,7 @@ const FocusFeedBack: React.FC<{
                         {new Date(comment?.data?.created_at + "").toUTCString()}
                       </span>
                       <div
-                        className="font-2 text-gray-200 text-sm border p-1 rounded"
+                        className="font-2 text-gray-200 text-sm border p-1 rounded max-h-44 overflow-auto"
                         dangerouslySetInnerHTML={{
                           __html: comment?.data?.content,
                         }}

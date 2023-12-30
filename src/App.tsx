@@ -26,6 +26,7 @@ const App: React.FC = () => {
   const userCurrent = useSelector(
     (state: any) => state.authReducer?.userCurrent
   );
+  const token = useSelector((state: any) => state.authReducer?.accessToken);
   return (
     <BrowserRouter>
       <ToastContainer />
@@ -38,7 +39,7 @@ const App: React.FC = () => {
               {userCurrent && userCurrent?.role !== Role.user ? (
                 <HeaderAdmin userCurrent={userCurrent} />
               ) : (
-                <HeaderUser userCurrent={userCurrent} />
+                <HeaderUser userCurrent={userCurrent} token={token}/>
               )}
               {/* config routes */}
               <Routes>

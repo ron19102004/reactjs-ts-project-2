@@ -303,7 +303,7 @@ const FocusFeedBack: React.FC<{
     init();
     setInterval(() => {
       init();
-    }, 15000);
+    }, 10000);
   }, []);
   return (
     <>
@@ -334,19 +334,19 @@ const FocusFeedBack: React.FC<{
                       {feedback?.user?.firstName} {feedback?.user?.lastName}
                     </p>
                   </div>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-gray-400 text-xs">
                     {new Date(feedback?.data?.created_at + "").toUTCString()}
                   </p>
                 </div>
               </div>
               <p className="-mt-4 text-gray-200 pt-1">
                 <div
-                  className="font-2 text-sm border p-1 rounded"
+                  className="font-2 text-sm border p-1 rounded max-h-44 overflow-auto"
                   dangerouslySetInnerHTML={{ __html: feedback?.data?.content }}
                 ></div>
               </p>
               <div className="w-full">
-                <button
+                <span
                   onClick={() => {
                     const name =
                       feedback?.user?.firstName +
@@ -354,7 +354,7 @@ const FocusFeedBack: React.FC<{
                       feedback?.user?.lastName;
                     changeUserReply(feedback?.user?.id, name);
                   }}
-                  className="flex items-center text-xs font-4 float-right hover:underline"
+                  className="cursor-pointer flex items-center text-xs font-4 float-right hover:underline"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -371,7 +371,7 @@ const FocusFeedBack: React.FC<{
                     />
                   </svg>
                   <span>Phản hồi</span>
-                </button>
+                </span>
               </div>
             </div>
           </div>
@@ -384,80 +384,94 @@ const FocusFeedBack: React.FC<{
                       key={index}
                       className="border rounded-lg bg-color3 text-white shadow-lg p-3"
                     >
-                      <h1 className="flex items-center space-x-1 font-6  text-sm">
-                        <span>
-                          {comment?.user?.role !== Role.user ? (
-                            "Admin"
-                          ) : (
-                            <>
-                              {comment?.user?.id === id_user ? (
-                                "Tôi"
+                      <div className="flex items-center space-x-1 pb-1">
+                        <img
+                          src={comment?.user?.avatar}
+                          className="rounded-full  bg-white border h-10 w-10 object-cover"
+                          alt=""
+                          loading="lazy"
+                        />
+                        <div>
+                          <h1 className="flex items-center space-x-1 font-6  text-sm">
+                            <span>
+                              {comment?.user?.role !== Role.user ? (
+                                "Admin"
                               ) : (
                                 <>
-                                  {comment?.userBeReply?.id ===
-                                  comment?.user?.id ? (
-                                    "Tác giả"
+                                  {comment?.user?.id === id_user ? (
+                                    "Tôi"
                                   ) : (
                                     <>
-                                      {comment?.user?.firstName}{" "}
-                                      {comment?.user?.lastName}
+                                      {comment?.userBeReply?.id ===
+                                      comment?.user?.id ? (
+                                        "Tác giả"
+                                      ) : (
+                                        <>
+                                          {comment?.user?.firstName}{" "}
+                                          {comment?.user?.lastName}
+                                        </>
+                                      )}
                                     </>
                                   )}
                                 </>
                               )}
-                            </>
-                          )}
-                        </span>
-                        <div className="-rotate-90">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            className="w-4 h-4"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                            />
-                          </svg>
-                        </div>
-                        <span>
-                          {comment?.userBeReply?.role !== Role.user ? (
-                            "Admin"
-                          ) : (
-                            <>
-                              {comment?.userBeReply?.id === comment?.user?.id &&
-                              comment?.userBeReply?.id === id_user ? (
-                                "Tôi"
+                            </span>
+                            <div className="-rotate-90">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                className="w-4 h-4"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                              </svg>
+                            </div>
+                            <span>
+                              {comment?.userBeReply?.role !== Role.user ? (
+                                "Admin"
                               ) : (
                                 <>
                                   {comment?.userBeReply?.id ===
-                                    comment?.user?.id && "Tác giả"}
-                                  {comment?.userBeReply?.id === id_user &&
-                                    "Tôi"}
+                                    comment?.user?.id &&
+                                  comment?.userBeReply?.id === id_user ? (
+                                    "Tôi"
+                                  ) : (
+                                    <>
+                                      {comment?.userBeReply?.id ===
+                                        comment?.user?.id && "Tác giả"}
+                                      {comment?.userBeReply?.id === id_user &&
+                                        "Tôi"}
+                                    </>
+                                  )}
+                                  {comment?.userBeReply?.id !==
+                                    comment?.user?.id &&
+                                  comment?.userBeReply?.id !== id_user ? (
+                                    <>
+                                      {comment?.userBeReply?.firstName}{" "}
+                                      {comment?.userBeReply?.lastName}
+                                    </>
+                                  ) : (
+                                    ""
+                                  )}
                                 </>
                               )}
-                              {comment?.userBeReply?.id !== comment?.user?.id &&
-                              comment?.userBeReply?.id !== id_user ? (
-                                <>
-                                  {comment?.userBeReply?.firstName}{" "}
-                                  {comment?.userBeReply?.lastName}
-                                </>
-                              ) : (
-                                ""
-                              )}
-                            </>
-                          )}
-                        </span>
-                      </h1>
-                      <span className="text-xs">
-                        {new Date(comment?.data?.created_at + "").toUTCString()}
-                      </span>
+                            </span>
+                          </h1>
+                          <span className="text-xs">
+                            {new Date(
+                              comment?.data?.created_at + ""
+                            ).toUTCString()}
+                          </span>
+                        </div>
+                      </div>
                       <div
-                        className="font-2 text-gray-200 text-sm border p-1 rounded"
+                        className="font-2 text-gray-200 text-sm border p-1 rounded max-h-44 overflow-auto"
                         dangerouslySetInnerHTML={{
                           __html: comment?.data?.content,
                         }}
@@ -489,7 +503,7 @@ const FocusFeedBack: React.FC<{
                             </h1>
                           )}
                         </div>
-                        <button
+                        <span
                           onClick={() => {
                             const name =
                               comment?.user?.firstName +
@@ -497,7 +511,7 @@ const FocusFeedBack: React.FC<{
                               comment?.user?.lastName;
                             changeUserReply(comment?.user?.id, name);
                           }}
-                          className="flex items-center text-xs font-4 hover:underline"
+                          className="cursor-pointer flex items-center text-xs font-4 hover:underline"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -514,7 +528,7 @@ const FocusFeedBack: React.FC<{
                             />
                           </svg>
                           <span>Phản hồi</span>
-                        </button>
+                        </span>
                       </div>
                     </li>
                   );
@@ -557,9 +571,9 @@ const FocusFeedBack: React.FC<{
                   setContent(e.target.value);
                 }}
               />
-              <button
+              <span
                 onClick={reply}
-                className="absolute top-2 right-1 outline-none border-hidden ring-0 rounded-3xl p-1 px-2"
+                className=" cursor-pointer absolute top-2 right-1 outline-none border-hidden ring-0 rounded-3xl p-1 px-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -575,7 +589,7 @@ const FocusFeedBack: React.FC<{
                     d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
                   />
                 </svg>
-              </button>
+              </span>
             </div>
           </div>
         </DialogContent>
